@@ -1,0 +1,1141 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>KRT Time Attack – PS1 Brzyska</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=block" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:'Press Start 2P',monospace;touch-action:none;user-select:none}
+  #ekran{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:0 0}
+  #ekran canvas:not(#obrotomierz){position:absolute;left:0;top:0;width:1600px!important;height:900px!important;image-rendering:auto}
+  .hud{position:absolute;color:#fff;text-shadow:4px 4px 0 #101018;line-height:1}
+  #ps{left:24px;top:20px;font-size:24px;color:#ffd21f}
+  #ps small{display:block;font-size:12px;color:#fff;margin-top:10px}
+  #czasL{right:24px;top:20px;font-size:16px;color:#ffd21f;text-align:right}
+  #czas{right:24px;top:44px;font-size:56px;text-align:right;color:#fff;text-shadow:4px 4px 0 #1a3a9c,8px 8px 0 #101018}
+  #delta{right:24px;top:116px;font-size:20px;color:#3cff6a}
+  #notka{left:0;top:0;transform:translate(-50%,-50%);display:flex;gap:12px;align-items:flex-start;text-shadow:none;filter:drop-shadow(4px 4px 0 #101018)}
+  #kmh{right:290px;bottom:30px;font-size:44px}
+  #obrotomierz{right:14px;bottom:10px;width:260px;height:260px;image-rendering:pixelated;filter:drop-shadow(4px 4px 0 #101018)}
+  #kmh small{font-size:16px;color:#ffd21f}
+  #tytul{left:24px;bottom:48px;font-size:16px;color:#ffd21f}
+  #rank{left:24px;bottom:20px;font-size:12px}
+  #rank b{color:#7ff3ff;font-weight:normal}
+  #pasek{left:50%;bottom:24px;transform:translateX(-50%);width:520px;height:16px;background:#101018;border:4px solid #fff;box-shadow:4px 4px 0 #101018}
+  #pasek i{position:absolute;top:-10px;width:12px;height:28px;border:4px solid #101018}
+  #swiatla{left:50%;top:260px;transform:translateX(-50%);display:none;gap:22px;padding:20px 26px;background:#101018;border:6px solid #fff;box-shadow:6px 6px 0 #000}
+  #swiatla b{display:block;width:70px;height:70px;border-radius:50%;background:#3a0c0c}
+  #komunikat{left:0;right:0;top:400px;text-align:center;font-size:40px;color:#ffd21f;display:none}
+  #menu{position:absolute;left:0;top:0;width:1600px;height:900px;background:rgba(10,10,20,.82);color:#fff;text-align:center}
+  #menu h1{font-size:52px;color:#ffd21f;margin:110px 0 10px;text-shadow:6px 6px 0 #1a3a9c}
+  #menu h2{font-size:22px;margin:0 0 60px;color:#fff}
+  .auta{display:flex;justify-content:center;gap:60px;margin-bottom:50px}
+  .auto{width:380px;padding:26px;border:6px solid #555;background:#1a1a28;cursor:pointer}
+  .auto.wyb{border-color:#ffd21f;box-shadow:0 0 0 6px #101018,0 0 30px #ffd21f88}
+  .auto b{display:block;font-size:24px;color:#ffd21f;margin-bottom:16px}
+  .auto span{font-size:13px;line-height:22px;color:#ccc}
+  #menu p{font-size:15px;line-height:30px;color:#ccc}
+  .rozdz{display:flex;justify-content:center;align-items:center;gap:18px;margin:-20px 0 30px;font-size:14px;color:#ccc}
+  .rozdz .opcja{padding:12px 18px;border:5px solid #555;background:#1a1a28;color:#fff;cursor:pointer;font-size:14px}
+  .rozdz .opcja small{display:block;font-size:10px;color:#aaa;margin-top:6px}
+  .rozdz .opcja.wyb{border-color:#ffd21f;box-shadow:0 0 0 4px #101018,0 0 20px #ffd21f88}
+  #menu .start{display:inline-block;margin-top:24px;font-size:28px;color:#101018;background:#ffd21f;padding:18px 34px;border:6px solid #101018;box-shadow:6px 6px 0 #000;cursor:pointer}
+  #strojenie{position:absolute;right:20px;top:170px;width:470px;background:rgba(10,10,20,.9);border:4px solid #ffd21f;padding:14px 18px;display:none;font-size:11px;color:#fff;line-height:18px}
+  #strojenie label{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:6px 0}
+  #strojenie input{width:200px}
+  #strojenie button{font-family:inherit;font-size:11px;margin-top:8px;padding:6px 10px}
+  #dotyk{position:absolute;left:0;top:0;width:1600px;height:900px;display:none}
+  #dotyk div{position:absolute;bottom:40px;width:190px;height:190px;border:6px solid rgba(255,255,255,.6);border-radius:50%;background:rgba(16,16,24,.35);color:#fff;font-size:40px;display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+<div id="ekran">
+<div class="hud" id="ps">PS1 BRZYSKA<small>JESIEN</small></div>
+<div class="hud" id="notka"></div>
+<div class="hud" id="czasL">CZAS</div>
+<div class="hud" id="czas">0'00"00</div>
+<div class="hud" id="delta"></div>
+<div class="hud" id="kmh">0<small> KM/H</small></div>
+<canvas class="hud" id="obrotomierz" width="96" height="96"></canvas>
+<div class="hud" id="fps" style="left:24px;top:90px;font-size:14px;color:#7ff3ff"></div>
+<div class="hud" id="dzwiek" style="left:24px;bottom:80px;font-size:12px;color:#ccc"></div>
+<div class="hud" id="tytul">KROPEK RALLY TEAM TIME ATTACK</div>
+<div class="hud" id="rank">NAJLEPSZY: <b id="best">---</b></div>
+<div class="hud" id="pasek"><i style="left:0;background:#7ff3ff"></i><i style="left:0;background:#ffd21f"></i></div>
+<div class="hud" id="swiatla" style="display:none"><b></b><b></b><b></b><b></b><b></b></div>
+<div class="hud" id="komunikat"></div>
+<div id="dotyk"><div id="tL" style="left:40px">&lt;</div><div id="tP" style="left:270px">&gt;</div><div id="tH" style="right:270px;font-size:22px">RĘCZNY</div><div id="tG" style="right:40px;font-size:26px">GAZ</div><div id="tB" style="right:40px;bottom:260px;width:150px;height:150px;font-size:20px">HAM.</div></div>
+<div id="strojenie"></div>
+<div id="menu">
+  <h1>TIME ATTACK</h1>
+  <h2>PS1 · 25 RAJD NIEPODLEGŁOŚCI · BRZYSKA</h2>
+  <div class="auta">
+    <div class="auto wyb" data-auto="janusz"><b>KROPEK JANUSZA</b><span>Smoła / Prokop<br>KGR 11761 · IRBUD</span></div>
+    <div class="auto" data-auto="andrzej"><b>KROPEK ANDRZEJA</b><span>Wieczorek / Duda<br>SH 5583F · BUDMAX METAL</span></div>
+  </div>
+  <div class="rozdz">ROZDZIELCZOŚĆ:<div class="opcja" data-r="720">1280×720<small>PŁYNNIEJ · ZALECANA</small></div><div class="opcja" data-r="1080">1920×1080<small>OSTRZEJ · MOCNY KOMPUTER</small></div></div>
+  <p>STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU</p>
+  <div class="start" id="startBtn">START (ENTER)</div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="makieta/trasa_ps1.js"></script>
+<script src="makieta/kropek_mesh.js"></script>
+<script src="makieta/kropek_model.js?v=1711zb"></script>
+<script src="makieta/pojazdy_model.js?v=1711e"></script>
+<script src="dzwieki/silnik_bank.js"></script>
+<script src="dzwieki/audio_dane.js?v=1611p"></script>
+<script>
+// KRT Time Attack – grywalny prototyp PS1 Brzyska. Scena budowana tym samym kodem co makieta (makieta/makieta_pixel.html),
+// ale dla całej trasy naraz; statyczne obiekty scalane w kilkadziesiąt siatek (wydajność na telefonie).
+let seed=7;function rnd(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646;}
+let ROZDZ=720;try{if(localStorage.getItem('krt_rozdz')==='1080')ROZDZ=1080;}catch(e){}   /* wybór w menu: 1280×720 (domyślnie) lub 1920×1080 */
+const W=16,H=9;   // proporcje obrazu (kadr niezależny od rozdzielczości); logika 60 Hz
+function rozdzPx(){return ROZDZ===1080?[1920,1080]:[1280,720];}
+const QS=new URLSearchParams(location.search), MAPA=false;
+const renderer=new THREE.WebGLRenderer({antialias:false});
+renderer.setSize(...rozdzPx(),false);renderer.setPixelRatio(1);
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.BasicShadowMap;renderer.shadowMap.autoUpdate=true;
+document.getElementById('ekran').prepend(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x8fa848);
+scene.add(new THREE.HemisphereLight(0xfff1d6,0x7a6848,0.85));
+const sun=new THREE.DirectionalLight(0xffd9a0,0.95);sun.castShadow=true;sun.shadow.mapSize.set(ROZDZ===1080?4096:2048,ROZDZ===1080?4096:2048);
+Object.assign(sun.shadow.camera,{left:-40,right:40,top:40,bottom:-40,near:1,far:220});scene.add(sun);scene.add(sun.target);
+const M=(c,o={})=>new THREE.MeshLambertMaterial(Object.assign({color:c,flatShading:true},o));
+// tekstury szumu: miękkie (szum wartości w kilku skalach, bez szwów), filtrowane liniowo – mniej „ziarna” w 960×540
+function noiseTex(amp){const S=256,cv=document.createElement("canvas");cv.width=cv.height=S;const c=cv.getContext("2d");const im=c.createImageData(S,S);
+  const warstwa=(n)=>{const g=[];for(let i=0;i<n*n;i++)g.push(rnd());return (x,y)=>{const fx=x/S*n,fy=y/S*n,x0=Math.floor(fx),y0=Math.floor(fy),tx=fx-x0,ty=fy-y0;const q=(a,b)=>g[((b%n+n)%n)*n+((a%n+n)%n)];
+    const sx=tx*tx*(3-2*tx),sy=ty*ty*(3-2*ty);return (q(x0,y0)*(1-sx)+q(x0+1,y0)*sx)*(1-sy)+(q(x0,y0+1)*(1-sx)+q(x0+1,y0+1)*sx)*sy;};};
+  const w1=warstwa(4),w2=warstwa(12),w3=warstwa(40),w4=warstwa(110);
+  for(let y=0;y<S;y++)for(let x=0;x<S;x++){const n=w1(x,y)*.42+w2(x,y)*.32+w3(x,y)*.17+w4(x,y)*.09;const v=255-Math.floor(n*amp*0.9+rnd()*amp*0.15);const i=(y*S+x)*4;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255;}
+  c.putImageData(im,0,0);const t=new THREE.CanvasTexture(cv);t.magFilter=THREE.LinearFilter;t.minFilter=THREE.LinearMipmapLinearFilter;t.wrapS=t.wrapT=THREE.RepeatWrapping;return t;}
+const TX_ASF=noiseTex(60),TX_TRAWA=noiseTex(90),TX_ZWIR=noiseTex(120);
+// tekstury przy drodze (własny generator losowy – nie zmienia układu reszty sceny)
+let ps9=97;const r9=()=>{ps9=(ps9*16807)%2147483647;return (ps9-1)/2147483646;};
+const pasMiekki=(baza,plamy,krawedz)=>{const cv=document.createElement('canvas');cv.width=128;cv.height=256;const c=cv.getContext('2d');c.fillStyle=baza;c.fillRect(0,0,128,256);
+  for(let k=0;k<60;k++){c.fillStyle=plamy[k%plamy.length];c.globalAlpha=.35;c.beginPath();c.ellipse(r9()*128,r9()*256,6+r9()*16,10+r9()*26,0,0,7);c.fill();}c.globalAlpha=1;
+  const id=c.getImageData(0,0,128,256),d=id.data;for(let y=0;y<256;y++)for(let x=0;x<128;x++){const u=x/127,e=Math.min(u,1-u);const a=Math.min(1,e/krawedz);d[(y*128+x)*4+3]=Math.round(255*a*a*(3-2*a));}c.putImageData(id,0,0);   /* miękkie brzegi */
+  const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.pelna=true;return t;};
+const TX_POBOCZE=pasMiekki('#86943e',['#7e8e3a','#929c46','#9a8e44'],.22);
+const TX_ROW=pasMiekki('#6e7c34',['#66742e','#76843a'],.5);
+const TX_ZWIR2=(()=>{const cv=document.createElement('canvas');cv.width=cv.height=256;const c=cv.getContext('2d');c.fillStyle='#7a7264';c.fillRect(0,0,256,256);   /* żwir pobocza: kamyczki */
+  for(let k=0;k<2200;k++){const v=90+Math.floor(r9()*90);c.fillStyle=`rgb(${v+10},${v+4},${v-6})`;const R=.8+r9()*2.6;c.beginPath();c.ellipse(r9()*256,r9()*256,R*1.3,R,r9()*3,0,7);c.fill();}
+  for(let k=0;k<500;k++){c.fillStyle='rgba(30,26,20,.35)';c.fillRect(r9()*256,r9()*256,2,2);}const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;return t;})();
+const TX_KRUSZ=(()=>{const cv=document.createElement('canvas');cv.width=64;cv.height=256;const c=cv.getContext('2d');c.clearRect(0,0,64,256);   /* wykruszona krawędź asfaltu: ciemne ubytki przy samej krawędzi */
+  for(let k=0;k<160;k++){const y=r9()*256,x=32+(r9()-.5)*26*Math.pow(r9(),.7);const v=55+Math.floor(r9()*50);c.fillStyle=`rgba(${v},${v},${v+4},${.5+r9()*.4})`;c.beginPath();c.moveTo(x,y);for(let s=0;s<5;s++)c.lineTo(x+(r9()-.5)*9,y+(r9()-.5)*12);c.closePath();c.fill();}
+  const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.pelna=true;return t;})();
+
+// --- trasa z GPS (próbki co 0,75 m po długości łuku)
+const TR=PS1_BRZYSKA;
+// Stylizacja jak w grach z automatów: długie proste + wyraźne zakręty (kolejność, kierunek i ostrość z GPS)
+// 1) Douglas-Peucker na surowym śladzie z większą tolerancją ?tol (m) → odcinki proste
+// 2) w każdym wierzchołku łuk: promień maleje z kątem skrętu (nawrót ciasno, łagodny łuk szeroko)
+function dp(P,tol){const keep=new Set([0,P.length-1]);(function r(a,b){let m=-1,md=0;const [ax,az]=P[a],[bx,bz]=P[b];const L=Math.hypot(bx-ax,bz-az)||1e-6;
+  for(let i=a+1;i<b;i++){const d=Math.abs((bx-ax)*(az-P[i][1])-(ax-P[i][0])*(bz-az))/L;if(d>md){md=d;m=i;}}if(md>tol){keep.add(m);r(a,m);r(m,b);}})(0,P.length-1);
+  return [...keep].sort((a,b)=>a-b).map(i=>P[i]);}
+// trasa jak w ulicach gier z automatów: odcinki pionowe, poziome i po skosie 45° w obie strony (kamera stała)
+// każdy odcinek GPS rozkładany na część prostą (wzdłuż osi) i skośną; części krótsze niż JOG pomijane (błąd przechodzi dalej, trasa nie ucieka od GPS)
+function manhattan(V,JOG){const out=[[V[0][0],V[0][1]]];let cx=V[0][0],cz=V[0][1];
+  const dodaj=(x,z)=>{out.push([x,z]);cx=x;cz=z;};
+  for(let i=1;i<V.length;i++){const dx=V[i][0]-cx,dz=V[i][1]-cz;const ax=Math.abs(dx),az=Math.abs(dz),sx=Math.sign(dx),sz=Math.sign(dz);
+    const pion=az>=ax,koniec=i===V.length-1;
+    if(koniec&&!pion&&ax<90)break;   // meta na pionowej prostej: ostatni krótki odcinek poziomy pomijany
+    const skos=Math.min(ax,az),reszta=Math.max(ax,az)-skos;          // długości: część skośna (w każdej osi) i prosta
+    const os=(d)=>pion?dodaj(cx,cz+sz*d):dodaj(cx+sx*d,cz);
+    if(skos*1.414<JOG){os(Math.max(ax,az));}                        // za mało skosu → prosto
+    else if(reszta<JOG){dodaj(cx+sx*skos,cz+sz*skos);}               // prawie 45° → sam skos
+    else{os(reszta/2);dodaj(cx+sx*skos,cz+sz*skos);os(reszta/2);}}   // prosto – skos – prosto
+  // scal współliniowe
+  const M2=[out[0]];for(let i=1;i<out.length;i++){const a=M2[M2.length-1],b=out[i];if(Math.hypot(b[0]-a[0],b[1]-a[1])<0.5)continue;
+    if(M2.length>=2){const p=M2[M2.length-2];const c1=(a[0]-p[0])*(b[1]-a[1])-(a[1]-p[1])*(b[0]-a[0]);const d1=(a[0]-p[0])*(b[0]-a[0])+(a[1]-p[1])*(b[1]-a[1]);if(Math.abs(c1)<1e-6&&d1>0){M2[M2.length-1]=b;continue;}}M2.push(b);}
+  return M2;}
+function scalKrotkie(V,MIN){V=V.slice();let zm=true;while(zm){zm=false;for(let i=1;i<V.length-2;i++){const L=Math.hypot(V[i+1][0]-V[i][0],V[i+1][1]-V[i][1]);if(L>=MIN)continue;
+    const [x1,z1]=V[i-1],[x2,z2]=V[i],[x3,z3]=V[i+1],[x4,z4]=V[i+2];const d=(x1-x2)*(z3-z4)-(z1-z2)*(x3-x4);if(Math.abs(d)<1e-6)continue;
+    const t=((x1-x3)*(z3-z4)-(z1-z3)*(x3-x4))/d;const p=[x1+t*(x2-x1),z1+t*(z2-z1)];if(Math.hypot(p[0]-x2,p[1]-z2)>40)continue;V.splice(i,2,p);zm=true;break;}}return V;}   /* krótki odcinek między dwoma zakrętami → jeden zakręt w punkcie przecięcia (bez łuków o promieniu kilku metrów) */
+function stylizuj(P,tol){const V=scalKrotkie(QS.get("schodki")==="0"?dp(P,tol):manhattan(dp(P,tol),+(QS.get("jog")||20)),28);const out=[V[0]];
+  for(let i=1;i<V.length-1;i++){const [px,pz]=V[i-1],[cx,cz]=V[i],[nx,nz]=V[i+1];
+    let ax=px-cx,az=pz-cz,bx=nx-cx,bz=nz-cz;const la=Math.hypot(ax,az),lb=Math.hypot(bx,bz);ax/=la;az/=la;bx/=lb;bz/=lb;
+    const skret=Math.PI-Math.acos(Math.max(-1,Math.min(1,ax*bx+az*bz)));          // kąt skrętu 0..π
+    if(skret<0.05){out.push(V[i]);continue;}
+    let R=Math.max(9,Math.min(60,34/skret));                                       // 90° → ~22 m, 30° → 60 m, nawrót → 11 m
+    let tcut=R*Math.tan(skret/2);const lim=Math.min(la,lb)*0.45;if(tcut>lim){tcut=lim;R=tcut/Math.tan(skret/2);}
+    const p0=[cx+ax*tcut,cz+az*tcut],p1=[cx+bx*tcut,cz+bz*tcut];const n=Math.max(3,Math.round(skret*R/2.5));
+    for(let k=0;k<=n;k++){const t=k/n,u=1-t;out.push([u*u*p0[0]+2*u*t*cx+t*t*p1[0],u*u*p0[1]+2*u*t*cz+t*t*p1[1]]);}}
+  out.push(V[V.length-1]);
+  // zagęszczenie prostych, żeby spline nie wybrzuszał odcinków
+  const G=[out[0]];for(let i=1;i<out.length;i++){const [ax,az]=out[i-1],[bx,bz]=out[i];const L=Math.hypot(bx-ax,bz-az);const n=Math.max(1,Math.round(L/6));for(let k=1;k<=n;k++)G.push([ax+(bx-ax)*k/n,az+(bz-az)*k/n]);}
+  // dojazd przed startem i wyjazd za metą (po 40 m prosto), żeby droga nie urywała się w kadrze
+  const ext=(a,b,L)=>{const dx=a[0]-b[0],dz=a[1]-b[1],l=Math.hypot(dx,dz)||1;const o=[];for(let k=6;k>=1;k--)o.push([a[0]+dx/l*L*k/6,a[1]+dz/l*L*k/6]);return o;};
+  const pre=ext(G[0],G[Math.min(3,G.length-1)],ZAPAS),post=ext(G[G.length-1],G[Math.max(0,G.length-4)],ZAPAS_META).reverse();
+  return {pts:[...pre,...G,...post],wierzcholki:V};}
+const ZAPAS=40, ZAPAS_META=130;   // m prostej przed startem i za metą (dłuższy odjazd na wyhamowanie)
+const TOL=+(QS.get('tol')||12);
+const STYL=stylizuj(TR.surowe,TOL);
+const curve=new THREE.CatmullRomCurve3(STYL.pts.map(([x,z])=>new THREE.Vector3(x,0,z)),false,'centripetal');
+const LEN=curve.getLength(), DS=0.75, N=Math.round(LEN/DS), m2t=m=>m/LEN;
+const samples=[];for(let i=0;i<=N;i++){const u=i/N;samples.push({p:curve.getPointAt(u),d:curve.getTangentAt(u)});}
+const nrm=s=>new THREE.Vector3(-s.d.z,0,s.d.x).normalize();
+const RD0=11;let RD=RD0;   // szerokość asfaltu na starcie; RD = szerokość w miejscu aktualnie budowanym (zmieniana w pętlach)
+const START_I=Math.round(ZAPAS/DS), META_I=N-Math.round(ZAPAS_META/DS);
+function wDrogi(i){const t=Math.max(0,Math.min(1,(i-START_I)/(META_I-START_I)));return RD0*(1-0.5*t);}   /* droga zwęża się liniowo przez cały odcinek: 100% na starcie, 50% na mecie */
+const tc=(START_I-4)/N, CP=curve.getPointAt(tc), cd=curve.getTangentAt(tc);
+const ic=START_I, I0=0, I1=N;
+function krzywizna(i,k=6){const a=samples[Math.max(0,i-k)].d,b=samples[Math.min(N,i+k)].d;return {ang:Math.acos(Math.max(-1,Math.min(1,a.x*b.x+a.z*b.z))),lewy:(-a.x*b.z+a.z*b.x)>0};}
+// strefa otoczenia: las / pole / wieś (uproszczenie – docelowo z OpenStreetMap)
+function strefa(i,side){const v=(Math.sin(i*0.0021+0.5+side)+Math.sin(i*0.0057+side*2))*0.5;return v>0.25?'las':v<-0.35?'wies':'pole';}
+
+// --- mostek na dnie doliny (~590 m wg profilu wysokości GPS) jako hopa
+const MOST_M=+(QS.get('most')||590);
+const IB_GPS=(()=>{const q=TR.surowe[Math.min(TR.surowe.length-1,Math.round(MOST_M/10))];let b=0,bd=1e9;samples.forEach((s,i)=>{const d=(s.p.x-q[0])**2+(s.p.z-q[1])**2;if(d<bd){bd=d;b=i;}});return b;})();
+// hopa na mostku: środek najbliższej (w promieniu ~300 m od mostka z GPS) prostej o długości min. 80 m
+const IB=(()=>{const prosto=i=>{if(i<30||i>N-30)return false;const c=samples[i].d;for(const k of [-12,12]){const a=samples[i+k].d;if(a.x*c.x+a.z*c.z<0.9995)return false;}return true;};
+  const odcinki=[];let st=-1;for(let i=START_I+20;i<META_I-20;i++){if(prosto(i)){if(st<0)st=i;}else if(st>=0){odcinki.push([st,i-1]);st=-1;}}if(st>=0)odcinki.push([st,META_I-21]);
+  const dobre=odcinki.filter(([a,b])=>(b-a)*DS>=80);let best=null,bd=1e9;for(const [a,b] of dobre){const m=Math.round((a+b)/2);const d=Math.abs(m-IB_GPS);if(d<bd){bd=d;best=m;}}return best??IB_GPS;})();
+// profil: równa rampa w górę 10 m do 1 m i od razu zjazd 8 m – auto wybija się ze szczytu i leci kilkanaście metrów
+function hy(i){const d=(i-IB)*DS,H=1.0;if(d<=-10||d>=8)return 0;return d<0?H*(d+10)/10:H*(1-d/8);}
+const MOST_POL=6, MOST_ZWEZ=wDrogi(IB)/2*0.6;   // mostek: ±6 m od środka, jezdnia zwężona do ±3,3 m (bariery betonowe)
+// asfalt jak na wzorze: drobna faktura, ciemniejsze wyjeżdżone pasy kół, łaty i spękania (jedna tekstura na całą szerokość drogi)
+const TX_ASFALT=(()=>{const W2=256,H2=512,cv=document.createElement('canvas');cv.width=W2;cv.height=H2;const c=cv.getContext('2d');const im=c.createImageData(W2,H2);
+  for(let y=0;y<H2;y++)for(let x=0;x<W2;x++){const u=x/W2;let v=150+(rnd()-.5)*30;const e=Math.min(u,1-u);if(e<.07)v-=(.07-e)/.07*30*(0.6+0.4*Math.sin(y*.3+x));const r2=rnd();if(r2<.05)v+=26;else if(r2<.1)v-=24;   /* ciemniejsze krawędzie i drobne kruszywo, bez kolein */v+=Math.sin(y*.05+x*.02)*3;const i=(y*W2+x)*4;im.data[i]=v;im.data[i+1]=v;im.data[i+2]=v+4;im.data[i+3]=255;}
+  c.putImageData(im,0,0);c.scale(2,2);const W3=W2/2,H3=H2/2;   /* łaty i spękania w tej samej skali co wcześniej, ziarno 2× drobniejsze */c.fillStyle='rgba(30,30,34,.09)';for(let k=0;k<3;k++){c.fillRect(rnd()*W3*.8,rnd()*H3,14+rnd()*30,10+rnd()*24);}   /* łaty */
+  c.strokeStyle='rgba(25,25,28,.3)';c.lineWidth=1;for(let k=0;k<5;k++){let x=rnd()*W3,y=rnd()*H3;c.beginPath();c.moveTo(x,y);for(let s=0;s<6;s++){x+=(rnd()-.5)*10;y+=4+rnd()*8;c.lineTo(x,y);}c.stroke();}   /* spękania */
+  const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(1,0.27);t.anisotropy=4;return t;})();
+// woda: niebieska z jasnymi zmarszczkami, przesuwana w czasie (nurt)
+const TX_WODA=(()=>{for(let k=0;k<434;k++)rnd();   /* tyle wywołań rnd() co stara tekstura – układ drzew/domów bez zmian */
+  let ws=29;const wr=()=>{ws=(ws*16807)%2147483647;return (ws-1)/2147483646;};const WW=256,WH=512;
+  const cv=document.createElement('canvas');cv.width=WW;cv.height=WH;const c=cv.getContext('2d');
+  const gr=c.createLinearGradient(0,0,WW,0);gr.addColorStop(0,'#4f8f8a');gr.addColorStop(.16,'#3a7892');gr.addColorStop(.5,'#2a5f84');gr.addColorStop(.84,'#3a7892');gr.addColorStop(1,'#4f8f8a');c.fillStyle=gr;c.fillRect(0,0,WW,WH);   /* płycizny przy brzegach, głębiej na środku */
+  const owal=(x,y,rx,ry,st)=>{c.fillStyle=st;for(const dy of [-WH,0,WH]){c.beginPath();c.ellipse(x,y+dy,rx,ry,0,0,7);c.fill();}};   /* powtarzalne w pionie (nurt przesuwa teksturę) */
+  c.filter='blur(6px)';for(let k=0;k<22;k++)owal(WW*(.25+wr()*.5),wr()*WH,10+wr()*22,30+wr()*60,'rgba(16,46,70,.32)');   /* miękkie głębie */
+  c.filter='blur(3px)';for(let k=0;k<16;k++)owal(wr()<.5?wr()*WW*.18:WW*(1-wr()*.18),wr()*WH,6+wr()*10,20+wr()*40,'rgba(120,170,150,.28)');   /* jaśniejsze płycizny */
+  c.filter='blur(1px)';for(let k=0;k<90;k++)owal(wr()*WW,wr()*WH,1+wr()*1.6,8+wr()*22,`rgba(${185+wr()*50|0},${215+wr()*35|0},240,${.18+wr()*.3})`);   /* zmarszczki wzdłuż nurtu */
+  c.filter='none';for(let k=0;k<26;k++)owal(wr()*WW,wr()*WH,1.2,2.5+wr()*3,'rgba(255,255,250,.55)');   /* błyski */
+  const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(1,11);t.anisotropy=4;return t;})();
+function ribbon(w,y,color,offset=0,map=null,jit=0){
+  const pos=[],idx=[],uv=[];let k=0;
+  for(let i=I0;i<=I1;i++){const s=samples[i];RD=wDrogi(i);const n=nrm(s);
+    const j1=jit*(Math.sin(i*0.37)+Math.sin(i*0.13+1.3)+(rnd()-.5)*.6)*.5, j2=jit*(Math.sin(i*0.29+2)+Math.sin(i*0.11)+(rnd()-.5)*.6)*.5;
+    const w0=w,o0=offset;{const w=typeof w0==="function"?w0(i):w0,offset=typeof o0==="function"?o0(i):o0;
+    let oa=offset-w/2-j1,ob=offset+w/2+j2;
+    if(offset===0&&w<=wDrogi(i)+3&&typeof IB!=="undefined"){const dm=Math.abs(i-IB)*DS;if(dm<MOST_POL+7){const u=Math.max(0,(dm-MOST_POL)/7);const lim=(MOST_ZWEZ+0.25)+(w/2-(MOST_ZWEZ+0.25))*u;oa=Math.max(oa,-lim);ob=Math.min(ob,lim);}}   /* asfalt i pobocze zwężają się przed mostkiem do barierek */
+    { /* na ciasnych łukach krawędź od wewnątrz nie może wyjść poza środek łuku (inaczej pas się zawija i robi czarne kreski) */
+      const d1=samples[Math.max(0,i-4)].d,d2=samples[Math.min(N,i+4)].d;const kat=Math.acos(Math.max(-1,Math.min(1,d1.x*d2.x+d1.z*d2.z)));
+      if(kat>0.01){const R=8*DS/kat*0.92;const lewy=(-d1.x*d2.z+d1.z*d2.x)>0;if(lewy)oa=Math.max(oa,-R),ob=Math.max(ob,-R);else ob=Math.min(ob,R),oa=Math.min(oa,R);}}
+    const a=s.p.clone().addScaledVector(n,oa),b=s.p.clone().addScaledVector(n,ob);
+    const yy=y+hy(i);pos.push(a.x,yy,a.z,b.x,yy,b.z);uv.push(0,i*0.35,(map===TX_ASFALT||(map&&map.pelna))?1:w/4,i*0.35);}
+    if(i<I1&&Math.abs(i+0.5-IB)*DS>MOST_POL){idx.push(k,k+1,k+2,k+1,k+3,k+2);}k+=2;}   /* na mostku bez pobocza i trawy: za barierkami od razu woda */
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();
+  const m=new THREE.Mesh(g,M(color,map?{side:THREE.DoubleSide,map}:{side:THREE.DoubleSide}));m.receiveShadow=true;scene.add(m);return m;}
+{const m=ribbon(i=>wDrogi(i)+11,0.02,0xffffff,0,TX_POBOCZE);m.material.transparent=true;m.material.depthWrite=false;}   /* pas trawy przy drodze z miękkimi brzegami */              // trawiaste pobocze
+for(const sd of [-1,1]){const m=ribbon(2.2,0.025,0xffffff,i=>sd*(wDrogi(i)/2+3.4),TX_ROW);m.material.transparent=true;m.material.depthWrite=false;}   // rowy – miękkie przejście
+ribbon(i=>wDrogi(i)+1.2,0.03,0xd8d0c4,0,TX_ZWIR2,0.3);         // wąskie, ubite pobocze przy asfalcie (odcinek tylko asfaltowy)
+ribbon(i=>wDrogi(i),0.04,0x9ea0a8,0,TX_ASFALT,0.45);           // asfalt: faktura, pasy kół, łaty, spękania
+for(const sd of [-1,1]){const m=ribbon(.9,0.042,0xffffff,i=>sd*wDrogi(i)/2,TX_KRUSZ);m.material.transparent=true;m.material.depthWrite=false;}   /* wykruszona krawędź asfaltu */
+const TX_LISCIE=(()=>{const cv=document.createElement("canvas");cv.width=64;cv.height=256;const c=cv.getContext("2d");const kol=["#8a4a1c","#a8601e","#6e3a18","#b8822a","#7a5a22","#c06a24"];
+  for(let k=0;k<950;k++){const x=rnd()*64,y=rnd()*256;const gest=Math.pow(1-Math.abs(x-32)/32,0.6)*(0.55+0.45*Math.sin(y*.05));if(rnd()>gest)continue;c.fillStyle=kol[Math.floor(rnd()*kol.length)];c.save();c.translate(x,y);c.rotate(rnd()*3);c.fillRect(-1.5,-1,3,2);c.restore();}
+  const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.magFilter=THREE.NearestFilter;t.pelna=true;return t;})();   /* opadłe liście przy krawędzi asfaltu */
+for(const sd of [-1,1]){const m=ribbon(2.8,0.032,0xffffff,i=>sd*(wDrogi(i)/2+1.4),TX_LISCIE);m.material.transparent=true;m.material.alphaTest=.5;m.material.depthWrite=false;}
+// (koleiny usunięte na prośbę użytkownika)
+
+// szybkie szukanie odległości od drogi: siatka 20 m z próbkami trasy
+const SIATKA=new Map();samples.forEach((s,i)=>{const k=Math.floor(s.p.x/20)+','+Math.floor(s.p.z/20);if(!SIATKA.has(k))SIATKA.set(k,[]);SIATKA.get(k).push(i);});
+function najblizsza(x,z){const cx=Math.floor(x/20),cz=Math.floor(z/20);let m=1e9,b=-1;for(let a=-1;a<=1;a++)for(let c=-1;c<=1;c++){const L=SIATKA.get((cx+a)+','+(cz+c));if(L)for(const i of L){const p=samples[i].p;const d=(p.x-x)**2+(p.z-z)**2;if(d<m){m=d;b=i;}}}return [Math.sqrt(m),b];}
+function distRoad(x,z){const r=najblizsza(x,z);return r[1]<0?60:r[0];}
+
+// --- teren wokół auta
+// --- wyposażenie OS-u: opony w folii, separatory z czerwonymi pasami, beczki
+const TX_SEP=(()=>{const cv=document.createElement('canvas');cv.width=16;cv.height=48;const c=cv.getContext('2d');c.fillStyle='#f4f4f4';c.fillRect(0,0,16,48);c.fillStyle='#d42020';for(let k=-2;k<6;k++){c.beginPath();c.moveTo(0,k*10);c.lineTo(16,k*10+8);c.lineTo(16,k*10+13);c.lineTo(0,k*10+5);c.fill();}const t=new THREE.CanvasTexture(cv);t.magFilter=THREE.NearestFilter;return t;})();
+const SEPARATORY=[];   /* pozycje separatorów do kolizji */
+function separator(x,z,ry){SEPARATORY.push({x,z,t:0});const g=new THREE.Group();const b=new THREE.Mesh(new THREE.BoxGeometry(.5,1.2,.1),[M(0xdddddd),M(0xdddddd),M(0xeeeeee),M(0xeeeeee),new THREE.MeshLambertMaterial({map:TX_SEP}),new THREE.MeshLambertMaterial({map:TX_SEP})]);b.position.y=.62;b.castShadow=true;g.add(b);
+  const s=new THREE.Mesh(new THREE.BoxGeometry(.5,.08,.4),M(0x222222));s.position.y=.04;g.add(s);g.position.set(x,0,z);g.rotation.y=ry;scene.add(g);}
+function opony(x,z,ile=3){const g=new THREE.Group();const fol=[0xd42020,0xeeeeea,0x1a1a1a];   /* folia: czerwona, biała, czarna */
+  for(let k=0;k<ile;k++){const o=new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,.24,9),M(k%2?fol[(Math.abs(Math.round(x*7+z*3)))%3]:0x1c1c1e));o.position.y=.12+k*.24;o.castShadow=true;g.add(o);}
+  const OL=new THREE.Mesh(new THREE.CylinderGeometry(.37,.37,ile*.24+.04,9),new THREE.MeshBasicMaterial({color:0x0c0c0c,side:THREE.BackSide}));OL.position.y=ile*.12;g.add(OL);g.position.set(x,0,z);scene.add(g);}
+function beczka(x,z){const b=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.9,8),M(0x1d8a3a));b.position.set(x,.45,z);b.castShadow=true;scene.add(b);const p=new THREE.Mesh(new THREE.CylinderGeometry(.305,.305,.16,8),M(0xf0f0f0));p.position.set(x,.55,z);scene.add(p);}
+// szykana: na środku najdłuższej pionowej prostej (3 bramki co 16 m, naprzemiennie z lewej i prawej)
+const SZ_ODST=26, SZ_GLEB=0.4;   // szykana: odstęp bramek 26 próbek (19,5 m), bramka zajmuje 45% szerokości drogi
+const CH_I=(()=>{const V=STYL.wierzcholki;let best=-1,bl=0;for(let i=1;i<V.length;i++){const dx=V[i][0]-V[i-1][0],dz=V[i][1]-V[i-1][1];const L=Math.hypot(dx,dz);if(Math.abs(dz)>Math.abs(dx)&&L>bl){bl=L;best=i;}}
+  const q=[(V[best][0]+V[best-1][0])/2,(V[best][1]+V[best-1][1])/2];let b=0,bd=1e9;samples.forEach((s,i)=>{const d=(s.p.x-q[0])**2+(s.p.z-q[1])**2;if(d<bd){bd=d;b=i;}});return b;})();
+const vszum=(a,b)=>{const ia=Math.floor(a),ib=Math.floor(b),fa=a-ia,fb=b-ib,h=(p,q)=>{const s=Math.sin(p*127.1+q*311.7)*43758.5453;return s-Math.floor(s);},sa=fa*fa*(3-2*fa),sb=fb*fb*(3-2*fb);return (h(ia,ib)*(1-sa)+h(ia+1,ib)*sa)*(1-sb)+(h(ia,ib+1)*(1-sa)+h(ia+1,ib+1)*sa)*sb;};
+function wysT(x,z){const SB=samples[IB];const d=distRoad(x,z);const dw=Math.abs((x-SB.p.x)*SB.d.x+(z-SB.p.z)*SB.d.z);const wz=Math.abs((x-SB.p.x)*SB.d.z-(z-SB.p.z)*SB.d.x);return (dw<MOST_POL+0.6&&wz<70)?-0.5:d<RD0/2+5?-0.06:Math.min(2.5,(d-RD0/2-4)*0.04)*(0.45+1.1*vszum(x/26,z/26));}   /* wysokość terenu – też do stawiania drzew i domów */
+if(!MAPA){
+  let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;samples.forEach(s=>{x0=Math.min(x0,s.p.x);x1=Math.max(x1,s.p.x);z0=Math.min(z0,s.p.z);z1=Math.max(z1,s.p.z);});
+  const TW=x1-x0+260,TH=z1-z0+260;const g=new THREE.PlaneGeometry(TW,TH,Math.round(TW/4),Math.round(TH/4));g.rotateX(-Math.PI/2);g.translate((x0+x1)/2,0,(z0+z1)/2);
+  const pos=g.attributes.position;
+  for(let i=0;i<pos.count;i++){const x=pos.getX(i),z=pos.getZ(i);pos.setY(i,wysT(x,z));}
+  g.computeVertexNormals();const cols=[],pole=[],uvp=[];
+  // teren jak z góry nad polską wsią: pola malowane na osobnej teksturze (gładkie granice i bruzdy), pobocze i ściółka z kolorów wierzchołków
+  const RODZ=[[0xc8a85a,0xb8984e],[0x7a5434,0x664428],[0x6a4a2e,0x5a3e24],[0x9a9a4e,0x8c8c44],[0xb8a060,0xa89050]];   /* jesień: ścierniska, zaorane, skoszona łąka */
+  const KAT=0.32,ck=Math.cos(KAT),sk=Math.sin(KAT);const hsh=(a,b)=>{const s=Math.sin(a*127.1+b*311.7)*43758.5453;return s-Math.floor(s);};
+  const PU=38,PV=150,NU=8,NV=4,CW=2048,CH=2048;   /* tekstura pól powtarza się co 8×4 pola (304×600 m), obrócona o KAT */
+  const cvp=document.createElement('canvas');cvp.width=CW;cvp.height=CH;const cp=cvp.getContext('2d');const sx=CW/(PU*NU),sy=CH/(PV*NV);
+  const hex=c=>'#'+c.toString(16).padStart(6,'0');let ps=11;const pr=()=>{ps=(ps*16807)%2147483647;return (ps-1)/2147483646;};
+  for(let a=0;a<NU;a++)for(let b=0;b<NV;b++){const ri=Math.floor(hsh(a,b)*RODZ.length),r=RODZ[ri];const X=a*PU*sx,Y=b*PV*sy,FW=PU*sx,FH=PV*sy;
+    cp.fillStyle=hex(r[1]);cp.fillRect(X,Y,FW,FH);
+    if(ri!==3){cp.fillStyle=hex(new THREE.Color(r[0]).multiplyScalar(ri===1||ri===2?0.66:0.76).getHex());const kr=(ri===1||ri===2)?2.2:1.6;if(hsh(a+7,b+3)<.35){for(let v=0;v<PV;v+=kr)cp.fillRect(X,Y+v*sy,FW,kr*.5*sy);}else for(let u=0;u<PU;u+=kr)cp.fillRect(X+u*sx,Y,kr*.5*sx,FH);}   /* część pól orana w poprzek */           /* bruzdy / rzędy ścierniska */
+    else{cp.fillStyle=hex(new THREE.Color(r[1]).multiplyScalar(1.1).getHex());for(let u=0;u<PU;u+=6)cp.fillRect(X+u*sx,Y,3*sx,FH);   /* pasy po kosiarce */
+      for(let k=0;k<26;k++){cp.fillStyle=hex(r[pr()<.6?0:1]);cp.globalAlpha=.4;cp.beginPath();cp.ellipse(X+pr()*FW,Y+pr()*FH,(3+pr()*7)*sx,(4+pr()*12)*sy,0,0,7);cp.fill();}cp.globalAlpha=1;}   /* łąka w plamy */
+    for(let k=0;k<140;k++){cp.fillStyle=pr()<.5?'rgba(255,240,200,.10)':'rgba(40,30,10,.10)';cp.fillRect(X+pr()*FW,Y+pr()*FH,(1+pr()*3)*sx,(1+pr()*3)*sy);}   /* drobne przebarwienia */
+    cp.fillStyle='#7d963c';cp.fillRect(X,Y,1.3*sx,FH);cp.fillRect(X,Y,FW,1.0*sy);}                       /* miedze */
+  const tp=new THREE.CanvasTexture(cvp);tp.wrapS=tp.wrapT=THREE.RepeatWrapping;tp.anisotropy=4;tp.magFilter=THREE.NearestFilter;
+  const kol=new THREE.Color();
+  for(let i=0;i<pos.count;i++){const x=pos.getX(i),z=pos.getZ(i);const [d,si]=najblizsza(x,z);let col,pl=0;
+    const sz=vszum(x/6,z/6);
+    const RDs=wDrogi(Math.max(0,si));if(d<RDs/2+9)col=sz<.35?0x9a8a3e:0x84923c;   /* pobocze: oliwkowa trawa z przebarwieniami */
+    else{const s=samples[Math.max(0,si)],n=nrm(s),strona=((x-s.p.x)*n.x+(z-s.p.z)*n.z)>0?1:-1;
+      if(si>=0&&strefa(si,strona)==='las'&&d<62)col=sz<.5?0x5f6e30:0x6a7834;   /* ściółka pod lasem */
+      else{col=0x84923c;pl=Math.min(1,(d-RDs/2-9)/6);}}
+    kol.setHex(col).multiplyScalar(0.94+vszum(x/3.3,z/3.3)*0.12);cols.push(kol.r,kol.g,kol.b);pole.push(pl);
+    const u=x*ck+z*sk,v=-x*sk+z*ck;uvp.push(u/(PU*NU),v/(PV*NV));}
+  g.setAttribute('color',new THREE.Float32BufferAttribute(cols,3));g.setAttribute('aPole',new THREE.Float32BufferAttribute(pole,1));g.setAttribute('uvPole',new THREE.Float32BufferAttribute(uvp,2));
+  const tt=TX_TRAWA.clone();tt.needsUpdate=true;tt.repeat.set(Math.round(TW/14),Math.round(TH/14));
+  const mt=new THREE.MeshLambertMaterial({vertexColors:true,map:tt});
+  mt.onBeforeCompile=sh=>{sh.uniforms.tPole={value:tp};
+    sh.vertexShader='attribute float aPole;attribute vec2 uvPole;varying float vPole;varying vec2 vUvPole;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvPole=aPole;vUvPole=vec2(transformed.x*('+ck+')+transformed.z*('+sk+'),transformed.z*('+ck+')-transformed.x*('+sk+'))/vec2('+(PU*NU)+'.0,'+(PV*NV)+'.0);');
+    sh.fragmentShader='uniform sampler2D tPole;varying float vPole;varying vec2 vUvPole;\n'+sh.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>\n{vec3 pk=texture2D(tPole,vUvPole).rgb;float jas=dot(texelColor.rgb,vec3(0.333));diffuseColor.rgb=mix(diffuseColor.rgb,pk*jas,smoothstep(0.35,0.65,vPole));}');};
+  {const T=80,ix=g.index.array,P=g.attributes.position,kaf=new Map();   /* teren w kafle 80×80 m (wspólne atrybuty, osobne indeksy) – rysowane tylko kafle w kadrze */
+   for(let i=0;i<ix.length;i+=3){const a=ix[i];const k=Math.floor(P.getX(a)/T)+','+Math.floor(P.getZ(a)/T);if(!kaf.has(k))kaf.set(k,[]);kaf.get(k).push(ix[i],ix[i+1],ix[i+2]);}
+   for(const [k,lst] of kaf){const gk=new THREE.BufferGeometry();for(const n in g.attributes)gk.setAttribute(n,g.attributes[n]);gk.setIndex(lst);
+     const [kx,kz]=k.split(',').map(Number);gk.boundingSphere=new THREE.Sphere(new THREE.Vector3((kx+.5)*T,1,(kz+.5)*T),T*.75);gk.boundingBox=new THREE.Box3(new THREE.Vector3(kx*T,-1,kz*T),new THREE.Vector3((kx+1)*T,4,(kz+1)*T));
+     const t=new THREE.Mesh(gk,mt);t.receiveShadow=true;t.userData.teren=true;scene.add(t);}}
+}
+
+function wytartaFarba(cv){const c=cv.getContext('2d');let q=555;const rr=()=>{q=(q*16807)%2147483647;return (q-1)/2147483646;};c.globalCompositeOperation='destination-out';
+  for(let k=0;k<cv.width*cv.height/18;k++){c.globalAlpha=.25+rr()*.6;c.fillRect(rr()*cv.width,rr()*cv.height,1+rr()*2.5,1+rr()*2.5);}c.globalAlpha=1;c.globalCompositeOperation='source-over';const t=new THREE.CanvasTexture(cv);t.anisotropy=8;return t;}   /* wytarta farba na asfalcie */
+// --- obiekty
+const leafCols=[0xe07b24,0xd4562a,0xe8b02f,0xc2402a,0xf09a2b,0x6f8a3a,0x3f6b3a];
+function obrys(g,skala,pomin){const OL=new THREE.MeshBasicMaterial({color:0x1c1408,side:THREE.BackSide});g.children.slice().forEach(o=>{if(o.isMesh&&!pomin(o)){const c=new THREE.Mesh(o.geometry,OL);c.position.copy(o.position);c.rotation.copy(o.rotation);c.scale.copy(o.scale).multiplyScalar(skala);g.add(c);}});}
+// drzewa: korony z kilku gładkich kul (liściaste, jesienne odcienie) albo stożki (świerki); pień widoczny
+const GEO_KULA=new THREE.SphereGeometry(1,7,5),GEO_PIEN=new THREE.CylinderGeometry(.14,.22,1,8),GEO_STOZEK=new THREE.ConeGeometry(1,1,10);   /* gęstsze bryły pod 1280×720 */
+function odcien(c,z){return new THREE.Color(c).multiplyScalar(1-z/2+rnd()*z).getHex();}
+// woda (strumień pod mostkiem): żaden obiekt nie może w niej stać
+function wWodzie(x,z,zapas=1.8){if(typeof IB==='undefined')return false;const s=samples[IB],n=nrm(s);const dx=x-s.p.x,dz=z-s.p.z;return Math.abs(dx*s.d.x+dz*s.d.z)<MOST_POL+zapas&&Math.abs(dx*n.x+dz*n.z)<72;}
+// dęby jesienne jak na wzorze: gruby, rozwidlony pień z konarami, szeroka korona z wielu kęp (ciemniejsze od spodu), czasem świerk
+const LIS_DAB=[[0xa8361a,0x6e2210,0xc85a26],[0xbc6018,0x86400f,0xdc8a30],[0xb88a26,0x806016,0xd6aa44],[0x9a4e1c,0x663212,0xbc6e2c]];   // czerwony, pomarańczowy, złoty, rdzawy – stonowane jak na wzorze
+function budujDrzewo(swierk,s,palNr){
+  const g=new THREE.Group();
+
+
+
+  if(swierk){const tr=new THREE.Mesh(GEO_PIEN,M(0x4a3420));tr.scale.set(s,1.6*s,s);tr.position.y=.8*s;g.add(tr);
+    for(let k=0;k<4;k++){const cn=new THREE.Mesh(GEO_STOZEK,M(odcien(k%2?0x2c4a26:0x355a2c,.1)));const r=(1.8-k*.38)*s;cn.scale.set(r,2.0*s,r);cn.position.y=(1.7+k*1.05)*s;cn.castShadow=true;g.add(cn);}}
+  else{const pal=LIS_DAB[palNr];
+    const pien=new THREE.Mesh(GEO_PIEN,M(0x3e2a1a));pien.scale.set(1.9*s,2.2*s,1.9*s);pien.position.y=1.1*s;pien.castShadow=true;g.add(pien);
+    const kon=[];for(let k=0;k<3;k++){const a=k*2.1+rnd(),b=new THREE.Mesh(GEO_PIEN,M(0x44301e));b.scale.set(1.0*s,1.7*s,1.0*s);b.position.set(Math.cos(a)*.55*s,2.6*s,Math.sin(a)*.55*s);b.rotation.set(Math.sin(a)*.6,0,-Math.cos(a)*.6);g.add(b);kon.push(a);}
+    const R=(2.3+rnd()*.6)*s;   // szeroka korona: środek + kępy po obwodzie, niższe ciemniejsze
+    const kepa=(px,py,pz,r,c,wew)=>{const m=new THREE.Mesh(GEO_KULA,M(odcien(c,.12)));m.scale.set(r,r*.78,r);m.position.set(px,py,pz);m.castShadow=!wew;if(wew)m.userData.bezObrysu=true;g.add(m);};   /* wew: kępa wewnątrz korony – bez obrysu i bez cienia (niewidoczne z zewnątrz) */
+    kepa(0,3.9*s,0,R*.62,pal[0]);
+    // korona jak na wzorze: wiele kęp w kilku odcieniach (ciemne niżej po obwodzie, jasne na wierzchu), lekko nieregularna
+    for(let k=0;k<9;k++){const a=k/9*6.28+rnd()*.4,o=R*(.6+rnd()*.3);kepa(Math.cos(a)*o,(3.0+rnd()*.6)*s,Math.sin(a)*o,R*(.3+rnd()*.12),rnd()<.75?pal[1]:pal[0]);}
+    for(let k=0;k<6;k++){const a=rnd()*6.28,o=R*(.25+rnd()*.4);kepa(Math.cos(a)*o,(3.9+rnd()*.5)*s,Math.sin(a)*o,R*(.28+rnd()*.1),rnd()<.6?pal[0]:pal[2],true);}
+    for(let k=0;k<4;k++){const a=rnd()*6.28,o=R*rnd()*.3;kepa(Math.cos(a)*o,(4.5+rnd()*.4)*s,Math.sin(a)*o,R*(.22+rnd()*.08),pal[2],true);}}
+  obrys(g,1.05,o=>o.geometry===GEO_PIEN||o.userData.bezObrysu);
+  // ściółka z liści pod drzewem (płaska plama w kolorze korony)
+  if(!swierk)for(let k=0;k<5;k++){const a=rnd()*6.28,o=(k?1+rnd()*1.4:0)*s;const pl=new THREE.Mesh(new THREE.CircleGeometry((k?.8+rnd()*.7:1.7)*s,8),new THREE.MeshLambertMaterial({color:odcien([0x6e4a22,0x7a5a26,0x5e5a2a][k%3],.15)}));pl.rotation.x=-Math.PI/2;pl.position.set(Math.cos(a)*o,.07+k*.004,Math.sin(a)*o);pl.scale.set(1,1+rnd()*.4,1);pl.receiveShadow=true;g.add(pl);}   /* plamy opadłych liści */
+  return g;}
+// domy: dwuspadowy dach, komin, drzwi, okna z obu stron, mały ogródek z płotem i szopa
+const TX_DACH=(()=>{const cv=document.createElement('canvas');cv.width=cv.height=64;const c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,64,64);c.fillStyle='rgba(0,0,0,.18)';for(let y=0;y<64;y+=8){c.fillRect(0,y,64,2);for(let x=(y/8)%2*6;x<64;x+=12)c.fillRect(x,y,2,8);}const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(3,2);return t;})();
+const GEO_DACH=(()=>{const sh=new THREE.Shape();sh.moveTo(-3.6,0);sh.lineTo(0,2.3);sh.lineTo(3.6,0);sh.closePath();const g=new THREE.ExtrudeGeometry(sh,{depth:9,bevelEnabled:false});g.translate(0,0,-4.5);return g;})();
+// kamienne domy jak na wzorze: ściany z kamienia (tekstura), ciemnobrązowa dachówka, studnia i kamienny murek ogródka
+const TX_KAMIEN=(()=>{const cv=document.createElement('canvas');cv.width=cv.height=64;const c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,64,64);
+  for(let y=0;y<64;y+=8)for(let x=((y/8)%2)*5-5;x<64;x+=10+Math.floor(rnd()*4)){const v=200+Math.floor(rnd()*55);c.fillStyle=`rgb(${v},${v-6},${v-14})`;c.fillRect(x+1,y+1,9,6);}
+  const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(2,1);return t;})();
+// ===== domy w stylu wzoru: kamienne ściany, stromy dach z dachówką i okapem, okna z okiennicami, kamienny komin; 3 warianty =====
+const TX_DACHOWKA=(()=>{const cv=document.createElement('canvas');cv.width=cv.height=64;const c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,64,64);
+  for(let y=0;y<64;y+=6){c.fillStyle='rgba(0,0,0,.28)';c.fillRect(0,y+4,64,2);for(let x=((y/6)%2)*4;x<64;x+=8){const v=225+Math.floor(rnd()*30);c.fillStyle=`rgb(${v},${v},${v})`;c.fillRect(x,y,7,4);c.fillStyle='rgba(0,0,0,.18)';c.fillRect(x+7,y,1,4);}}
+  const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(3,3);return t;})();
+function dach(szer,dl,wys,okap){const sh=new THREE.Shape();sh.moveTo(-szer/2-okap,-.15);sh.lineTo(0,wys);sh.lineTo(szer/2+okap,-.15);sh.lineTo(szer/2+okap,.05);sh.lineTo(0,wys+.2);sh.lineTo(-szer/2-okap,.05);sh.closePath();
+  const g=new THREE.ExtrudeGeometry(sh,{depth:dl+okap*2,bevelEnabled:false});g.translate(0,0,-(dl+okap*2)/2);return g;}
+const TX_TYNK=(()=>{const t=noiseTex(22);t.repeat.set(1.5,1.5);return t;})();
+function bryla(g,szer,dl,wysSc,wc,rc,ox,oz,ry){const b=new THREE.Group();
+  const coko=new THREE.Mesh(new THREE.BoxGeometry(szer+.1,.5,dl+.1),M(0x8a8478,{map:TX_KAMIEN}));coko.position.y=.25;b.add(coko);   /* kamienny cokół */
+  const sc=new THREE.Mesh(new THREE.BoxGeometry(szer,wysSc,dl),M(wc,{map:TX_TYNK}));   /* ściany tynkowane */sc.position.y=wysSc/2;sc.castShadow=sc.receiveShadow=true;b.add(sc);
+  const szczyt=new THREE.Shape();szczyt.moveTo(-szer/2,0);szczyt.lineTo(0,szer*.62);szczyt.lineTo(szer/2,0);szczyt.closePath();const sg=new THREE.ExtrudeGeometry(szczyt,{depth:dl,bevelEnabled:false});sg.translate(0,0,-dl/2);
+  const sz=new THREE.Mesh(sg,M(wc,{map:TX_TYNK}));sz.position.y=wysSc;b.add(sz);   /* trójkątne szczyty ścian */
+  const d=new THREE.Mesh(dach(szer,dl,szer*.62,.45),M(rc,{map:TX_DACHOWKA}));d.position.y=wysSc;d.castShadow=true;b.add(d);
+  // okna z okiennicami po dłuższych bokach i drzwi
+  const ileOkien=Math.max(1,Math.floor(dl/2.6));for(const sd of [-1,1])for(let k=0;k<ileOkien;k++){const z=-dl/2+dl*(k+.5)/ileOkien;
+    const o=new THREE.Mesh(new THREE.BoxGeometry(.08,.9,.7),M(0x283440));o.position.set(sd*(szer/2+.02),wysSc*.6,z);b.add(o);
+    for(const s of [-1,1]){const ok=new THREE.Mesh(new THREE.BoxGeometry(.06,.95,.32),M(0x5a3a22));ok.position.set(sd*(szer/2+.04),wysSc*.6,z+s*.52);b.add(ok);}}
+  const drz=new THREE.Mesh(new THREE.BoxGeometry(1,1.9,.08),M(0x5a3820));drz.position.set(0,.95,dl/2+.03);b.add(drz);
+  b.position.set(ox,0,oz);b.rotation.y=ry;g.add(b);return b;}
+function budujDom(wc,rc,typ=0){const g=new THREE.Group();
+  if(typ===0){bryla(g,6,8,3,wc,rc,0,0,0);}
+  else if(typ===1){bryla(g,6,9,3,wc,rc,0,0,0);bryla(g,4.5,5,2.6,wc,rc,4.6,-1.5,Math.PI/2);}   /* dom z przybudówką (L) */
+  else {bryla(g,7,7,4.6,wc,rc,0,0,0);}                                                    /* piętrowy */
+  const h=typ===2?4.6+4.3:3+3.7;const kom=new THREE.Mesh(new THREE.BoxGeometry(.7,1.8,.7),M(0x8a8478,{map:TX_KAMIEN}));kom.position.set(1.4,h-.6,-1.6);kom.castShadow=true;g.add(kom);
+  // podwórko: studnia, kamienny murek, drewniana szopa
+  const st=new THREE.Group();const cb=new THREE.Mesh(new THREE.CylinderGeometry(.55,.6,.7,8),M(0x9a948a,{map:TX_KAMIEN}));cb.position.y=.35;st.add(cb);const dw=new THREE.Mesh(new THREE.ConeGeometry(.75,.6,4),M(0x6a3a22));dw.position.y=1.5;dw.rotation.y=Math.PI/4;st.add(dw);
+  for(const k of [-1,1]){const sl=new THREE.Mesh(new THREE.BoxGeometry(.08,1.2,.08),M(0x5a3a22));sl.position.set(k*.5,.9,0);st.add(sl);}st.position.set(-3.4,0,6.2);g.add(st);
+  for(const [px,pz,dl,ry] of [[-6.5,0,15,0],[-.5,7.6,12,Math.PI/2]]){const mur=new THREE.Mesh(new THREE.BoxGeometry(.5,.7,dl),M(0xa8a196,{map:TX_KAMIEN}));mur.position.set(px,.35,pz);mur.rotation.y=ry;mur.castShadow=true;g.add(mur);}
+  const sz=new THREE.Mesh(new THREE.BoxGeometry(2.4,2,3),M(0x5e4430,{map:TX_ZWIR}));sz.position.set(-4.4,1,-5);sz.castShadow=true;g.add(sz);const szd=new THREE.Mesh(dach(2.4,3,1.0,.2),M(0x4a3020));szd.position.set(-4.4,2,-5);g.add(szd);
+  obrys(g,1.02,o=>o.geometry.parameters&&o.geometry.parameters.width<0.2);return g;}
+// ===== kilka wzorów drzew i domów, powielanych obrotem i skalą (InstancedMesh: jeden wzór = kilkanaście wywołań rysowania na cały odcinek) =====
+const WZORY={};
+// wzór = części zbudowanego obiektu scalone w kilka geometrii: wszystkie jednolite kolory → jedna siatka z kolorami wierzchołków
+// (z „malarskim” światłem: góra jaśniejsza, spód ciemniejszy), obrys → jedna siatka, elementy z teksturą → po jednej na materiał
+function wzor(nazwa,budowa){if(WZORY[nazwa])return WZORY[nazwa];const g=budowa();g.updateMatrixWorld(true);const kosze=new Map();const tmpC=new THREE.Color();
+  g.traverse(o=>{if(!o.isMesh)return;let geo=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();geo.applyMatrix4(o.matrixWorld);if(!geo.attributes.normal)geo.computeVertexNormals();
+    const m=o.material;let klucz,mat;
+    if(m.isMeshLambertMaterial&&!m.map&&!m.transparent){klucz='L';mat=null;const n=geo.attributes.normal,cnt=geo.attributes.position.count,col=new Float32Array(cnt*3);
+      for(let i=0;i<cnt;i++){const sw=0.55+0.55*Math.pow(n.getY(i)*0.5+0.5,1.4)+0.08*n.getX(i);   /* mocniejszy cień od spodu – malarski efekt */tmpC.copy(m.color).multiplyScalar(sw);col[i*3]=tmpC.r;col[i*3+1]=tmpC.g;col[i*3+2]=tmpC.b;}geo.setAttribute('color',new THREE.BufferAttribute(col,3));}
+    else{klucz=m.uuid;mat=m;}
+    for(const a of Object.keys(geo.attributes))if(!['position','normal','color','uv'].includes(a))geo.deleteAttribute(a);
+    if(!kosze.has(klucz))kosze.set(klucz,{geo:[],mat,cien:false,odb:false});const k=kosze.get(klucz);k.geo.push(geo);k.cien=k.cien||o.castShadow;k.odb=k.odb||o.receiveShadow;});
+  const czesci=[];for(const [kl,k] of kosze){const atr=['position','normal'].concat(kl==='L'?['color']:(k.geo[0].attributes.uv?['uv']:[]));const out=new THREE.BufferGeometry();
+    for(const a of atr){const roz=k.geo[0].attributes[a].itemSize;let L=0;k.geo.forEach(g2=>L+=g2.attributes[a]?g2.attributes[a].count*roz:0);const arr=new Float32Array(L);let off=0;k.geo.forEach(g2=>{if(g2.attributes[a]){arr.set(g2.attributes[a].array,off);off+=g2.attributes[a].array.length;}});out.setAttribute(a,new THREE.BufferAttribute(arr,roz));}
+    czesci.push({geo:out,mat:kl==='L'?new THREE.MeshLambertMaterial({vertexColors:true}):k.mat,cien:k.cien,odb:k.odb});}
+  return WZORY[nazwa]={czesci,poz:[]};}
+const _mI=new THREE.Matrix4(),_qI=new THREE.Quaternion(),_vI=new THREE.Vector3(),_sI=new THREE.Vector3(),_yI=new THREE.Vector3(0,1,0);
+function postaw(nazwa,budowa,x,z,ry,sk){const w=wzor(nazwa,budowa);w.poz.push(_mI.compose(_vI.set(x,Math.max(0,wysT(x,z)),z),_qI.setFromAxisAngle(_yI,ry),_sI.set(sk,sk,sk)).clone());}
+// instancje dzielone na kafle 60×60 m; rysowane są tylko kafle blisko kamery (pokazKafle w pętli gry)
+const KAFLE=[];
+function zbudujWzory(){for(const n in WZORY){const w=WZORY[n];if(!w.poz.length)continue;const grupy=new Map();const p=new THREE.Vector3();
+  for(const m of w.poz){p.setFromMatrixPosition(m);const k=Math.floor(p.x/60)+","+Math.floor(p.z/60);if(!grupy.has(k))grupy.set(k,{lista:[],x:(Math.floor(p.x/60)+.5)*60,z:(Math.floor(p.z/60)+.5)*60});grupy.get(k).lista.push(m);}
+  for(const g of grupy.values())for(const c of w.czesci){const im=new THREE.InstancedMesh(c.geo,c.mat,g.lista.length);g.lista.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=c.cien&&/^(dab|swierk|brzoza|dom|stodola)/.test(n);   /* cień rzucają tylko drzewa i domy – drobnica bez cienia (mniej pracy, bez przycięć) */im.receiveShadow=c.odb;im.frustumCulled=false;im.userData.kafel=[g.x,g.z];scene.add(im);KAFLE.push(im);}}}
+function pokazKafle(x,z,r){for(const im of KAFLE){const [kx,kz]=im.userData.kafel;im.visible=Math.abs(kx-x)<r+30&&Math.abs(kz-z)<r+30;}}
+// 5 dębów (po jednym na kolor liści) + 2 świerki; 3 domy
+function budujBrzoze(v){const g=new THREE.Group();const pn=new THREE.Mesh(GEO_PIEN,M(0xebe6da));pn.scale.set(.75,5.2,.75);pn.position.y=2.6;pn.castShadow=true;g.add(pn);
+  for(let k=0;k<7;k++){const c=new THREE.Mesh(new THREE.BoxGeometry(.2,.08,.2),M(0x1e1c1a));c.position.set((rnd()-.5)*.06,.5+k*.62+rnd()*.2,(rnd()-.5)*.06);c.rotation.y=rnd()*3;g.add(c);}   /* czarne przetarcia kory */
+  const pal=[[0xe6b832,0xd09a26,0xf2cc4a],[0xd8a62c,0xc08424,0xeac040]][v];for(let k=0;k<11;k++){const a=rnd()*6.28,o=rnd()*1.1,h=3.6+rnd()*2.6;const m=new THREE.Mesh(GEO_KULA,M(odcien(pal[k%3],.1)));const r=.55+rnd()*.35;m.scale.set(r,r*1.25,r);m.position.set(Math.cos(a)*o,h,Math.sin(a)*o);m.castShadow=true;g.add(m);}
+  obrys(g,1.05,o=>o.geometry===GEO_PIEN||o.geometry.type==="BoxGeometry");return g;}   /* brzoza jak na zdjęciach z odcinka: biały pień, żółta ażurowa korona */
+function tree(x,z,s){if(wWodzie(x,z,4.5*Math.max(1,s)))return;{const st0=samples[START_I].p;const dS=Math.hypot(x-st0.x,z-st0.z);if(dS<15||(dS<70&&rnd()<.45))return;}   /* mniej drzew przy starcie, wolne miejsce dla karetki i straży */const rb=rnd();if(rb<.2){const v=rb<.1?0:1;postaw("brzoza"+v,()=>budujBrzoze(v),x,z,rnd()*6.28,s*(0.85+rnd()*0.3));return;}const sw=rnd()<.22;const k=sw?Math.floor(rnd()*2):Math.floor(rnd()*LIS_DAB.length);
+  postaw((sw?'swierk':'dab')+k,()=>budujDrzewo(sw,sw?0.9+k*0.15:1,k),x,z,rnd()*6.28,s*(0.9+rnd()*0.2));}
+const DOMY=[[0xf0ead8,0x8a3e26,0],[0xe8dcb8,0x6a3624,1],[0xf4f0e6,0x9a4a2c,2],[0xe4d6a8,0x5a3222,0]];   /* tynk: biały, kremowy, jasnożółty + dachówka */   /* kamień + dachówka: 4 wzory (3 kształty) */
+function house(x,z,rot){if(wWodzie(x,z,8)||distRoad(x,z)<RD/2+13)return;   /* murek i szopa nie mogą wchodzić na pobocze */{const st0=samples[START_I].p;if(Math.hypot(x-st0.x,z-st0.z)<30)return;}const k=Math.floor(rnd()*DOMY.length);postaw("dom"+k,()=>budujDom(DOMY[k][0],DOMY[k][1],DOMY[k][2]),x,z,rot+(rnd()<.5?0:Math.PI),0.9+rnd()*0.2);}
+// krzaki: 3 wzory z kilku kęp liści (jesienne), kępy trawy: 2 wzory z cienkich źdźbeł – stawiane jako instancje
+const KRZ_PAL=[[0x9a3a1a,0xc05a24,0x6e2814],[0xb0761e,0xd49a34,0x7a5216],[0x6e7a2e,0x8e9a3c,0x4e5a22]];
+function budujKrzak(k){const g=new THREE.Group();const p=KRZ_PAL[k];for(let i=0;i<6;i++){const a=i/6*6.28+rnd(),o=i?.45+rnd()*.25:0;const r=.42+rnd()*.22;
+  const m=new THREE.Mesh(GEO_KULA,M(p[i%3]));m.scale.set(r,r*.75,r);m.position.set(Math.cos(a)*o,.32+rnd()*.25,Math.sin(a)*o);m.castShadow=true;g.add(m);}obrys(g,1.06,()=>false);return g;}
+function budujKepe(k){const g=new THREE.Group();const kol=k?[0xa49a46,0x8c8a3a,0xbcae5a]:[0x7c9236,0x6a8030,0x93a444];
+  for(let i=0;i<7;i++){const a=rnd()*6.28,o=rnd()*.25;const z=new THREE.Mesh(new THREE.ConeGeometry(.05,.45+rnd()*.3,3),M(kol[i%3]));z.position.set(Math.cos(a)*o,.25,Math.sin(a)*o);z.rotation.set((rnd()-.5)*.6,0,(rnd()-.5)*.6);g.add(z);}return g;}
+function krzakW(x,z,s){if(wWodzie(x,z,1.5))return;{const st0=samples[START_I].p;if(Math.hypot(x-st0.x,z-st0.z)<22)return;}const k=Math.floor(rnd()*3);postaw('krzak'+k,()=>budujKrzak(k),x,z,rnd()*6.28,s*(.8+rnd()*.5));}
+function kepaW(x,z){if(wWodzie(x,z,.5))return;const k=rnd()<.6?0:1;postaw('kepa'+k,()=>budujKepe(k),x,z,rnd()*6.28,.8+rnd()*.6);}
+function postac(c){const g=new THREE.Group();   /* kibic/obsługa: kurtka (zwężany walec), ręce, nogi, głowa-kula, czapka albo włosy */
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(.24,.31,.82,7),M(c));body.position.y=1.0;body.scale.z=.72;body.castShadow=true;g.add(body);
+  const sk=rnd()<.15?0xc89870:0xf0c8a0;const hd=new THREE.Mesh(new THREE.SphereGeometry(.19,7,5),M(sk));hd.position.y=1.6;g.add(hd);
+  const czap=new THREE.Mesh(new THREE.SphereGeometry(.2,7,4,0,Math.PI*2,0,Math.PI*.5),M(rnd()<.45?[0xd42020,0x1f3c8a,0x222222,0xe0c020][Math.floor(rnd()*4)]:[0x3a2a1a,0x6a4a2a,0xb08a50][Math.floor(rnd()*3)]));czap.position.y=1.64;g.add(czap);
+  for(const k of [-1,1]){const n=new THREE.Mesh(new THREE.CylinderGeometry(.1,.09,.6,6),M(0x2a3550));n.position.set(k*.12,.3,0);g.add(n);
+    const b=new THREE.Mesh(new THREE.BoxGeometry(.16,.1,.28),M(0x1a1a1a));b.position.set(k*.12,.05,.05);g.add(b);}
+  const rece=rnd()<.4;for(const k of [-1,1]){const a=new THREE.Mesh(new THREE.CylinderGeometry(.075,.07,.66,6),M(c));
+    if(rece){a.position.set(k*.36,1.62,0);a.rotation.z=k*-.35;}else{a.position.set(k*.33,1.02,0);a.rotation.z=k*.12;}g.add(a);
+    const d=new THREE.Mesh(new THREE.SphereGeometry(.07,5,4),M(sk));d.position.set(rece?k*.48:k*.37,rece?1.95:.68,0);g.add(d);}
+  g.children.forEach(o=>{o.position.multiplyScalar(1.15);o.scale.multiplyScalar(1.15);});   /* ok. 1,8 m po skali 0,8 */
+  return g;}
+function bela(x,z,ry){const b=new THREE.Mesh(new THREE.BoxGeometry(1.3,.55,.6),M(0xe2c25e,{map:TX_ZWIR}));b.position.set(x,.28,z);b.rotation.y=ry;b.castShadow=true;scene.add(b);
+  const b2=new THREE.Mesh(b.geometry,new THREE.MeshBasicMaterial({color:0x2a2010,side:THREE.BackSide}));b2.position.copy(b.position);b2.rotation.copy(b.rotation);b2.scale.setScalar(1.08);scene.add(b2);}
+
+if(!MAPA){
+ // drzewa, domy i płoty wg strefy
+ const PLOT_OST={'-1':null,'1':null};
+ for(let i=I0;i<=I1;i+=2){const s=samples[i];RD=wDrogi(i);const n=nrm(s);
+   for(const side of [-1,1]){const st=strefa(i,side);
+     if(st==='las'){for(let r=0;r<3;r++){if(rnd()<.8){const o=side*(RD/2+6+r*16+rnd()*16);const x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(distRoad(x,z)>RD/2+5)tree(x,z,.85+rnd()*.55);}}}   // ściana lasu, kilka rzędów w głąb
+     if(st==='pole'&&rnd()<.04){const o=side*(RD/2+7+rnd()*30);const x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(distRoad(x,z)>RD/2+5)tree(x,z,.9+rnd()*.5);}
+     if(st==='wies'&&i%96===0){const o=side*(RD/2+16+rnd()*6);const x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(distRoad(x,z)>RD/2+8)house(x,z,Math.atan2(s.d.x,s.d.z),[0xf1e6cf,0xe8dcc0,0xf4efe4][i%3],[0xc0452a,0x8a3a28,0xc8562f][i%3]);}
+     if(st==='wies'&&i%3===0){const o=side*(RD/2+6.5);const px=s.p.x+n.x*o,pz=s.p.z+n.z*o;const p=new THREE.Mesh(new THREE.BoxGeometry(.14,.95,.14),M(0x6e4f32));p.position.set(px,.47,pz);p.castShadow=true;scene.add(p);
+       const pp=PLOT_OST[side];if(pp&&Math.hypot(px-pp[0],pz-pp[1])<6.5){const dx=px-pp[0],dz=pz-pp[1],L=Math.hypot(dx,dz),ry=Math.atan2(dx,dz),mx=(px+pp[0])/2,mz=(pz+pp[1])/2;   /* drewniany płot: dwie żerdzie i sztachety */
+         for(const h of [.3,.72]){const r=new THREE.Mesh(new THREE.BoxGeometry(.05,.07,L),M(0x80603e));r.position.set(mx,h,mz);r.rotation.y=ry;scene.add(r);}
+         for(let k=1;k<6;k++){const u=k/6,sz=new THREE.Mesh(new THREE.BoxGeometry(.04,.85,.1),M(k%2?0x8a6a44:0x7c5c3a));sz.position.set(pp[0]+dx*u,.42,pp[1]+dz*u);sz.rotation.y=ry;scene.add(sz);}}
+       PLOT_OST[side]=[px,pz];}else if(st!=='wies')PLOT_OST[side]=null;
+   }}
+ // kilka drzew przy starcie (w kadrze odliczania, nie zasłaniają karetki ani straży)
+ {for(const [wz,bok] of [[-8,-1],[6,-1],[-4,1],[10,1],[18,-1]]){const s=samples[Math.max(0,START_I+Math.round(wz/DS))],n=nrm(s);const o=bok*(RD/2+11+rnd()*3);const k=Math.floor(rnd()*4);postaw("dab"+k,()=>budujDrzewo(false,1,k),s.p.x+n.x*o,s.p.z+n.z*o,rnd()*6.28,.9+rnd()*.3);}}
+ {const s=samples[START_I+Math.round(13/DS)],n=nrm(s);const o=-(RD/2+15);postaw("dom0",()=>budujDom(DOMY[0][0],DOMY[0][1],DOMY[0][2]),s.p.x+n.x*o,s.p.z+n.z*o,Math.atan2(s.d.x,s.d.z)+Math.PI/2,1);}   /* jeden dom po lewej przy starcie */
+ // --- więcej otoczenia: aleje drzew przy polach, krzaki, słupy energetyczne, stodoły, kapliczki, kibice z banerem, taśmy, samochody kibiców
+ {const krzak=(x,z,s)=>{krzakW(x,z,s);return;const b=new THREE.Mesh(new THREE.IcosahedronGeometry(.7*s,0),M([0x6f8a3a,0x8a7a2a,0xb06a24,0x5f7a30][Math.floor(rnd()*4)]));b.position.set(x,.45*s,z);b.scale.y=.7;b.rotation.y=rnd()*3;b.castShadow=true;scene.add(b);};
+  const SLUPY=[];const slup=(x,z,ry=0,sd=0)=>{if(wWodzie(x,z,1)){SLUPY.push(null);return;}SLUPY.push({x,z,ry,sd});const s=new THREE.Mesh(new THREE.CylinderGeometry(.11,.14,6.5,5),M(0x6b5a44));s.position.set(x,3.25,z);s.castShadow=false;scene.add(s);   /* słupy bez cienia: z góry ich nie widać, a cień kładł się długą kreską przez drogę */const p=new THREE.Mesh(new THREE.BoxGeometry(1.4,.1,.1),M(0x4a3a2a));p.position.set(x,6.2,z);p.rotation.y=ry;scene.add(p);};
+  const stodola=(x,z,ry)=>{if(wWodzie(x,z,8))return;const g=new THREE.Group();const b=new THREE.Mesh(new THREE.BoxGeometry(7,3.6,10),M(0x8a4a2a,{map:TX_ZWIR}));b.position.y=1.8;b.castShadow=true;g.add(b);
+    const r=new THREE.Mesh(new THREE.CylinderGeometry(.01,5.4,2.4,4,1),M(0x5a5a60));r.rotation.y=Math.PI/4;r.scale.set(1,1,1.4);r.position.y=4.8;r.castShadow=true;g.add(r);
+    const d=new THREE.Mesh(new THREE.BoxGeometry(.1,2.4,2.6),M(0x3a2a1c));d.position.set(-3.52,1.2,0);g.add(d);obrys(g,1.03,()=>false);g.position.set(x,0,z);g.rotation.y=ry;scene.add(g);};
+  const kapliczka=(x,z,ry)=>{const g=new THREE.Group();const b=new THREE.Mesh(new THREE.BoxGeometry(.9,1.8,.9),M(0xf2efe6));b.position.y=.9;b.castShadow=true;g.add(b);const r=new THREE.Mesh(new THREE.ConeGeometry(.8,.9,4),M(0x3a5a8a));r.rotation.y=Math.PI/4;r.position.y=2.25;g.add(r);
+    const k=new THREE.Mesh(new THREE.BoxGeometry(.06,.5,.06),M(0x222222));k.position.y=2.9;g.add(k);const k2=new THREE.Mesh(new THREE.BoxGeometry(.3,.06,.06),M(0x222222));k2.position.y=3.0;g.add(k2);g.position.set(x,0,z);g.rotation.y=ry;scene.add(g);};
+  const autoKibica=(x,z,ry)=>{const c=[0x2f5fa8,0xb8bcc2,0x8a1c1c,0x2a2a2a,0xe8e8e8][Math.floor(rnd()*5)];const g=new THREE.Group();const b=new THREE.Mesh(new THREE.BoxGeometry(1.7,.7,4),M(c));b.position.y=.55;b.castShadow=true;g.add(b);
+    const k=new THREE.Mesh(new THREE.BoxGeometry(1.5,.55,2),M(0x2a3a4a));k.position.set(0,1.15,.2);g.add(k);obrys(g,1.04,()=>false);g.position.set(x,0,z);g.rotation.y=ry;scene.add(g);};
+  let ostSlup=-99,ostKap=-999;
+  for(let i=I0;i<=I1;i+=3){const s=samples[i];RD=wDrogi(i);const n=nrm(s);const ry=Math.atan2(s.d.x,s.d.z);
+    for(const side of [-1,1]){const st=strefa(i,side);
+      if(st==='pole'&&(i%8===0)){const zaLinia=side===(Math.floor(i/400)%2?1:-1);const o=side*(RD/2+(zaLinia?12.8:6.5)+rnd()*1.5);   /* po stronie słupów aleja za przewodami (korony przecinały linię) */tree(s.p.x+n.x*o,s.p.z+n.z*o,.75+rnd()*.35);}          // aleja przydrożna
+      if(rnd()<(st==='las'?.5:.22)){const o=side*(RD/2+3.6+rnd()*3);const x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(distRoad(x,z)>RD/2+3)krzak(x,z,.7+rnd()*.6);}
+      if(st==='pole'&&rnd()<.025){const o=side*(RD/2+30+rnd()*25);stodola(s.p.x+n.x*o,s.p.z+n.z*o,ry+(rnd()<.5?0:Math.PI/2));}
+      if(st==='wies'&&i%60===0&&rnd()<.6){const o=side*(RD/2+15+rnd()*4);const x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(distRoad(x,z)>RD/2+7)house(x,z,ry,[0xf1e6cf,0xe8dcc0,0xf4efe4,0xd8e4ec][i%4],[0xc0452a,0x8a3a28,0xc8562f,0x5a5a60][i%4]);}
+      // auta kibiców przy domach usunięte (na prośbę użytkownika)
+    }
+    if(i-ostSlup>=52){ostSlup=i;const sd=Math.floor(i/400)%2?1:-1,o=sd*(RD/2+8.5);if(strefa(i,sd)!=="las")slup(s.p.x+n.x*o,s.p.z+n.z*o,ry,sd);else SLUPY.push(null);}   /* w lesie bez słupów (przewody szły przez korony drzew) */
+    if(i-ostKap>1100&&strefa(i,1)==='wies'){ostKap=i;const o=RD/2+5;kapliczka(s.p.x+n.x*o,s.p.z+n.z*o,ry);}}
+  {const L=[];for(let a=1;a<SLUPY.length;a++){const p=SLUPY[a-1],q=SLUPY[a];if(!p||!q||p.sd!==q.sd)continue;const d=Math.hypot(q.x-p.x,q.z-p.z);if(d>50)continue;   /* przewody między sąsiednimi słupami, z zwisem */
+     for(const s of [-.6,.6]){const ax=p.x+Math.cos(p.ry)*s,az=p.z-Math.sin(p.ry)*s,bx=q.x+Math.cos(q.ry)*s,bz=q.z-Math.sin(q.ry)*s;let px=ax,py=6.28,pz=az;
+       for(let k=1;k<=8;k++){const t=k/8,x=ax+(bx-ax)*t,z=az+(bz-az)*t,y=6.28-Math.sin(t*Math.PI)*0.9;L.push(px,py,pz,x,y,z);px=x;py=y;pz=z;}}}
+   const gd=new THREE.BufferGeometry();gd.setAttribute('position',new THREE.Float32BufferAttribute(L,3));scene.add(new THREE.LineSegments(gd,new THREE.LineBasicMaterial({color:0x2a2622})));}
+  // grupy kibiców przy ostrych łukach (po wewnętrznej, za taśmą, z banerem)
+  const kc3=[0xff4a3a,0x2f6bff,0xffd21f,0x2ecc40,0xffffff,0x1c1c1c,0xff8c1a,0x8a3cff];
+  for(let i=I0+30;i<I1-30;i+=4){const k=krzywizna(i,10);if(k.ang<0.5||(i%80)>4)continue;const s=samples[i],n=nrm(s);RD=wDrogi(i);const wew=k.lewy?-1:1;
+    for(let j=0;j<8;j++){const q=samples[i-12+Math.floor(rnd()*24)],nn=nrm(q);const o=wew*(RD/2+5+rnd()*3);const g=postac(kc3[Math.floor(rnd()*8)]);
+      g.position.set(q.p.x+nn.x*o,0,q.p.z+nn.z*o);g.rotation.y=Math.atan2(-nn.x*wew,-nn.z*wew);g.scale.setScalar(.8);scene.add(g);}
+    const cv=document.createElement('canvas');cv.width=96;cv.height=20;const c=cv.getContext('2d');c.fillStyle='#ffd21f';c.fillRect(0,0,96,20);c.fillStyle='#101018';c.font='bold 12px Arial Black,Arial';c.textAlign='center';c.textBaseline='middle';c.fillText('DAWAJ KROPEK!',48,11);
+    const tx=new THREE.CanvasTexture(cv);tx.magFilter=THREE.NearestFilter;const mt=new THREE.MeshLambertMaterial({map:tx});
+    const ban=new THREE.Mesh(new THREE.BoxGeometry(3.4,.7,.06),[M(0x333333),M(0x333333),M(0x333333),M(0x333333),mt,mt]);const o=wew*(RD/2+4.2);ban.position.set(s.p.x+n.x*o,.9,s.p.z+n.z*o);ban.rotation.y=Math.atan2(s.d.x,s.d.z)+Math.PI/2;ban.castShadow=true;scene.add(ban);}
+ }
+ // kępy trawy: gęsto przy poboczu, rzadziej w polu (instancje – lekkie)
+ for(let i=I0;i<=I1;i+=3){const s=samples[i];RD=wDrogi(i);const n=nrm(s);for(const side of [-1,1]){const ile=1+Math.floor(rnd()*3);for(let k=0;k<ile;k++){const o=side*(RD/2+1+rnd()*9);kepaW(s.p.x+n.x*o+(rnd()-.5)*2,s.p.z+n.z*o+(rnd()-.5)*2);}
+   if(rnd()<.35){const o=side*(RD/2+12+rnd()*30);kepaW(s.p.x+n.x*o,s.p.z+n.z*o);}}}
+ // bele słomy po zewnętrznej ciasnych łuków, stare ślady opon
+ const SK=new THREE.MeshBasicMaterial({color:0x202024,transparent:true,opacity:.2});
+ for(let i=I0+8;i<I1-8;i++){const k=krzywizna(i);if(k.ang<0.11)continue;const s=samples[i];RD=wDrogi(i);const n=nrm(s);const zew=k.lewy?1:-1;
+   if(i%2===0&&k.ang>0.16)opony(s.p.x+n.x*zew*(RD/2+1.4),s.p.z+n.z*zew*(RD/2+1.4),2+(i%3===0));
+   if(i%9===0&&k.ang>0.2)separator(s.p.x-n.x*zew*(RD/2+0.6),s.p.z-n.z*zew*(RD/2+0.6),Math.atan2(s.d.x,s.d.z));
+   if(i%2===0)for(let m=0;m<2;m++){const o=-zew*(1.2+m*1.5)+Math.sin(i*.04+m*1.7)*.5;const p=new THREE.Mesh(new THREE.PlaneGeometry(.24,1.56),SK);p.rotation.x=-Math.PI/2;const g=new THREE.Group();g.add(p);g.position.set(s.p.x+n.x*o,.055,s.p.z+n.z*o);g.rotation.y=Math.atan2(s.d.x,s.d.z);scene.add(g);}
+ }
+ // szykana z opon i separatorów + beczki
+ if(true){[-1,0,1].forEach((gk,gi)=>{const i=CH_I+gk*SZ_ODST;const s=samples[i],n=nrm(s);RD=wDrogi(i);const side=gk===0?1:-1;
+   for(let o=RD/2-0.3;o>RD/2-RD*SZ_GLEB;o-=0.75){opony(s.p.x+n.x*side*o,s.p.z+n.z*side*o,2);}
+   const tip=RD/2-RD*SZ_GLEB-0.2;separator(s.p.x+n.x*side*tip,s.p.z+n.z*side*tip,Math.atan2(s.d.x,s.d.z)+Math.PI/2);
+   beczka(s.p.x+n.x*side*(RD/2+0.9)+s.d.x*1.2,s.p.z+n.z*side*(RD/2+0.9)+s.d.z*1.2);});}
+ // start: biała linia, tablica świetlna z zielonym światłem, kibice i samochód organizatora
+ if(true){RD=RD0;const s=samples[Math.round(ZAPAS/DS)],n=nrm(s);
+   const lin=new THREE.Mesh(new THREE.PlaneGeometry(RD,.5),new THREE.MeshLambertMaterial({map:wytartaFarba((()=>{const cv=document.createElement('canvas');cv.width=512;cv.height=32;const c=cv.getContext('2d');c.fillStyle='#ecebe6';c.fillRect(0,0,512,32);return cv;})()),transparent:true,depthWrite:false}));lin.rotation.order='YXZ';lin.rotation.y=Math.atan2(s.d.x,s.d.z);lin.rotation.x=-Math.PI/2;lin.position.set(s.p.x,.05,s.p.z);scene.add(lin);
+   const tg2=new THREE.Group();const sl=new THREE.Mesh(new THREE.BoxGeometry(.15,2.4,.15),M(0x444444));sl.position.y=1.2;tg2.add(sl);
+   const box=new THREE.Mesh(new THREE.BoxGeometry(.9,.6,.2),M(0x161616));box.position.y=2.6;tg2.add(box);
+   [[-.25,0x2a0a0a],[0,0x2a0a0a],[.25,0x29e04a]].forEach(([dx,col])=>{const l=new THREE.Mesh(new THREE.CircleGeometry(.09,8),new THREE.MeshBasicMaterial({color:col}));l.position.set(dx,2.6,-.11);l.rotation.y=Math.PI;tg2.add(l);});
+   tg2.position.set(s.p.x+n.x*(RD/2+1.2),0,s.p.z+n.z*(RD/2+1.2));tg2.rotation.y=Math.atan2(s.d.x,s.d.z);scene.add(tg2);
+   const kc2=[0xff4a3a,0x2f6bff,0xffd21f,0x2ecc40,0xffffff,0x1c1c1c,0xff8c1a];
+   for(let i=0;i<14;i++){const q=samples[Math.round(ZAPAS/DS)-20+Math.floor(rnd()*40)],nn=nrm(q);const side=i%2?1:-1;const o=side*(RD/2+3+rnd()*3);
+     const g=postac(kc2[i%7]);
+     g.position.set(q.p.x+nn.x*o,0,q.p.z+nn.z*o);g.rotation.y=Math.atan2(-nn.x*side,-nn.z*side);g.scale.setScalar(.8);scene.add(g);}
+   const org=new THREE.Group();const ob=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.4,4.2),M(0xf2f2f2));ob.position.y=.9;ob.castShadow=true;org.add(ob);const os=new THREE.Mesh(new THREE.BoxGeometry(1.82,.25,4.22),M(0xd42020));os.position.y=1.1;org.add(os);
+   const q=samples[Math.round(ZAPAS/DS)-10],nn=nrm(q);org.position.set(q.p.x-nn.x*(RD/2+3),0,q.p.z-nn.z*(RD/2+3));org.rotation.y=Math.atan2(q.d.x,q.d.z);scene.add(org);}
+   // służby na starcie: wóz strażacki (prawa strona) i karetka (lewa, za autem organizatora)
+   {const tekst=(w,h,rys)=>{const cv=document.createElement('canvas');cv.width=w;cv.height=h;const c=cv.getContext('2d');rys(c,w,h);const t=new THREE.CanvasTexture(cv);t.magFilter=THREE.NearestFilter;return new THREE.MeshLambertMaterial({map:t});};
+    const pojazd=(i,strona,dl,szer,wys,kolor,bok,dodaj)=>{const q=samples[i],nn=nrm(q);
+      if(typeof karetka==='function'){const g=kolor===0xc8141c?straz():karetka();g.userData.nieScalaj=true;const o=strona*(RD/2+7.5);g.position.set(q.p.x+nn.x*o,0,q.p.z+nn.z*o);   /* nowe modele wg arkuszy rzutów użytkownika */
+        scene.children.slice().forEach(c=>{if(c.isGroup&&c!==g&&!c.userData.nieScalaj&&c.position.distanceTo(g.position)<8)scene.remove(c);});g.rotation.y=Math.atan2(-q.d.x,-q.d.z);scene.add(g);return;}
+      const g=new THREE.Group();
+      const b=new THREE.Mesh(new THREE.BoxGeometry(szer,wys,dl),[bok,bok,M(kolor),M(kolor),M(kolor),M(kolor)]);b.position.y=wys/2+.35;b.castShadow=true;g.add(b);
+      const kab=new THREE.Mesh(new THREE.BoxGeometry(szer,wys*.75,1.7),M(kolor));kab.position.set(0,wys*.375+.35,-dl/2-.85);kab.castShadow=true;g.add(kab);
+      const sz=new THREE.Mesh(new THREE.BoxGeometry(szer*.92,wys*.3,.06),M(0x2a3a4a));sz.position.set(0,wys*.55+.35,-dl/2-1.71);g.add(sz);
+      for(const [x,z] of [[-szer/2+.15,-dl/2-.6],[szer/2-.15,-dl/2-.6],[-szer/2+.15,dl/2-.8],[szer/2-.15,dl/2-.8]]){const k=new THREE.Mesh(new THREE.CylinderGeometry(.42,.42,.3,10).rotateZ(Math.PI/2),M(0x151515));k.position.set(x,.42,z);g.add(k);}
+      for(const x of [-szer*.28,szer*.28]){const l=new THREE.Mesh(new THREE.BoxGeometry(.32,.16,.3),new THREE.MeshBasicMaterial({color:0x2a5cff}));l.position.set(x,wys*.75+.43,-dl/2-1.2);g.add(l);}
+      if(dodaj)dodaj(g);obrys(g,1.03,()=>false);/* poza trasą, za rowem */ const o=strona*(RD/2+7);g.position.set(q.p.x+nn.x*o,0,q.p.z+nn.z*o);scene.children.slice().forEach(c=>{if(c.isGroup&&c!==g&&c.position.distanceTo(g.position)<7.5)scene.remove(c);});   /* miejsce na parkingu służb: bez drzew i domów */g.rotation.y=Math.atan2(-q.d.x,-q.d.z);scene.add(g);};
+    const bokStraz=tekst(128,40,(c,w,h)=>{c.fillStyle='#c8141c';c.fillRect(0,0,w,h);c.fillStyle='#f2f2f2';c.fillRect(0,25,w,6);c.fillStyle='#fff';c.font='bold 15px Arial Black,Arial';c.textAlign='center';c.fillText('STRAŻ',w/2,20);});
+    // wóz strażacki wg widoku z góry od użytkownika: długi czerwony dach z drabiną przez całą długość, belka świateł niebiesko-biało-czerwona na kabinie
+    const dachStrazy=tekst(48,160,(c,w,h)=>{c.fillStyle="#c81a1e";c.fillRect(0,0,w,h);c.fillStyle="#a01216";c.fillRect(0,0,3,h);c.fillRect(w-3,0,3,h);
+      c.fillStyle="#5a1010";c.fillRect(17,6,14,h-12);c.fillStyle="#e8e8ea";c.fillRect(17,6,2,h-12);c.fillRect(29,6,2,h-12);for(let y=10;y<h-8;y+=7)c.fillRect(17,y,14,2);
+      c.fillStyle="#fff";c.fillRect(6,h-14,4,4);c.fillStyle="#2a5cff";c.fillRect(w-10,h-14,4,4);});
+    pojazd(Math.round(ZAPAS/DS)+1,1,6.8,2.4,2.5,0xc8141c,bokStraz,g=>{const d=new THREE.Mesh(new THREE.PlaneGeometry(2.38,6.78),dachStrazy);d.rotation.x=-Math.PI/2;d.position.set(0,2.86,0);g.add(d);
+      [[-0.62,0x2a5cff],[-0.2,0xf4f4f4],[0.2,0xe8241c],[0.62,0x2a5cff]].forEach(([x,c])=>{const l=new THREE.Mesh(new THREE.BoxGeometry(.4,.18,.34),new THREE.MeshBasicMaterial({color:c}));l.position.set(x,2.33,-4.25);g.add(l);});});
+    const bokKaretka=tekst(128,40,(c,w,h)=>{c.fillStyle='#f4f4f0';c.fillRect(0,0,w,h);for(let x=0;x<w;x+=16){c.fillStyle=(x/16)%2?'#2a8a3a':'#e8e020';c.fillRect(x,24,16,8);c.fillStyle=(x/16)%2?'#e8e020':'#2a8a3a';c.fillRect(x,32,16,8);}c.fillStyle='#d42020';c.fillRect(56,4,16,16);c.fillStyle='#fff';c.fillRect(62,6,4,12);c.fillRect(58,10,12,4);});
+    // karetka wg widoku z góry od użytkownika (wzór, nie kopia): biały dach z niebieską gwiazdą życia, belka świateł czerwono-niebieska, czerwone pasy po bokach
+    const dachKaretki=tekst(64,96,(c,w,h)=>{c.fillStyle="#f6f4ef";c.fillRect(0,0,w,h);c.fillStyle="#d62a20";c.fillRect(0,0,5,h);c.fillRect(w-5,0,5,h);c.fillStyle="#dcdad2";for(let y=8;y<h-8;y+=7)c.fillRect(12,y,w-24,2);
+      c.fillStyle="#2f5fd0";c.beginPath();c.arc(w/2,h*0.55,17,0,7);c.fill();c.fillStyle="#fff";c.beginPath();c.arc(w/2,h*0.55,14,0,7);c.fill();c.fillStyle="#2f5fd0";for(let k=0;k<3;k++){c.save();c.translate(w/2,h*0.55);c.rotate(k*Math.PI/3);c.fillRect(-3,-11,6,22);c.restore();}});
+    pojazd(Math.round(ZAPAS/DS)+4,-1,3.6,2.1,2.1,0xf4f4f0,bokKaretka,g=>{const d=new THREE.Mesh(new THREE.PlaneGeometry(2.08,3.56),dachKaretki);d.rotation.x=-Math.PI/2;d.rotation.z=Math.PI;d.position.set(0,2.46,0);g.add(d);
+      const bc=new THREE.Mesh(new THREE.BoxGeometry(.9,.16,.32),new THREE.MeshBasicMaterial({color:0xe8241c}));bc.position.set(-.45,2.55,-1.62);g.add(bc);const bn=new THREE.Mesh(new THREE.BoxGeometry(.9,.16,.32),new THREE.MeshBasicMaterial({color:0x2a5cff}));bn.position.set(.45,2.55,-1.62);g.add(bn);});}
+ // meta: szachownica w poprzek drogi, tablica z flagą i STOP dalej
+ if(true){RD=wDrogi(META_I);const s=samples[META_I],n=nrm(s);
+   const cv=document.createElement('canvas');cv.width=64;cv.height=8;const c=cv.getContext('2d');for(let a=0;a<16;a++)for(let b=0;b<2;b++){c.fillStyle=(a+b)%2?'#111':'#fff';c.fillRect(a*4,b*4,4,4);}const tx=new THREE.CanvasTexture(cv);tx.magFilter=THREE.NearestFilter;
+   const lin=new THREE.Mesh(new THREE.PlaneGeometry(RD,1.4),new THREE.MeshLambertMaterial({map:wytartaFarba(tx.image),transparent:true,depthWrite:false}));lin.rotation.order='YXZ';lin.rotation.y=Math.atan2(s.d.x,s.d.z)+Math.PI/2;lin.rotation.x=-Math.PI/2;lin.rotation.y=Math.atan2(s.d.x,s.d.z);lin.position.set(s.p.x,.05,s.p.z);scene.add(lin);
+   for(const k of [-1,1]){const sl=new THREE.Mesh(new THREE.BoxGeometry(.18,3.2,.18),M(0xdddddd));sl.position.set(s.p.x+n.x*k*(RD/2+1),1.6,s.p.z+n.z*k*(RD/2+1));sl.castShadow=true;}   /* bramka mety usunięta (życzenie użytkownika) */
+   const tb=new THREE.Mesh(new THREE.BoxGeometry(1.2,1.2,.08),[M(0x333333),M(0x333333),M(0x333333),M(0x333333),new THREE.MeshBasicMaterial({map:tx}),M(0xffd21f)]);tb.position.set(s.p.x+n.x*(RD/2+1.2),3.4,s.p.z+n.z*(RD/2+1.2));tb.rotation.y=Math.atan2(s.d.x,s.d.z);   /* stara tablica z flagą zastąpiona tablicą META LOTNA */
+   /* transparent META między słupkami: czerwony, biały napis, szachownica na końcach */
+   const cb=document.createElement('canvas');cb.width=256;cb.height=32;const b2=cb.getContext('2d');b2.fillStyle='#d42020';b2.fillRect(0,0,256,32);
+   for(const x0 of [0,232])for(let a=0;a<6;a++)for(let b=0;b<8;b++){b2.fillStyle=(a+b)%2?'#111':'#fff';b2.fillRect(x0+a*4,b*4,4,4);}
+   b2.fillStyle='#fff';b2.font='bold 24px Arial Black,Arial';b2.textAlign='center';b2.textBaseline='middle';b2.fillText('META',128,17);
+   const tbn=new THREE.CanvasTexture(cb);tbn.anisotropy=4;const mb=new THREE.MeshLambertMaterial({map:tbn});
+   const ban=new THREE.Mesh(new THREE.BoxGeometry(RD+2,.62,.06),[M(0xb01818),M(0xb01818),M(0xb01818),M(0xb01818),mb,mb]);ban.position.set(s.p.x,2.85,s.p.z);ban.rotation.y=Math.atan2(s.d.x,s.d.z);ban.castShadow=true;void ban;}
+ // kibice za taśmą po wewnętrznej najbliższego ciasnego łuku przed autem
+ const kc=[0xff4a3a,0x2f6bff,0xffd21f,0x2ecc40,0xffffff,0x1c1c1c,0xff8c1a,0x8a3cff,0x18b4c8];
+ function kibic(x,z,ry){const g=postac(kc[Math.floor(rnd()*kc.length)]);g.position.set(x,0,z);g.rotation.y=ry;g.scale.setScalar(.8);scene.add(g);}
+ let ik=-1;
+ if(ik>0){const wew=krzywizna(ik,10).lewy?-1:1;
+   for(let i=ik-30;i<=ik+30;i++){const s=samples[i];RD=wDrogi(i);const n=nrm(s);const o=wew*(RD/2+4);
+     if(i%3===0){const p=new THREE.Mesh(new THREE.BoxGeometry(.1,1,.1),M(0xeeeeee));p.position.set(s.p.x+n.x*o,.5,s.p.z+n.z*o);scene.add(p);}
+     const tp=new THREE.Mesh(new THREE.BoxGeometry(.12,.12,.9),M((i>>1)%2?0xffffff:0xe01818));tp.position.set(s.p.x+n.x*o,.95,s.p.z+n.z*o);tp.rotation.y=Math.atan2(s.d.x,s.d.z);scene.add(tp);
+     const ile=Math.floor(rnd()*3);for(let k=0;k<ile;k++){const oo=wew*(RD/2+5+rnd()*3.5);kibic(s.p.x+n.x*oo,s.p.z+n.z*oo,Math.atan2(-n.x*wew,-n.z*wew)+(rnd()-.5)*.8);}}}
+ // liście i łaty na asfalcie przy aucie
+ for(let i=0;i<2600;i++){const _si=Math.floor(rnd()*N),s=samples[_si];const n=nrm(s);RD=wDrogi(_si);const o=(rnd()-.5)*RD*1.1;
+   const l=new THREE.Mesh(new THREE.PlaneGeometry(.22,.16),M(leafCols[Math.floor(rnd()*5)],{side:THREE.DoubleSide}));l.rotation.set(-Math.PI/2,0,rnd()*6);l.position.set(s.p.x+n.x*o,0.07,s.p.z+n.z*o);scene.add(l);}
+ for(let i=0;i<220;i++){const _si=Math.floor(rnd()*N),s=samples[_si];const n=nrm(s);RD=wDrogi(_si);const o=(rnd()-.5)*RD*.6;
+   /* łata: nieregularny czworobok w odcieniu bliskim asfaltowi + ciemniejsza obwódka zalewki (scalane, bez tekstury) */
+   const hw=.55+rnd()*.5,hh=.35+rnd()*.4,j=()=>(rnd()-.5)*.16;const P=[[-hw+j(),-hh+j()],[hw+j(),-hh+j()],[hw+j(),hh+j()],[-hw+j(),hh+j()]];
+   const ksz=(sk)=>{const sh=new THREE.Shape();P.forEach((q,k)=>k?sh.lineTo(q[0]*sk,q[1]*sk):sh.moveTo(q[0]*sk,q[1]*sk));return new THREE.ShapeGeometry(sh);};
+   const rot=Math.atan2(s.d.x,s.d.z)+(rnd()<.6?0:(rnd()-.5)*.5);
+   const ob=new THREE.Mesh(ksz(1.0+.09/hw),M(0x43454b));ob.rotation.set(-Math.PI/2,0,rot);ob.position.set(s.p.x+n.x*o,.048,s.p.z+n.z*o);const naLinii=Math.min(Math.abs(_si-START_I),Math.abs(_si-META_I))*DS<3.5;   /* nie na linii startu/mety */
+   if(!naLinii)scene.add(ob);
+   const p=new THREE.Mesh(ksz(1),M([0x50525a,0x55575e,0x4c4e55][Math.floor(rnd()*3)]));p.rotation.set(-Math.PI/2,0,rot);p.position.set(s.p.x+n.x*o,.052,s.p.z+n.z*o);if(!naLinii)scene.add(p);}
+}
+
+// --- mostek: strumień w poprzek, betonowe barierki, deski na garbie
+if(true){
+  const s=samples[IB],n=nrm(s);
+  const woda=new THREE.Mesh(new THREE.PlaneGeometry(MOST_POL*2+0.6,140),new THREE.MeshLambertMaterial({color:0xffffff,map:TX_WODA}));woda.rotation.order='YXZ';woda.rotation.y=Math.atan2(s.d.x,s.d.z)+Math.PI/2;woda.rotation.x=-Math.PI/2;woda.position.set(s.p.x,0.035,s.p.z);scene.add(woda);
+  {const cm=new THREE.Mesh(new THREE.PlaneGeometry(MOST_ZWEZ*2+2.4,MOST_POL*2+.4),new THREE.MeshBasicMaterial({color:0x0a1a24,transparent:true,opacity:.38,depthWrite:false}));cm.rotation.order="YXZ";cm.rotation.y=Math.atan2(s.d.x,s.d.z);cm.rotation.x=-Math.PI/2;cm.position.set(s.p.x+.6,0.04,s.p.z-.4);scene.add(cm);}   /* cień mostu na wodzie */
+  for(const k of [-1,1]){const brzeg=new THREE.Mesh(new THREE.PlaneGeometry(1.6,140),M(0x6b5a3a,{map:TX_ZWIR}));brzeg.rotation.order='YXZ';brzeg.rotation.y=woda.rotation.y;brzeg.rotation.x=-Math.PI/2;brzeg.position.set(s.p.x+s.d.x*k*(MOST_POL+1.0),0.036,s.p.z+s.d.z*k*(MOST_POL+1.0));scene.add(brzeg);}
+  // mostek z metalowymi barierkami (wzór od użytkownika): ciemny pomost, słupki co ~1,5 m, dwie stalowe taśmy, kamienie na brzegach
+  const MET=M(0x6f7a86),SLUP=M(0x3e4248),POMOST=M(0x3c3e44,{map:TX_ASF});
+  {const n0=Math.round((MOST_POL+.6)/DS),P=[],U=[],I=[];let k=0;const hw=MOST_ZWEZ+.25;
+   for(let i=IB-n0;i<=IB+n0;i++){const q=samples[i],nn=nrm(q),y=hy(i)+.075;P.push(q.p.x-nn.x*hw,y,q.p.z-nn.z*hw,q.p.x+nn.x*hw,y,q.p.z+nn.z*hw);U.push(.5-hw/wDrogi(i),i*.35,.5+hw/wDrogi(i),i*.35);if(i<IB+n0)I.push(k,k+1,k+2,k+1,k+3,k+2);k+=2;}
+   const gm=new THREE.BufferGeometry();gm.setAttribute('position',new THREE.Float32BufferAttribute(P,3));gm.setAttribute('uv',new THREE.Float32BufferAttribute(U,2));gm.setIndex(I);gm.computeVertexNormals();
+   const am=new THREE.Mesh(gm,M(0x9ea0a8,{map:TX_ASFALT,side:THREE.DoubleSide}));am.receiveShadow=true;scene.add(am);}   /* asfalt na mostku – ta sama tekstura co droga */
+  for(let i=IB-Math.round(MOST_POL/DS);i<=IB+Math.round(MOST_POL/DS);i++){const q=samples[i],nn=nrm(q);const ry=Math.atan2(q.d.x,q.d.z);
+    const pm=new THREE.Mesh(new THREE.BoxGeometry(MOST_ZWEZ*2+.8,.14,DS+.02),POMOST);pm.position.set(q.p.x,hy(i)-.06,q.p.z);pm.rotation.y=ry;scene.add(pm);   /* pomost */
+    for(const k of [-1,1]){const bel=new THREE.Mesh(new THREE.BoxGeometry(.34,.55,DS+.02),M(0x6e7072));bel.position.set(q.p.x+nn.x*k*(MOST_ZWEZ+.42),hy(i)-.22,q.p.z+nn.z*k*(MOST_ZWEZ+.42));bel.rotation.y=ry;bel.castShadow=true;scene.add(bel);}   /* betonowe belki boczne pomostu */
+    for(const k of [-1,1]){const o=k*(MOST_ZWEZ+0.2),x=q.p.x+nn.x*o,z=q.p.z+nn.z*o,y=hy(i);
+      for(const [hh,th] of [[.72,.13],[.42,.09]]){const t=new THREE.Mesh(new THREE.BoxGeometry(.06,th,DS+.03),MET);t.position.set(x,y+hh,z);t.rotation.y=ry;t.castShadow=true;scene.add(t);}   /* taśmy */
+      if(i%2===0){const s2=new THREE.Mesh(new THREE.BoxGeometry(.1,.85,.1),SLUP);s2.position.set(x+nn.x*k*.06,y+.42,z+nn.z*k*.06);s2.castShadow=true;scene.add(s2);}}}   /* słupki */
+  for(let j=0;j<10;j++){const k=j%2?1:-1,str=j<5?1:-1;const kam=new THREE.Mesh(new THREE.DodecahedronGeometry(.35+rnd()*.35,0),M(rnd()<.5?0x8a8a86:0xa4a29a));
+    kam.position.set(s.p.x+s.d.x*str*(2.6+rnd()*1.6)+n.x*k*(MOST_ZWEZ+1.5+rnd()*5),.15,s.p.z+s.d.z*str*(2.6+rnd()*1.6)+n.z*k*(MOST_ZWEZ+1.5+rnd()*5));kam.rotation.set(rnd()*3,rnd()*3,0);kam.scale.y=.6;kam.castShadow=true;scene.add(kam);}   /* kamienie przy strumieniu */
+  for(let j=0;j<90;j++){const k=j%2?1:-1,a=(rnd()-.5)*136;if(Math.abs(a)<MOST_ZWEZ+3)continue;const o=MOST_POL+0.7+rnd()*1.8;const kk=rnd()<.7?1:0;postaw("kepa"+kk,()=>budujKepe(kk),s.p.x+s.d.x*k*o+n.x*a,s.p.z+s.d.z*k*o+n.z*a,rnd()*6.28,1.1+rnd()*.9);}   /* trawy i trzciny wzdłuż brzegów */
+  RD=wDrogi(IB);
+  // opony na wjazdach przed barierkami (po obu stronach, z obu kierunków)
+  for(const kier of [-1,1]){const q=samples[IB+kier*Math.round((MOST_POL+7.6)/DS)],nq=nrm(q);for(const k of [-1,1])opony(q.p.x+nq.x*k*(RD/2+0.3),q.p.z+nq.z*k*(RD/2+0.3),3);}
+  // zwężenie przed mostkiem: skośne bariery z pasami ostrzegawczymi i tablice „zwężenie”
+  {const s0=samples[IB],n0=nrm(s0);const TXP=(()=>{const cv=document.createElement('canvas');cv.width=32;cv.height=8;const c=cv.getContext('2d');for(let x=-8;x<40;x+=8){c.fillStyle='#d42020';c.beginPath();c.moveTo(x,8);c.lineTo(x+4,0);c.lineTo(x+8,0);c.lineTo(x+4,8);c.fill();}c.globalCompositeOperation='destination-over';c.fillStyle='#f4f4f4';c.fillRect(0,0,32,8);const t=new THREE.CanvasTexture(cv);t.magFilter=THREE.NearestFilter;return new THREE.MeshLambertMaterial({map:t});})();
+   for(const kier of [-1,1]){const iA=IB+kier*Math.round(MOST_POL/DS),iB=IB+kier*Math.round((MOST_POL+7)/DS);
+     for(const k of [-1,1]){const a=samples[iA],b=samples[iB];const pa=a.p.clone().addScaledVector(nrm(a),k*(MOST_ZWEZ+0.2)),pb=b.p.clone().addScaledVector(nrm(b),k*(RD/2+0.3));
+       const L=pa.distanceTo(pb);const bl=new THREE.Mesh(new THREE.BoxGeometry(.06,.13,L),[M(0xa8acb0),M(0xa8acb0),M(0xc4c8cc),M(0xa8acb0),TXP,TXP]);bl.position.copy(pa).lerp(pb,.5);bl.position.y=hy(Math.round((iA+iB)/2))+.62;   /* metalowa barierka-skos przed mostkiem */bl.rotation.y=Math.atan2(pb.x-pa.x,pb.z-pa.z);bl.castShadow=true;scene.add(bl);}
+     const t=samples[IB+kier*Math.round((MOST_POL+16)/DS)],nt=nrm(t);const tab=new THREE.Group();const sl=new THREE.Mesh(new THREE.BoxGeometry(.08,1.6,.08),M(0x666666));sl.position.y=.8;tab.add(sl);
+     const cv=document.createElement('canvas');cv.width=32;cv.height=32;const c=cv.getContext('2d');c.fillStyle='#fff';c.beginPath();c.moveTo(16,1);c.lineTo(31,30);c.lineTo(1,30);c.closePath();c.fill();c.strokeStyle='#d42020';c.lineWidth=4;c.stroke();c.fillStyle='#111';c.fillRect(10,12,3,14);c.fillRect(19,12,3,14);
+     const tx=new THREE.CanvasTexture(cv);tx.magFilter=THREE.NearestFilter;const zn=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshLambertMaterial({map:tx,transparent:true,side:THREE.DoubleSide}));zn.position.y=1.9;zn.rotation.x=-0.6;tab.add(zn);
+     tab.position.copy(t.p).addScaledVector(nt,RD/2+1.2);tab.rotation.y=Math.atan2(-t.d.x,-t.d.z)+(kier<0?0:Math.PI);scene.add(tab);}}
+  /* ciemne pasy (deski) na mostku usunięte – mostek asfaltowy */
+}
+// --- słupki drogowe (białe, czarny pasek, odblask) co ok. 50 m na przemian po obu stronach – jak na zdjęciach z odcinka
+function budujSlupek(){const g=new THREE.Group();const s=new THREE.Mesh(new THREE.BoxGeometry(.13,1.05,.13),M(0xf2f2ee));s.position.y=.52;s.castShadow=true;g.add(s);
+  const p=new THREE.Mesh(new THREE.BoxGeometry(.135,.22,.135),M(0x141414));p.position.y=.88;g.add(p);
+  const o=new THREE.Mesh(new THREE.BoxGeometry(.14,.1,.05),new THREE.MeshBasicMaterial({color:0xff7a1a}));o.position.set(0,.88,.05);g.add(o);
+  obrys(g,1.06,()=>false);return g;}
+if(!MAPA){for(let i=START_I+60;i<META_I;i+=66){const k=krzywizna(i);if(k.ang>0.16)continue;if(Math.abs(i-IB)*DS<MOST_POL+12)continue;if(Math.abs(i-CH_I)<SZ_ODST*2)continue;
+  const s=samples[i],n=nrm(s),sd=(i/66|0)%2?1:-1,o=sd*(wDrogi(i)/2+1.3);const x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(wWodzie(x,z,.5))continue;
+  postaw('slupek',budujSlupek,x,z,Math.atan2(s.d.x,s.d.z)+(sd<0?Math.PI:0),1);}}
+// --- tablice rajdowe po prawej stronie drogi (wg wzoru od użytkownika): START OS (czerwona, czarna flaga), ZAPOWIEDŹ mety lotnej 100 m przed (żółta, szachownica), META LOTNA (czerwona, szachownica)
+function znakRajdowy(typ){const cv=document.createElement('canvas');cv.width=cv.height=256;const c=cv.getContext('2d');
+  c.fillStyle='#f6f6f4';c.fillRect(0,0,256,256);c.strokeStyle='#9a9ea4';c.lineWidth=6;c.strokeRect(3,3,250,250);
+  c.fillStyle=typ==='zapowiedz'?'#ffe21a':'#e01f1f';c.beginPath();c.arc(128,128,104,0,7);c.fill();c.strokeStyle='#141414';c.lineWidth=10;c.stroke();
+  c.save();c.translate(128,128);c.rotate(-.42);c.strokeStyle='#141414';c.lineWidth=8;c.beginPath();c.moveTo(52,-78);c.lineTo(52,80);c.stroke();   /* drzewce */
+  const fl=(x,y)=>{const v=Math.sin(x*0.05)*10;return [x-55,y-60+v];};
+  if(typ==='start'){c.fillStyle='#141414';c.beginPath();let p=fl(0,0);c.moveTo(...fl(100,0));for(let x=100;x>=0;x-=5)c.lineTo(...fl(x,0));for(let x=0;x<=100;x+=5)c.lineTo(...fl(x,70));c.closePath();c.fill();}
+  else{for(let i=0;i<5;i++)for(let j=0;j<4;j++){c.fillStyle=(i+j)%2?'#141414':'#ffffff';const a=fl(i*20,j*17.5),b=fl(i*20+20,j*17.5),d=fl(i*20+20,j*17.5+17.5),e=fl(i*20,j*17.5+17.5);c.beginPath();c.moveTo(...a);c.lineTo(...b);c.lineTo(...d);c.lineTo(...e);c.closePath();c.fill();}
+    c.strokeStyle='#141414';c.lineWidth=3;c.beginPath();c.moveTo(...fl(0,0));for(let x=0;x<=100;x+=5)c.lineTo(...fl(x,0));c.lineTo(...fl(100,70));for(let x=100;x>=0;x-=5)c.lineTo(...fl(x,70));c.closePath();c.stroke();}
+  c.restore();const t=new THREE.CanvasTexture(cv);t.anisotropy=8;return t;}
+function tablicaRajdowa(i,typ){const s=samples[Math.max(0,Math.min(N,i))],n=nrm(s),w=wDrogi(i),o=w/2+1.3;const g=new THREE.Group();
+  {const px=s.p.x+n.x*o,pz=s.p.z+n.z*o,v=new THREE.Vector3();for(const k in WZORY){if(!/^(dab|swierk|brzoza|krzak)/.test(k))continue;WZORY[k].poz=WZORY[k].poz.filter(m=>{v.setFromMatrixPosition(m);return Math.hypot(v.x-px,v.z-pz)>7.5;});}}   /* tablica nie może stać za drzewem */
+  const tex=znakRajdowy(typ);const tab=new THREE.Mesh(new THREE.BoxGeometry(1.0,1.0,.04),[M(0xdddddd),M(0xdddddd),M(0xdddddd),M(0xdddddd),new THREE.MeshLambertMaterial({map:tex}),new THREE.MeshLambertMaterial({map:tex})]);
+  tab.position.set(0,.6,0);tab.rotation.x=-.3;tab.castShadow=true;g.add(tab);   /* tablica stoi na ziemi, oparta na podpórce (jak na OS) */
+  for(const k of [-1,1]){const n2=new THREE.Mesh(new THREE.BoxGeometry(.04,1.0,.04),M(0x6e7278));n2.position.set(k*.4,.48,-.28);n2.rotation.x=.45;g.add(n2);}
+  g.position.set(s.p.x+n.x*o,0,s.p.z+n.z*o);g.rotation.y=Math.atan2(-s.d.x,-s.d.z);scene.add(g);}
+if(!MAPA){tablicaRajdowa(START_I+2,'start');tablicaRajdowa(META_I-Math.round(50/DS),'zapowiedz');tablicaRajdowa(META_I,'meta');}
+// ===== więcej szczegółów wokół trasy (lekkie wzory powielane instancjami) =====
+function budujPien(){const g=new THREE.Group();const p=new THREE.Mesh(new THREE.CylinderGeometry(.32,.4,.45,9),M(0x6a4a2c));p.position.y=.22;p.castShadow=true;g.add(p);
+  const t=new THREE.Mesh(new THREE.CylinderGeometry(.31,.31,.02,9),M(0xc8a06a));t.position.y=.455;g.add(t);obrys(g,1.05,()=>false);return g;}
+function budujKlode(){const g=new THREE.Group();const k=new THREE.Mesh(new THREE.CylinderGeometry(.22,.26,3.2,8),M(0x5e432a));k.rotation.z=Math.PI/2;k.position.y=.24;k.castShadow=true;g.add(k);
+  for(const s of [-1,1]){const t=new THREE.Mesh(new THREE.CircleGeometry(.22,8),M(0xb89060));t.rotation.y=s*Math.PI/2;t.position.set(s*1.61,.24,0);g.add(t);}obrys(g,1.04,o=>o.geometry.type==='CircleGeometry');return g;}
+function budujKamien(v){const g=new THREE.Group();const k=new THREE.Mesh(new THREE.DodecahedronGeometry(.45,0),M(v?0x9a968c:0x86827a));k.scale.set(1,.55,.8);k.position.y=.18;k.castShadow=true;g.add(k);obrys(g,1.06,()=>false);return g;}
+function budujDrewno(){const g=new THREE.Group();for(let r=0;r<3;r++)for(let c=0;c<6-r;c++){const k=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,1.1,7),M(c%2?0x7a5636:0x6a4a2e));k.rotation.x=Math.PI/2;k.position.set(-.6+c*.24+r*.12,.12+r*.21,0);g.add(k);
+    const t=new THREE.Mesh(new THREE.CircleGeometry(.11,7),M(0xc69a62));t.position.set(k.position.x,k.position.y,.56);g.add(t);}
+  const d=new THREE.Mesh(new THREE.BoxGeometry(1.6,.06,1.3),M(0x4a3a2a));d.position.y=.78;d.rotation.z=.08;g.add(d);obrys(g,1.03,o=>o.geometry.type==='CircleGeometry');return g;}   /* stos drewna pod daszkiem */
+function budujSkrzynke(){const g=new THREE.Group();const s=new THREE.Mesh(new THREE.BoxGeometry(.08,1.1,.08),M(0x5a4a3a));s.position.y=.55;g.add(s);const b=new THREE.Mesh(new THREE.BoxGeometry(.32,.28,.42),M(0x2f5fb0));b.position.y=1.18;b.castShadow=true;g.add(b);obrys(g,1.06,()=>false);return g;}
+function budujLawke(){const g=new THREE.Group();const s=new THREE.Mesh(new THREE.BoxGeometry(1.5,.06,.38),M(0x8a5a32));s.position.y=.45;g.add(s);const o=new THREE.Mesh(new THREE.BoxGeometry(1.5,.32,.05),M(0x8a5a32));o.position.set(0,.7,-.18);g.add(o);
+  for(const k of [-.65,.65]){const n=new THREE.Mesh(new THREE.BoxGeometry(.06,.45,.36),M(0x3a3a3a));n.position.set(k,.22,0);g.add(n);}obrys(g,1.04,()=>false);return g;}
+if(!MAPA){let sd=777;const r3=()=>{sd=(sd*16807)%2147483647;return (sd-1)/2147483646;};
+  // las: pnie i kłody; pola i pobocza: kamienie
+  for(let i=I0+20;i<=I1;i+=9){const s=samples[i],n=nrm(s);for(const side of [-1,1]){const st=strefa(i,side);const w=wDrogi(i);
+    if(st==='las'){if(r3()<.55){const o=side*(w/2+5+r3()*14),x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(!wWodzie(x,z,1))postaw('pien',budujPien,x,z,r3()*6.28,.8+r3()*.5);}
+      if(r3()<.2){const o=side*(w/2+6+r3()*12),x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(!wWodzie(x,z,2))postaw('kloda',budujKlode,x,z,Math.atan2(s.d.x,s.d.z)+(r3()-.5)*1.2,.8+r3()*.4);}}
+    if(r3()<.25){const o=side*(w/2+3.4+r3()*6),x=s.p.x+n.x*o,z=s.p.z+n.z*o;const v=r3()<.5?1:0;if(!wWodzie(x,z,.6))postaw('kamien'+v,()=>budujKamien(v),x,z,r3()*6.28,.5+r3()*.9);}}}
+  // przy domach: stos drewna i skrzynka pocztowa (pozycja liczona w układzie domu)
+  const v=new THREE.Vector3(),q=new THREE.Quaternion(),sc=new THREE.Vector3(),e=new THREE.Euler();
+  for(const k in WZORY){if(!/^dom/.test(k))continue;for(const m of WZORY[k].poz.slice()){m.decompose(v,q,sc);e.setFromQuaternion(q);const ry=e.y,c=Math.cos(ry),sn=Math.sin(ry);
+    const lok=(lx,lz)=>[v.x+lx*c+lz*sn,v.z-lx*sn+lz*c];const [dx,dz]=lok(3.8,-4.6);postaw('drewno',budujDrewno,dx,dz,ry+Math.PI/2,1);
+    if(r3()<.7){const [mx,mz]=lok(-4.5,5.5);postaw('skrzynka',budujSkrzynke,mx,mz,ry,1);}if(r3()<.4){const [bx,bz]=lok(2.5,5.0);postaw('lawka',budujLawke,bx,bz,ry,1);}}}
+}
+// znaki ostrzegawcze A-1 / A-2 (niebezpieczny zakręt w prawo / w lewo) po prawej, ok. 50 m przed ostrymi łukami
+function teksturaZnakuA(lewy){const cv=document.createElement('canvas');cv.width=cv.height=128;const c=cv.getContext('2d');c.clearRect(0,0,128,128);
+  c.fillStyle='#d8141c';c.beginPath();c.moveTo(64,6);c.lineTo(124,116);c.lineTo(4,116);c.closePath();c.fill();c.fillStyle='#ffd21f';c.beginPath();c.moveTo(64,24);c.lineTo(108,106);c.lineTo(20,106);c.closePath();c.fill();
+  c.save();c.translate(64,78);if(lewy)c.scale(-1,1);c.strokeStyle='#111';c.lineWidth=8;c.lineCap='round';c.beginPath();c.moveTo(-6,22);c.lineTo(-6,0);c.quadraticCurveTo(-6,-14,10,-14);c.stroke();
+  c.fillStyle='#111';c.beginPath();c.moveTo(20,-14);c.lineTo(6,-24);c.lineTo(6,-4);c.closePath();c.fill();c.restore();const t=new THREE.CanvasTexture(cv);t.anisotropy=4;return t;}
+function budujZnakA(lewy){const g=new THREE.Group();const s=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,2.2,6),M(0x8a8e94));s.position.y=1.1;g.add(s);
+  const z=new THREE.Mesh(new THREE.PlaneGeometry(.9,.9),new THREE.MeshLambertMaterial({map:teksturaZnakuA(lewy),transparent:true,alphaTest:.5,side:THREE.DoubleSide}));z.position.set(0,2.1,.05);z.rotation.x=-.3;g.add(z);return g;}
+if(!MAPA){let ost=-999;for(let i=START_I+80;i<META_I-20;i++){const k=krzywizna(i,12);if(k.ang<0.3||i-ost<130)continue;ost=i;
+  const j=Math.max(START_I+10,i-Math.round(50/DS));const s=samples[j],n=nrm(s),o=wDrogi(j)/2+1.5;const x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(wWodzie(x,z,1))continue;
+  const lw=k.lewy?1:0;postaw('znakA'+lw,()=>budujZnakA(!!lw),x,z,Math.atan2(-s.d.x,-s.d.z),1);}}
+// przystanek autobusowy z wiatą (we wsi, raz), studzienki na asfalcie w terenie zabudowanym
+function budujPrzystanek(){const g=new THREE.Group();const d=new THREE.Mesh(new THREE.BoxGeometry(3.2,.08,1.5),M(0x3c4a5a));d.position.y=2.4;d.castShadow=true;g.add(d);
+  for(const x of [-1.5,1.5])for(const z of [-.65,.65]){const s=new THREE.Mesh(new THREE.BoxGeometry(.07,2.4,.07),M(0x5a6470));s.position.set(x,1.2,z);g.add(s);}
+  const t=new THREE.Mesh(new THREE.BoxGeometry(3.0,1.9,.04),new THREE.MeshLambertMaterial({color:0x9ec8e0,transparent:true,opacity:.45}));t.position.set(0,1.3,-.68);g.add(t);
+  const l=new THREE.Mesh(new THREE.BoxGeometry(2.4,.06,.4),M(0x8a5a32));l.position.set(0,.5,-.4);g.add(l);
+  const zn=new THREE.Mesh(new THREE.BoxGeometry(.5,.5,.04),M(0xffd21f));zn.position.set(1.9,2.3,.6);g.add(zn);const sl=new THREE.Mesh(new THREE.BoxGeometry(.06,2.5,.06),M(0x8a8e94));sl.position.set(1.9,1.25,.6);g.add(sl);
+  const pl=new THREE.Mesh(new THREE.BoxGeometry(3.6,.12,2.2),M(0x9a9a96));pl.position.y=.06;pl.receiveShadow=true;g.add(pl);obrys(g,1.02,o=>o.material.transparent);return g;}
+const TX_STUDZ=(()=>{const cv=document.createElement('canvas');cv.width=cv.height=64;const c=cv.getContext('2d');c.fillStyle='#3a3c40';c.beginPath();c.arc(32,32,30,0,7);c.fill();c.strokeStyle='#55585e';c.lineWidth=3;
+  for(let r=8;r<28;r+=7){c.beginPath();c.arc(32,32,r,0,7);c.stroke();}c.beginPath();c.moveTo(4,32);c.lineTo(60,32);c.moveTo(32,4);c.lineTo(32,60);c.stroke();return new THREE.CanvasTexture(cv);})();
+if(!MAPA){let jest=false;for(let i=START_I+200;i<META_I-100&&!jest;i+=5){if(strefa(i,1)!=='wies'||krzywizna(i,12).ang>0.1)continue;const s=samples[i],n=nrm(s),o=wDrogi(i)/2+3.2;const x=s.p.x+n.x*o,z=s.p.z+n.z*o;
+    if(wWodzie(x,z,3))continue;const g=budujPrzystanek();g.position.set(x,0,z);g.rotation.y=Math.atan2(-s.d.x,-s.d.z)+Math.PI;g.userData.nieScalaj=false;scene.add(g);jest=true;}
+  const SM=new THREE.MeshLambertMaterial({map:TX_STUDZ,transparent:true,alphaTest:.3,polygonOffset:true,polygonOffsetFactor:-2});
+  for(let i=START_I+40;i<META_I;i+=37){if(strefa(i,1)!=='wies'&&strefa(i,-1)!=='wies')continue;const s=samples[i],n=nrm(s),o=(i%2?1:-1)*wDrogi(i)*.22;const m=new THREE.Mesh(new THREE.CircleGeometry(.4,16),SM);m.rotation.x=-Math.PI/2;m.position.set(s.p.x+n.x*o,.052+hy(i),s.p.z+n.z*o);scene.add(m);}}
+// ===== droga i okolice: zalane smołą pęknięcia, kałuże w rowach, pasy krzaków na granicach pól =====
+if(!MAPA){let sd=4242;const r4=()=>{sd=(sd*16807)%2147483647;return (sd-1)/2147483646;};
+  // pęknięcia zalane smołą: krótkie łamane linie na asfalcie, jedna siatka
+  const P=[],I=[];let vi=0;const kreska=(x0,z0,x1,z1,sz)=>{const dx=x1-x0,dz=z1-z0,L=Math.hypot(dx,dz)||1,nx=-dz/L*sz,nz=dx/L*sz;P.push(x0-nx,.047,z0-nz,x0+nx,.047,z0+nz,x1+nx,.047,z1+nz,x1-nx,.047,z1-nz);I.push(vi,vi+1,vi+2,vi,vi+2,vi+3);vi+=4;};
+  for(let i=START_I-20;i<META_I+60;i+=3){if(r4()>.35||Math.abs(i-IB)*DS<MOST_POL+3)continue;const s=samples[i],n=nrm(s),w=wDrogi(i);let o=(r4()-.5)*w*.85,x=s.p.x+n.x*o,z=s.p.z+n.z*o;
+    const podl=r4()<.5;let ang=podl?Math.atan2(s.d.x,s.d.z):Math.atan2(n.x,n.z);const seg=2+Math.floor(r4()*4);
+    for(let k=0;k<seg;k++){ang+=(r4()-.5)*.9;const l=.5+r4()*1.1,x1=x+Math.sin(ang)*l,z1=z+Math.cos(ang)*l;if(Math.abs((x1-s.p.x)*n.x+(z1-s.p.z)*n.z)>w/2-.2)break;kreska(x,z,x1,z1,.045+r4()*.03);x=x1;z=z1;}}
+  const gp=new THREE.BufferGeometry();gp.setAttribute('position',new THREE.Float32BufferAttribute(P,3));gp.setIndex(I);gp.computeVertexNormals();
+  const smola=new THREE.Mesh(gp,new THREE.MeshPhongMaterial({color:0x1c1d20,shininess:70,specular:0x666666,polygonOffset:true,polygonOffsetFactor:-3}));smola.receiveShadow=true;   /* czarne kreski (zalane pęknięcia) usunięte na życzenie użytkownika */
+  // kałuże w rowach (szare z odbiciem nieba)
+  const KM=new THREE.MeshPhongMaterial({color:0x4e5a62,shininess:90,specular:0x9aa6b0,transparent:true,opacity:.75,polygonOffset:true,polygonOffsetFactor:-2});
+  for(let i=START_I;i<META_I;i+=11){if(r4()>.18)continue;const s=samples[i],n=nrm(s),side=r4()<.5?1:-1,o=side*(wDrogi(i)/2+3.4);const x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(wWodzie(x,z,1))continue;
+    const k=new THREE.Mesh(new THREE.CircleGeometry(1,14),KM);k.rotation.x=-Math.PI/2;k.rotation.z=Math.atan2(s.d.x,s.d.z);k.scale.set(.35+r4()*.25,.8+r4()*1.0,1);k.position.set(x,.04,z);scene.add(k);}
+  // pasy krzaków na granicach pól (miedze) – równolegle do drogi, w strefie pól
+  for(let i=START_I+40;i<META_I;i+=4){for(const side of [-1,1]){if(strefa(i,side)!=='pole')continue;const s=samples[i],n=nrm(s);const d0=side*(wDrogi(i)/2+26+((i/180|0)%3)*9);
+    if(r4()>.55)continue;const o=d0+(r4()-.5)*1.5,x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(wWodzie(x,z,1.5)||distRoad(x,z)<wDrogi(i)/2+18)continue;krzakW(x,z,.9+r4()*.6);}}}
+// miękkie plamy tonalne na asfalcie (starsze/nowsze nakładki), bez ostrych krawędzi
+if(!MAPA){let s7=31337;const r7=()=>{s7=(s7*16807)%2147483647;return (s7-1)/2147483646;};
+  const plama=(jasna)=>{const cv=document.createElement('canvas');cv.width=cv.height=128;const c=cv.getContext('2d');const g=c.createRadialGradient(64,64,4,64,64,64);
+    g.addColorStop(0,jasna?'rgba(190,190,195,.22)':'rgba(30,32,36,.24)');g.addColorStop(.6,jasna?'rgba(190,190,195,.12)':'rgba(30,32,36,.13)');g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;c.fillRect(0,0,128,128);return new THREE.CanvasTexture(cv);};
+  const MJ=new THREE.MeshBasicMaterial({map:plama(true),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2}),MC=new THREE.MeshBasicMaterial({map:plama(false),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});
+  for(let i=START_I-30;i<META_I+80;i+=14){if(Math.abs(i-IB)*DS<MOST_POL+4||r7()<.35)continue;const s=samples[i],n=nrm(s),w=wDrogi(i);const o=(r7()-.5)*w*.4;
+    const m=new THREE.Mesh(new THREE.PlaneGeometry(1,1),r7()<.5?MJ:MC);m.rotation.order='YXZ';m.rotation.y=Math.atan2(s.d.x,s.d.z);m.rotation.x=-Math.PI/2;m.scale.set(w*(.5+r7()*.5),6+r7()*12,1);m.position.set(s.p.x+n.x*o,.046+hy(i),s.p.z+n.z*o);scene.add(m);}}
+// żwirowe wjazdy od drogi do domów (miękkie brzegi)
+if(!MAPA){const TXW=pasMiekki('#8a8070',['#7a7264','#958a78','#6e6658'],.3);const MW=new THREE.MeshLambertMaterial({map:TXW,transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1});
+  const v=new THREE.Vector3();for(const k in WZORY){if(!/^dom/.test(k))continue;for(const m of WZORY[k].poz){v.setFromMatrixPosition(m);const [d,si]=najblizsza(v.x,v.z);if(si<0||d>40)continue;
+    const s=samples[si],n=nrm(s),strona=((v.x-s.p.x)*n.x+(v.z-s.p.z)*n.z)>0?1:-1,w=wDrogi(si);const ax=s.p.x+n.x*strona*(w/2),az=s.p.z+n.z*strona*(w/2);
+    const dx=v.x-ax,dz=v.z-az,L=Math.hypot(dx,dz)-3.5;if(L<3)continue;const g=new THREE.Mesh(new THREE.PlaneGeometry(3.2,L),MW);g.rotation.order='YXZ';g.rotation.y=Math.atan2(dx,dz);g.rotation.x=-Math.PI/2;
+    g.position.set(ax+dx/Math.hypot(dx,dz)*L/2,.035,az+dz/Math.hypot(dx,dz)*L/2);scene.add(g);}}}
+
+// ===================== SCALANIE STATYCZNEJ GEOMETRII =====================
+// Wszystkie proste obiekty (jeden kolor, bez tekstury) łączone w siatki per kwadrat 120×120 m:
+// zamiast tysięcy wywołań rysowania jest kilkadziesiąt, a kwadraty poza kadrem są pomijane.
+function scal(){
+  scene.updateMatrixWorld(true);
+  const grupy=new Map(), doUsuniecia=[];
+  const tmp=new THREE.Color();
+  scene.traverse(o=>{
+    if(!o.isMesh||o.isInstancedMesh||Array.isArray(o.material))return;{let p=o;while(p){if(p.userData&&p.userData.nieScalaj)return;p=p.parent;}}   /* pojazdy służb (kontur przez bufor szablonu) zostają osobno */
+    const m=o.material;if(m.map||m.transparent)return;
+    const typ=m.isMeshLambertMaterial?'L':(m.isMeshBasicMaterial?(m.side===THREE.BackSide?'O':'B'):null);if(!typ)return;
+    const wp=new THREE.Vector3().setFromMatrixPosition(o.matrixWorld);
+    const klucz=typ+(m.side===THREE.DoubleSide?'d':'')+(o.castShadow?'c':'n')+':'+Math.floor(wp.x/120)+','+Math.floor(wp.z/120);
+    let geo=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();geo.applyMatrix4(o.matrixWorld);
+    if(!geo.attributes.normal)geo.computeVertexNormals();
+    tmp.copy(m.color);const n=geo.attributes.position.count,col=new Float32Array(n*3);for(let i=0;i<n;i++){col[i*3]=tmp.r;col[i*3+1]=tmp.g;col[i*3+2]=tmp.b;}
+    if(!grupy.has(klucz))grupy.set(klucz,{typ,side:m.side,poz:[],nor:[],kol:[],cien:false});
+    const G=grupy.get(klucz);G.poz.push(geo.attributes.position.array);G.nor.push(geo.attributes.normal.array);G.kol.push(col);G.cien=G.cien||o.castShadow;
+    doUsuniecia.push(o);});
+  doUsuniecia.forEach(o=>o.parent.remove(o));
+  const cat=a=>{let L=0;a.forEach(x=>L+=x.length);const r=new Float32Array(L);let k=0;a.forEach(x=>{r.set(x,k);k+=x.length;});return r;};
+  let ile=0;grupy.forEach(G=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(cat(G.poz),3));g.setAttribute('normal',new THREE.BufferAttribute(cat(G.nor),3));g.setAttribute('color',new THREE.BufferAttribute(cat(G.kol),3));
+    const mat=G.typ==='L'?new THREE.MeshLambertMaterial({vertexColors:true,side:G.side}):new THREE.MeshBasicMaterial({vertexColors:true,side:G.side});
+    const ms=new THREE.Mesh(g,mat);ms.castShadow=G.typ==='L'&&G.cien;ms.receiveShadow=G.typ==='L';scene.add(ms);ile++;});
+  // drugi etap: drobne siatki z teksturą / przezroczyste (ślady opon, naklejki, znaki) – scalane w obrębie tego samego materiału i kafla 60 m;
+  // materiał zostaje ten sam (wygląd bez zmian), a siatka dostaje środek w centrum grupy, żeby sortowanie przezroczystości działało jak wcześniej
+  const gr2=new Map(),usun2=[];const DOZW=new Set(['position','normal','uv']);
+  scene.updateMatrixWorld(true);
+  scene.traverse(o=>{
+    if(!o.isMesh||o.isInstancedMesh||Array.isArray(o.material)||o.isSkinnedMesh)return;{let p=o;while(p){if(p.userData&&p.userData.nieScalaj)return;p=p.parent;}}
+    const m=o.material;if(!(m.map||m.transparent))return;if(!(m.isMeshBasicMaterial||m.isMeshLambertMaterial||m.isMeshPhongMaterial))return;
+    if(o.onBeforeRender!==THREE.Object3D.prototype.onBeforeRender||o.customDepthMaterial||o.geometry.morphAttributes&&Object.keys(o.geometry.morphAttributes).length)return;
+    const at=Object.keys(o.geometry.attributes);if(at.some(a=>!DOZW.has(a)))return;if(o.geometry.groups&&o.geometry.groups.length>1)return;
+    if(!o.geometry.boundingSphere)o.geometry.computeBoundingSphere();if(o.geometry.boundingSphere.radius>10)return;
+    const wp=new THREE.Vector3().setFromMatrixPosition(o.matrixWorld);
+    const klucz=m.uuid+'|'+at.sort().join(',')+'|'+o.renderOrder+'|'+o.castShadow+o.receiveShadow+o.visible+'|'+Math.floor(wp.x/60)+','+Math.floor(wp.z/60);
+    if(!gr2.has(klucz))gr2.set(klucz,[]);gr2.get(klucz).push(o);});
+  let ile2=0;
+  gr2.forEach(L=>{if(L.length<2)return;const m=L[0].material;const at=Object.keys(L[0].geometry.attributes);
+    const cz={};at.forEach(a=>cz[a]=[]);const sr=new THREE.Vector3();
+    const geos=L.map(o=>{const g=(o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone());g.applyMatrix4(o.matrixWorld);return g;});
+    let n=0;geos.forEach(g=>{const P=g.attributes.position;for(let i=0;i<P.count;i++){sr.x+=P.getX(i);sr.y+=P.getY(i);sr.z+=P.getZ(i);}n+=P.count;});sr.divideScalar(n);
+    geos.forEach(g=>{g.translate(-sr.x,-sr.y,-sr.z);at.forEach(a=>cz[a].push(g.attributes[a].array));});
+    const g=new THREE.BufferGeometry();at.forEach(a=>g.setAttribute(a,new THREE.BufferAttribute(cat(cz[a]),L[0].geometry.attributes[a].itemSize)));
+    const ms=new THREE.Mesh(g,m);ms.position.copy(sr);ms.castShadow=L[0].castShadow;ms.receiveShadow=L[0].receiveShadow;ms.renderOrder=L[0].renderOrder;scene.add(ms);
+    L.forEach(o=>{o.parent.remove(o);usun2.push(o);});ile2++;});
+  // puste grupy po scaleniu – usuwane, żeby scena miała mniej obiektów do przejścia w każdej klatce
+  let puste=0;const czysc=o=>{for(const c of o.children.slice())czysc(c);if(o!==scene&&o.isGroup&&o!==sun.target&&o.children.length===0&&!(o.userData&&o.userData.nieScalaj)){o.parent.remove(o);puste++;}};czysc(scene);
+  return {usuniete:doUsuniecia.length,siatki:ile,drobne:usun2.length,siatki2:ile2,puste};}
+zbudujWzory();   /* wzory drzew i domów jako instancje */
+const SCALENIE=scal();
+
+// ===================== AUTO, DUCH, ŚLADY, KURZ =====================
+let AUTO=localStorage.getItem('krt_auto')||'janusz';
+let car=null;const ghost=kropek(true);ghost.visible=false;
+function zbudujAuto(){if(car)scene.remove(car);car=kropek(false,AUTO);}
+zbudujAuto();
+const SLADY=new THREE.InstancedMesh(new THREE.PlaneGeometry(.26,.8).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0x1b1b20,transparent:true,opacity:.38,depthWrite:false}),900);
+SLADY.instanceMatrix.setUsage(THREE.DynamicDrawUsage);SLADY.count=0;scene.add(SLADY);let sladIdx=0;
+const KURZ=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(.35,0),new THREE.MeshLambertMaterial({color:0xd6d2c8,transparent:true,opacity:.55,depthWrite:false}),80);
+KURZ.instanceMatrix.setUsage(THREE.DynamicDrawUsage);scene.add(KURZ);
+const kurz=[];for(let i=0;i<80;i++)kurz.push({x:0,y:-9,z:0,vx:0,vy:0,vz:0,t:0});let kurzIdx=0;
+const _m=new THREE.Matrix4(),_q=new THREE.Quaternion(),_s=new THREE.Vector3(),_p=new THREE.Vector3(),_e=new THREE.Euler();
+
+// ===================== PARAMETRY FIZYKI (strojone suwakami, klawisz T) =====================
+const VMAX_OS=160;   // maks. prędkość Kropka w grze (7000 obr./min na 6. biegu), dochodzi się do niej ciężko
+const P_DOMYSLNE={vmax:VMAX_OS,przysp:6.48,hamulec:19,skret:2.5,przyczep:7.0,przyczepDrift:1.9,przyczepReczny:0.9,progDriftu:0.22,odzysk:0.3,pobocze:1.2,bandaStrata:0.15};
+const P_OPIS={vmax:['prędkość maks. km/h',60,VMAX_OS,1],przysp:['przyspieszenie (7,2 = 0–100 w ok. 6 s)',3,14,.1],hamulec:['hamowanie',8,30,.5],skret:['szybkość skrętu',1,4,.05],przyczep:['przyczepność boczna',2,14,.1],
+  przyczepDrift:['przyczepność w drifcie',.4,5,.05],przyczepReczny:['przyczepność na ręcznym',.1,3,.05],progDriftu:['kąt wejścia w drift (rad)',.08,.5,.01],odzysk:['odzysk prędkości z driftu',0,1,.05],pobocze:['opór pobocza',0,4,.1],bandaStrata:['strata przy uderzeniu',0,.6,.01]};
+let P=Object.assign({},P_DOMYSLNE);try{Object.assign(P,JSON.parse(localStorage.getItem('krt_fizyka')||'{}'));}catch(e){}if(P.przysp===7.2)P.przysp=6.48;   /* stare zapisane strojenie: przyspieszenie -10% */
+P.vmax=Math.min(P.vmax,VMAX_OS);   // na tym odcinku nie szybciej niż na rajdzie
+(function panel(){const el=document.getElementById('strojenie');let h='<b style="color:#ffd21f">STROJENIE FIZYKI (T)</b>';
+  for(const k in P_OPIS){const [n,a,b,s]=P_OPIS[k];h+=`<label>${n}<input type="range" min="${a}" max="${b}" step="${s}" value="${P[k]}" data-k="${k}"><span id="w_${k}">${P[k]}</span></label>`;}
+  h+='<button id="pReset">DOMYŚLNE</button>';el.innerHTML=h;
+  el.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{P[i.dataset.k]=+i.value;document.getElementById('w_'+i.dataset.k).textContent=i.value;try{localStorage.setItem('krt_fizyka',JSON.stringify(P));}catch(e){}}));
+  document.getElementById('pReset').onclick=()=>{P=Object.assign({},P_DOMYSLNE);try{localStorage.removeItem('krt_fizyka');}catch(e){}panel();};})();
+
+// ===================== STEROWANIE =====================
+const K={};addEventListener('keydown',e=>{K[e.code]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
+  if(e.code==='KeyR'&&stan!=='menu')nowyPrzejazd();if(e.code==='KeyT'){const s=document.getElementById('strojenie');s.style.display=s.style.display==='block'?'none':'block';}
+  if(e.code==='Escape')pokazMenu();if(e.code==='Enter'&&stan==='menu')startGry();});
+addEventListener('keyup',e=>{K[e.code]=false;});
+const DOT={};['tL','tP','tH','tG','tB'].forEach(id=>{const el=document.getElementById(id);const on=e=>{e.preventDefault();DOT[id]=true;},off=e=>{e.preventDefault();DOT[id]=false;};
+  el.addEventListener('touchstart',on,{passive:false});el.addEventListener('touchend',off,{passive:false});el.addEventListener('touchcancel',off,{passive:false});});
+if('ontouchstart' in window)document.getElementById('dotyk').style.display='block';
+let wejscie=function(){const gp=(navigator.getGamepads&&navigator.getGamepads()[0])||null;
+  let gaz=K.ArrowUp||K.KeyW||DOT.tG,ham=K.ArrowDown||K.KeyS||DOT.tB,lewo=K.ArrowLeft||K.KeyA||DOT.tL,prawo=K.ArrowRight||K.KeyD||DOT.tP,reczny=K.Space||DOT.tH;
+  let skret=(lewo?1:0)-(prawo?1:0);
+  if(gp){const ax=gp.axes[0]||0;if(Math.abs(ax)>.15)skret=-ax;gaz=gaz||gp.buttons[7]?.value>.2||gp.buttons[0]?.pressed;ham=ham||gp.buttons[6]?.value>.2||gp.buttons[1]?.pressed;reczny=reczny||gp.buttons[2]?.pressed;}
+  return {gaz:!!gaz,ham:!!ham,skret,reczny:!!reczny};}
+
+// ===================== STAN GRY =====================
+const DLUGOSC=(LEN-ZAPAS-ZAPAS_META);                          // m odcinka od startu do mety
+const CZAS_RAJDU=98.69*DLUGOSC/2175;                  // tempo Kropka z rajdu (oficjalnie 1:38,69 na 2175 m GPS)
+let stan='menu',czas=0,meta=false,kara=0;const trafione=new Set();   // kara: +5 s za bramkę szykany, +10 s za falstart
+// start: trzymasz ręczny (spacja), 5 lamp zapala się na czerwono co sekundę, potem wszystkie zielone; puszczenie ręcznego = ruszenie.
+// Puszczenie ręcznego z wciśniętym gazem przed zielonym = falstart (+10 s, zegar rusza od razu).
+const START={faza:'czeka',t:0,trzymaj:false,falstart:false};
+const A={x:0,z:0,y:0,h:0,vx:0,vz:0,vy:0,skretW:0,dryf:false,poslizg:0,idx:0,wPowietrzu:false,lastGy:0,lastVyG:0};
+let zapis=[],duchZapis=null,duchCzasy=null;
+function wczytajDucha(){try{const d=JSON.parse(localStorage.getItem('krt_duch_'+AUTO)||'null');duchZapis=d?d.p:null;duchCzasy=d?d.c:null;}catch(e){duchZapis=null;duchCzasy=null;}}
+function najlepszy(){const v=+localStorage.getItem('krt_best_'+AUTO);return v>0?v:null;}
+function fmt(t){if(t==null)return '---';const m=Math.floor(t/60),s=t-m*60;return m+"'"+(s<10?'0':'')+s.toFixed(2).replace('.','"');}
+function nowyPrzejazd(){
+  const s=samples[START_I-5];A.x=s.p.x;A.z=s.p.z;A.y=0;A.h=Math.atan2(-s.d.x,-s.d.z);A.vx=A.vz=A.vy=0;A.skretW=0;A.dryf=false;A.idx=START_I-5;A.wPowietrzu=false;A.lastGy=0;A.lastVyG=0;
+  czas=0;kara=0;trafione.clear();START.faza='czeka';START.t=0;START.trzymaj=false;START.falstart=false;A.droga=0;meta=false;zapis=[];SLADY.count=0;sladIdx=0;wczytajDucha();stan='odliczanie';
+  document.getElementById('best').textContent=fmt(najlepszy());document.getElementById('komunikat').style.display='none';}
+function pokazKomunikat(t){const k=document.getElementById('komunikat');if(stan==='meta')return;k.style.display='block';k.innerHTML='<span style="font-size:26px">'+t+'</span>';clearTimeout(pokazKomunikat.t);pokazKomunikat.t=setTimeout(()=>{if(stan!=='meta')k.style.display='none';},1500);}
+function pokazMenu(){stan='menu';document.getElementById('menu').style.display='block';}
+function startGry(){dzwiekStart();document.getElementById('menu').style.display='none';try{localStorage.setItem('krt_auto',AUTO);}catch(e){}zbudujAuto();nowyPrzejazd();}
+document.querySelectorAll('.auto').forEach(el=>el.onclick=()=>{AUTO=el.dataset.auto;document.querySelectorAll('.auto').forEach(e=>e.classList.toggle('wyb',e===el));});
+document.querySelector(`.auto[data-auto="${AUTO}"]`)?.click();
+document.getElementById('startBtn').onclick=startGry;
+function ustawRozdz(r){ROZDZ=r;try{localStorage.setItem('krt_rozdz',String(r));}catch(e){}renderer.setSize(...rozdzPx(),false);
+  const ms=r===1080?4096:2048;if(sun.shadow.mapSize.x!==ms){sun.shadow.mapSize.set(ms,ms);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null;}}
+  document.querySelectorAll('.rozdz .opcja').forEach(e=>e.classList.toggle('wyb',+e.dataset.r===r));}
+document.querySelectorAll('.rozdz .opcja').forEach(el=>el.onclick=()=>ustawRozdz(+el.dataset.r));ustawRozdz(ROZDZ);
+
+// ===================== FIZYKA (stały krok 60 Hz) =====================
+const DT=1/60;
+function krok(){
+  if(stan==='odliczanie'||(stan==='jazda'&&START.trzymaj)){A.vx=A.vz=0;if(START.trzymaj&&!wejscie().reczny)START.trzymaj=false;return;}   // auto stoi na ręcznym do startu
+  const we=stan==='jazda'?wejscie():{gaz:false,ham:true,skret:0,reczny:false};A.we=we;
+  const vmax=P.vmax/3.6;
+  A.skretW+=Math.max(-DT*7,Math.min(DT*7,we.skret-A.skretW));
+  const fx=-Math.sin(A.h),fz=-Math.cos(A.h),rx=-fz,rz=fx;      // przód i prawo auta
+  let vL=A.vx*fx+A.vz*fz, vB=A.vx*rx+A.vz*rz;                  // prędkość wzdłuż i w bok
+  const v=Math.hypot(A.vx,A.vz);
+  // położenie względem drogi
+  const s=samples[A.idx],n=nrm(s);const off=(A.x-s.p.x)*n.x+(A.z-s.p.z)*n.z;const poza=Math.abs(off)>wDrogi(A.idx)/2+0.8,trawa=Math.abs(off)>wDrogi(A.idx)/2+2.2;   // poza asfaltem: żwir, dalej trawa
+  if(!A.wPowietrzu){
+    // skręt: rośnie z prędkością, słabnie przy v-max; na ręcznym ostrzej
+    const ks=Math.min(1,v/7)*(1-0.35*Math.min(1,v/vmax))*(we.reczny?1.35:1)*(A.dryf?1.15:1);
+    A.h+=A.skretW*P.skret*ks*DT*(vL<-0.5?-1:1);
+    // napęd 4×4 i hamulec
+    if(we.gaz)vL+=P.przysp*Math.max(0,1-Math.max(0,vL)/vmax)*(poza?0.6:1)*DT;   // przy dużej prędkości siła mocno słabnie: 0–100 ok. 6 s, 0–140 ok. 13 s, 0–150 ok. 17 s, 158 dopiero po ok. 27 s   // równiej niż wcześniej: bez „kopa” na starcie, 0–100 ok. 6 s
+    if(we.ham){if(vL>0.3)vL-=P.hamulec*DT;else if(stan==='jazda')vL=Math.max(-8,vL-5*DT);else vL=0;}
+    if(!we.gaz&&!we.ham)vL*=1-0.25*DT;
+    if(!we.gaz)vL*=1-0.012*DT*Math.abs(vL)/10;   /* opór powietrza tylko bez gazu – na gazie jest już w krzywej przyspieszenia, więc 140 km/h jest osiągalne */
+    // wyjazd poza trasę mocno spowalnia: żwir do ~80 km/h, trawa do ~45 km/h (siła wg suwaka „opór pobocza”)
+    if(poza){const k=P.pobocze/1.2,vlim=(trawa?45:80)/3.6,dec=(trawa?9:4.5)*k;if(Math.abs(vL)>vlim)vL-=Math.sign(vL)*Math.min(Math.abs(vL)-vlim,dec*1.6*DT);vL-=Math.sign(vL)*Math.min(Math.abs(vL),dec*0.35*DT);}
+    // poślizg boczny: drift wchodzi powyżej progu, ręczny zrywa przyczepność, kontra przywraca
+    A.poslizg=Math.atan2(vB,Math.max(1,Math.abs(vL)));
+    if(Math.abs(A.poslizg)>P.progDriftu||we.reczny)A.dryf=v>6;else if(Math.abs(A.poslizg)<0.07)A.dryf=false;
+    let g=we.reczny?P.przyczepReczny:A.dryf?P.przyczepDrift:P.przyczep;
+    if(A.dryf&&A.skretW*Math.sign(-vB)>0.3)g*=1.6;           // kontra
+    if(A.dryf&&we.gaz)g*=0.85;                                 // gaz w drifcie utrzymuje kąt (4×4)
+    if(poza)g*=0.7;
+    const vB2=vB*Math.exp(-g*DT);const vPrzed=Math.hypot(vL,vB);vL+=Math.sign(vL||1)*Math.abs(vB-vB2)*P.odzysk;vB=vB2;
+    {const vPo=Math.hypot(vL,vB);if(vPo>vPrzed&&vPo>0.01){const k=vPrzed/vPo;vL*=k;vB*=k;}}   // drift nie może dodawać prędkości, tylko mniej jej zabierać
+    if(A.dryf||we.reczny)vL*=1-Math.min(0.6,Math.abs(A.poslizg))*0.45*DT;   /* poślizg spowalnia: przy 30° ok. 25%/s */
+    A.vx=fx*vL+rx*vB;A.vz=fz*vL+rz*vB;
+  }
+  A.x+=A.vx*DT;A.z+=A.vz*DT;A.droga=(A.droga||0)+(A.vx*(-Math.sin(A.h))+A.vz*(-Math.cos(A.h)))*DT;
+  // śledzenie najbliższej próbki trasy
+  let b=A.idx,bd=1e9;for(let i=Math.max(0,A.idx-30);i<=Math.min(N,A.idx+60);i++){const p=samples[i].p;const d=(p.x-A.x)**2+(p.z-A.z)**2;if(d<bd){bd=d;b=i;}}A.idx=b;
+  // banda (opony / rów): łagodne odbicie i ślizg wzdłuż, bez obrotu auta
+  const s2=samples[A.idx],n2=nrm(s2);const off2=(A.x-s2.p.x)*n2.x+(A.z-s2.p.z)*n2.z;const GR=wDrogi(A.idx)/2+3.2;
+  if(Math.abs(off2)>GR){const sg=Math.sign(off2);A.x-=n2.x*(off2-sg*GR);A.z-=n2.z*(off2-sg*GR);const vn=A.vx*n2.x+A.vz*n2.z;if(vn*sg>0){dzwiekUderzenie(Math.abs(vn));A.vx-=n2.x*vn*1.3;A.vz-=n2.z*vn*1.3;const k=1-P.bandaStrata;A.vx*=k;A.vz*=k;}}
+  // zwężenie na mostku: bariery od ±(wDrogi(IB)/2+0,3) zwężają się do ±MOST_ZWEZ na 7 m przed mostkiem i trzymają na całym mostku
+  {const dm=Math.abs(A.idx-IB)*DS;if(dm<MOST_POL+7){const sc=dm<=MOST_POL?MOST_ZWEZ:MOST_ZWEZ+(wDrogi(IB)/2+0.3-MOST_ZWEZ)*(dm-MOST_POL)/7;const GW=sc-0.85;const sm=samples[A.idx],nm=nrm(sm);const om=(A.x-sm.p.x)*nm.x+(A.z-sm.p.z)*nm.z;
+    if(Math.abs(om)>GW){const sg=Math.sign(om);A.x-=nm.x*(om-sg*GW);A.z-=nm.z*(om-sg*GW);const vn=A.vx*nm.x+A.vz*nm.z;if(vn*sg>0){dzwiekUderzenie(Math.abs(vn));A.vx-=nm.x*vn*1.3;A.vz-=nm.z*vn*1.3;const k=1-P.bandaStrata;A.vx*=k;A.vz*=k;}}}}
+  // separator: przejazd po nim spowalnia i delikatnie odbija auto (raz na 0,5 s dla danego separatora)
+  for(const sp of SEPARATORY){const dx=A.x-sp.x,dz=A.z-sp.z;if(Math.abs(dx)>1.6||Math.abs(dz)>1.6)continue;const d=Math.hypot(dx,dz);if(d<1.15&&czas-sp.t>0.5){sp.t=czas;const nx=dx/(d||1),nz=dz/(d||1);const v=Math.hypot(A.vx,A.vz);
+    A.vx=A.vx*0.88+nx*Math.min(2.5,v*0.08);A.vz=A.vz*0.88+nz*Math.min(2.5,v*0.08);dzwiekUderzenie(Math.max(2,v*0.3));}}
+  // szykana: bramki z opon zajmujące pół drogi
+  for(const gk of [-1,0,1]){const gi=CH_I+gk*SZ_ODST;if(Math.abs(A.idx-gi)*DS>1.3)continue;const sg=gk===0?1:-1;const sb=samples[gi],nb=nrm(sb);const o=(A.x-sb.p.x)*nb.x+(A.z-sb.p.z)*nb.z;const kraw=wDrogi(gi)/2-wDrogi(gi)*SZ_GLEB-0.2-0.9;
+    if(o*sg>kraw){if(stan==='jazda'&&!trafione.has(gi)){trafione.add(gi);kara+=5;pokazKomunikat('<span style="color:#ff5a4a">SZYKANA +5 S</span>');}A.x-=nb.x*(o-sg*kraw);A.z-=nb.z*(o-sg*kraw);const vn=A.vx*nb.x+A.vz*nb.z;if(vn*sg>0){dzwiekUderzenie(Math.abs(vn)+3);A.vx-=nb.x*vn;A.vz-=nb.z*vn;}A.vx*=0.985;A.vz*=0.985;}}
+  // wysokość: garb mostka = hopa (wybicie, gdy droga opada szybciej niż auto)
+  const sg0=samples[A.idx],fIdx=A.idx+((A.x-sg0.p.x)*sg0.d.x+(A.z-sg0.p.z)*sg0.d.z)/DS;   /* ciągła pozycja wzdłuż trasy – płynna wysokość rampy */
+  const gy=hy(fIdx),vyG=(gy-A.lastGy)/DT;
+  if(A.wPowietrzu){A.vy-=9.81*DT;A.y+=A.vy*DT;if(A.y<=gy){A.y=gy;A.wPowietrzu=false;A.vx*=0.97;A.vz*=0.97;}}
+  else{A.blokHopy=Math.max(0,(A.blokHopy||0)-DT);if(!A.blokHopy&&A.lastVyG>0.8&&vyG<A.lastVyG-1.2&&v>12){A.wPowietrzu=true;A.blokHopy=1.0;A.vy=A.lastVyG*1.0;A.y=gy;}else A.y=gy;}
+  A.lastGy=gy;A.lastVyG=vyG;
+  // ślady opon i kurz
+  A.sladD=(A.sladD||0)+v*DT;const sladOn=(A.dryf||we.reczny||(we.ham&&v>8))&&!A.wPowietrzu&&v>4;if(!sladOn)A.sladD=0;if(sladOn&&A.sladD>=0.9){const dl=A.sladD;A.sladD=0;for(const bok of [-0.72,0.72]){const tx=A.x+rx*bok-fx*1.25,tz=A.z+rz*bok-fz*1.25;
+      _m.compose(_p.set(tx-A.vx/v*dl/2,A.y+0.06,tz-A.vz/v*dl/2),_q.setFromEuler(_e.set(0,Math.atan2(A.vx,A.vz),0)),_s.set(1,1,(dl+0.12)/0.8));SLADY.setMatrixAt(sladIdx,_m);sladIdx=(sladIdx+1)%900;SLADY.count=Math.min(900,SLADY.count+1);}
+    SLADY.instanceMatrix.needsUpdate=true;
+    if(Math.random()<.6){const k=kurz[kurzIdx];kurzIdx=(kurzIdx+1)%80;k.x=A.x-fx*2;k.z=A.z-fz*2;k.y=A.y+.3;k.vx=-fx*2+(Math.random()-.5)*2;k.vz=-fz*2+(Math.random()-.5)*2;k.vy=1+Math.random();k.t=1;}}
+  // czas, zapis przejazdu, meta
+  if(stan==='jazda'){czas+=DT;if(Math.round(czas*60)%6===0)zapis.push([+A.x.toFixed(1),+A.z.toFixed(1),+A.h.toFixed(2)]);
+    if(A.idx>=META_I&&!meta){meta=true;koniec();}}
+}
+function koniec(){stan='meta';const t=czas+kara;const b=najlepszy();const rekord=!b||t<b;
+  const km=document.getElementById('komunikat');km.style.display='block';
+  km.innerHTML=`META!<br><span style="font-size:56px;color:#fff">${fmt(t)}</span><br><span style="font-size:22px;color:${rekord?'#3cff6a':'#fff'}">${rekord?'NOWY REKORD!':'NAJLEPSZY: '+fmt(b)}</span>${kara?`<br><span style="font-size:18px;color:#ff5a4a">W TYM KARA ZA SZYKANĘ: +${kara} S</span>`:""}<br><span style="font-size:18px;color:#ccc">KROPEK Z RAJDU: ${fmt(CZAS_RAJDU)} · R – JESZCZE RAZ</span>`;
+  if(rekord){const c=[];let k=0;for(let i=START_I;i<=META_I;i+=20){while(k<czasyIdx.length&&czasyIdx[k][0]<i)k++;c.push(k<czasyIdx.length?czasyIdx[k][1]:t);}
+    try{localStorage.setItem('krt_best_'+AUTO,t.toFixed(3));localStorage.setItem('krt_duch_'+AUTO,JSON.stringify({p:zapis,c}));}catch(e){}}}
+let czasyIdx=[];
+
+// ===================== KAMERA I RYSOWANIE =====================
+const pitch=Math.PI*0.21;   /* rzut 45°: widać pnie drzew i ściany domów jak na wzorze */let VH=17.5;
+const camera=new THREE.OrthographicCamera(-VH*W/H/2,VH*W/H/2,VH/2,-VH/2,1,400);
+const cel=new THREE.Vector3();let celOK=false;
+const CIEN_AUTA=new THREE.Mesh(new THREE.CircleGeometry(1,16).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0x14100a,transparent:true,opacity:.42,depthWrite:false,alphaMap:(()=>{const cv=document.createElement("canvas");cv.width=cv.height=64;const c=cv.getContext("2d");const gr=c.createRadialGradient(32,32,8,32,32,32);gr.addColorStop(0,"#fff");gr.addColorStop(.6,"#ccc");gr.addColorStop(1,"#000");c.fillStyle=gr;c.fillRect(0,0,64,64);return new THREE.CanvasTexture(cv);})()}));CIEN_AUTA.renderOrder=1;scene.add(CIEN_AUTA);   /* miękki cień pod autem */
+function cienAuta(){if(!car)return;const gy=hy(A.idx);const hh=Math.max(0,car.position.y-gy);const k=Math.max(.55,1-hh*.25);CIEN_AUTA.position.set(car.position.x+.22+hh*.5,gy+.065,car.position.z-.18-hh*.35);CIEN_AUTA.rotation.y=car.rotation.y;CIEN_AUTA.scale.set(1.62*k,1,3.0*k);CIEN_AUTA.material.opacity=.55*k;}
+function kamera(dt){cienAuta();const v=Math.hypot(A.vx,A.vz);const lead=4+Math.min(8,v*0.2);
+  // kadr patrzy do przodu: połowa wg kierunku jazdy, połowa wg trasy (punkt 10–35 m przed autem) – zakręt widać wcześniej
+  const pa=samples[Math.min(N,A.idx+Math.round((14+Math.min(34,v*0.75))/DS))].p;   // punkt 14–48 m przed autem
+  const kx=v>2?A.vx/v:-Math.sin(A.h),kz=v>2?A.vz/v:-Math.cos(A.h);let ox=0.5*kx*lead+0.5*(pa.x-A.x),oz=0.5*kz*lead+0.5*(pa.z-A.z);
+  // auto nigdy w górnej części ekranu (ox,oz = przesunięcie kadru od auta; dodatnie oz = kadr niżej niż auto = auto wyżej na ekranie)
+  const SKR=Math.sin(pitch),pionMax=(VH/2-3.6)/SKR,poziomMax=VH*W/H*0.28;   /* auto w środkowych ~55% szerokości ekranu */
+  oz=Math.min(oz,0)-VH*0.14;oz=Math.max(oz,-pionMax);ox=Math.max(-poziomMax,Math.min(poziomMax,ox));const tx=A.x+ox,tz=A.z+oz;
+  if(!celOK){cel.set(tx,0,tz);celOK=true;}cel.x+=(tx-cel.x)*Math.min(1,dt*3.5);cel.z+=(tz-cel.z)*Math.min(1,dt*3.5);
+  /* przy prędkości kamera się oddala */ const vh=18.5+8*Math.min(1,v/(P.vmax/3.6));if(Math.abs(vh-VH)>0.01){VH+=(vh-VH)*Math.min(1,dt*1.5);camera.left=-VH*W/H/2;camera.right=VH*W/H/2;camera.top=VH/2;camera.bottom=-VH/2;camera.updateProjectionMatrix();}
+  camera.position.set(cel.x,80*Math.sin(pitch),cel.z+80*Math.cos(pitch));camera.lookAt(cel);pokazKafle(cel.x,cel.z-8,VH*W/H*0.6);   /* rysuj tylko kafle drzew/domów w kadrze */
+  sun.position.set(cel.x-40,75,cel.z+30);sun.target.position.copy(cel);}   /* słońce z lewej z przodu: ściany od strony kamery oświetlone, cienie w górę ekranu (jak na wzorze) */   /* słońce wyżej: krótsze cienie, jak w grach z automatów */
+
+// HUD
+const el={czas:document.getElementById('czas'),delta:document.getElementById('delta'),kmh:document.getElementById('kmh'),notka:document.getElementById('notka'),pasek:document.querySelectorAll('#pasek i'),sw:document.getElementById('swiatla'),km:document.getElementById('komunikat')};
+document.querySelector('#ps small').textContent='JESIEN - '+(DLUGOSC/1000).toFixed(2).replace('.',',')+' KM';
+function zakret(t0,t1){const a=curve.getTangentAt(Math.min(t0,1)),b=curve.getTangentAt(Math.min(t1,1));return {lewy:(-a.x*b.z+a.z*b.x)>0,ang:Math.acos(Math.max(-1,Math.min(1,a.x*b.x+a.z*b.z)))};}
+function piktogram(z,size){const kol=z.ang<0.5?'#3cd65a':z.ang<1.1?'#ffd21f':'#e8302a';const sciezka=z.ang<0.35?'M12.5 31.5 V12 H4 L16.5 2 L29 12 H20.5 V31.5 Z':z.ang<2.0?'M29 31.5 V11 H14 V4 L3 13.5 L14 23 V18 H21.5 V31.5 Z':'M29.5 31.5 V8.5 Q29.5 2 23 2 H10.5 Q4 2 4 8.5 V15 H2.5 L10 25 L17.5 15 H11.5 V9.5 H22 V31.5 Z';   /* strzałki na cały kwadracik */const odb=(!z.lewy&&z.ang>=0.35)?' transform="translate(33,0) scale(-1,1)"':'';return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 33 33" shape-rendering="crispEdges"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><path d="'+sciezka+'"'+odb+' fill="'+kol+'" stroke="#101018" stroke-width="1.4" stroke-linejoin="round"/></svg>';}
+// lista zakrętów z wierzchołków stylizowanej trasy: kąt skrętu w każdym wierzchołku, wierzchołki bliżej niż 40 m
+// i skręcające w tę samą stronę łączone w jeden zakręt (np. dwa skosy 45° = zakręt 90°); przeciwne kierunki = osobne (esy)
+const ZAKRETY=(()=>{const V=STYL.wierzcholki,lista=[];
+  const idxNa=(p)=>{let b=0,bd=1e9;for(let i=0;i<=N;i+=2){const s=samples[i].p;const d=(s.x-p[0])**2+(s.z-p[1])**2;if(d<bd){bd=d;b=i;}}return b;};
+  for(let i=1;i<V.length-1;i++){const ax=V[i][0]-V[i-1][0],az=V[i][1]-V[i-1][1],bx=V[i+1][0]-V[i][0],bz=V[i+1][1]-V[i][1];
+    const la=Math.hypot(ax,az),lb=Math.hypot(bx,bz);const cr=(-ax*bz+az*bx)/(la*lb),dt=(ax*bx+az*bz)/(la*lb);const kat=Math.atan2(cr,dt);
+    if(Math.abs(kat)<0.12)continue;const idx=idxNa(V[i]);const ost=lista[lista.length-1];
+    if(ost&&Math.sign(ost.kat)===Math.sign(kat)&&(idx-ost.koniec)*DS<40){ost.kat+=kat;ost.koniec=idx;}else lista.push({idx,koniec:idx,kat});}
+  return lista.filter(z=>z.idx>START_I-20&&z.idx<META_I+10).map(z=>({idx:z.idx,koniec:z.koniec,z:{lewy:z.kat>0,ang:Math.abs(z.kat)}}));})();
+// następny zakręt przed autem (pokazywany do chwili minięcia jego wierzchołka) i ewentualnie kolejny, jeśli blisko
+function zakretyPrzed(i){const a=ZAKRETY.find(z=>z.koniec+8>i&&(z.idx-i)*DS<135);if(!a)return [];const b=ZAKRETY.find(z=>z.idx>a.koniec&&(z.idx-a.koniec)*DS<75);return b?[a,b]:[a];}
+function nastepny(od,zasieg){for(let m=0;m<zasieg;m+=4){const t=od+m2t(m);if(t>1)break;const z=zakret(t,t+m2t(25));if(z.ang>0.2){return {z:zakret(t,t+m2t(55)),t:t+m2t(55)};}}return null;}
+const HOPA='<svg width="132" height="132" viewBox="0 0 33 33" shape-rendering="crispEdges"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><path d="M2 29 L13 29 L19 22 L31 22 L31 29" fill="none" stroke="#ffd21f" stroke-width="3.5"/><path d="M4 21 Q13 3 27 12" fill="none" stroke="#fff" stroke-width="2.4" stroke-dasharray="2.5 2"/><path d="M27 8 L30 14 L23.5 14.5 Z" fill="#fff"/></svg>';
+const SZYK='<svg width="132" height="132" viewBox="0 0 33 33" shape-rendering="crispEdges"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><path d="M16.5 31 V25 L8 19.5 L25 11.5 L16.5 7 V2" fill="none" stroke="#101018" stroke-width="7"/><path d="M16.5 31 V25 L8 19.5 L25 11.5 L16.5 7 V2" fill="none" stroke="#ffd21f" stroke-width="3.6"/><rect x="2" y="17" width="5" height="5" fill="#d42020"/><rect x="26" y="9" width="5" height="5" fill="#d42020"/></svg>';
+let ostNotka='';
+const FPS={k:0,t:performance.now(),v:0,pokaz:false};addEventListener('keydown',e=>{if(e.code==='KeyF'){FPS.pokaz=!FPS.pokaz;document.getElementById('fps').textContent='';}});
+function hud(klatka){
+  el.czas.textContent=fmt(czas+kara);
+  {const n=performance.now();FPS.k++;if(n-FPS.t>1000){FPS.v=Math.round(FPS.k*1000/(n-FPS.t));FPS.k=0;FPS.t=n;if(FPS.pokaz)document.getElementById('fps').textContent=FPS.v+' KL/S';}}
+  if(klatka%15===0){const ed=document.getElementById('dzwiek');ed.textContent=!DZW.ok?'DŹWIĘK: KLIKNIJ EKRAN':DZW.wycisz?'DŹWIĘK: WYCISZONY (M)':DZW.ctx.state!=='running'?'DŹWIĘK: ZABLOKOWANY – KLIKNIJ':!DZW.bank?'DŹWIĘK: WCZYTYWANIE…':'DŹWIĘK: WŁ.';}   /* stan dźwięku na ekranie */
+  const v=Math.hypot(A.vx,A.vz);el.kmh.innerHTML=Math.round(v*3.6)+'<small> KM/H</small>';
+  // różnica do ducha: własny najlepszy przejazd albo tempo Kropka z rajdu
+  if(stan==='jazda'&&A.idx>START_I){const dist=(A.idx-START_I)*DS;let tD;
+    if(duchCzasy){const j=Math.min(duchCzasy.length-1,Math.floor((A.idx-START_I)/20));tD=duchCzasy[j];}else tD=CZAS_RAJDU*dist/DLUGOSC;
+    const d=czas+kara-tD;el.delta.style.color=d<=0?'#3cff6a':'#ff5a4a';el.delta.textContent=(duchCzasy?'REKORD ':'KROPEK ')+(d<=0?'-':'+')+fmt(Math.abs(d)).replace(/^0'/,'');}
+  else el.delta.textContent='';
+  const tc=A.idx/N;
+  el.pasek[1].style.left=(Math.max(0,Math.min(1,(A.idx-START_I)/(META_I-START_I)))*506)+'px';
+  if(klatka%4===0){
+    const doMostu=(IB-A.idx)*DS,doSzyk=(CH_I-A.idx)*DS-SZ_ODST*DS;let h='';
+    if(doMostu>3&&doMostu<110)h=HOPA;else if(doSzyk>-5&&doSzyk<110)h=SZYK;else{const zz=zakretyPrzed(A.idx);if(zz[0])h=piktogram(zz[0].z,132);if(zz[1])h+=piktogram(zz[1].z,72);}
+    if(stan==='odliczanie')h='';   // w czasie odliczania tylko lampy
+    if(h!==ostNotka){el.notka.innerHTML=h;ostNotka=h;}
+    camera.updateMatrixWorld();const fx=-Math.sin(A.h),fz=-Math.cos(A.h);const p=new THREE.Vector3(A.x-fx*0,A.y,A.z-fz*0).add(new THREE.Vector3(curve.getTangentAt(tc).x*7.5,0,curve.getTangentAt(tc).z*7.5)).project(camera);
+    el.notka.style.left=((p.x+1)/2*1600+190)+'px';el.notka.style.top=Math.max(120,Math.min(700,(1-p.y)/2*900))+'px';}
+  // światła startowe
+  // 5 lamp od lewej zapala się na czerwono co sekundę, start = wszystkie zielone
+  const sw=el.sw.children;
+  if(stan==='odliczanie'){el.sw.style.display='flex';const n=START.faza==='czeka'?0:Math.min(5,Math.floor(START.t));
+    for(let i=0;i<5;i++)sw[i].style.background=i<n?'#ff2a1a':'#3a0c0c';
+    el.km.style.display='block';el.km.innerHTML=START.faza==='czeka'?'<span style="font-size:22px;line-height:40px">TRZYMAJ RĘCZNY (SPACJA)<br>GAZ MOŻESZ TRZYMAĆ<br>PUŚĆ RĘCZNY NA ZIELONYM</span>':'';}
+  else if(stan==='jazda'&&czas<1.2&&!START.falstart){el.sw.style.display='flex';for(let i=0;i<5;i++)sw[i].style.background='#29e04a';if(el.km.innerHTML.indexOf('TRZYMAJ')>=0)el.km.style.display='none';}
+  else{el.sw.style.display='none';if(el.km.innerHTML.indexOf('TRZYMAJ')>=0)el.km.style.display='none';}
+}
+
+// skalowanie ekranu do okna (16:9, piksele bez wygładzania)
+function dopasuj(){const s=Math.min(innerWidth/1600,innerHeight/900);const e=document.getElementById('ekran');e.style.transform=`translate(-50%,-50%) scale(${s})`;e.style.transformOrigin='50% 50%';}
+addEventListener('resize',dopasuj);dopasuj();
+
+
+
+
+
+// ===================== SILNIK: OBROTY, SKRZYNIA, OBROTOMIERZ, DŹWIĘK =====================
+// 6 biegów, 7000 obr./min przy 160 km/h na szóstce; automatyczna zmiana biegów (biegu nie pokazujemy w HUD).
+const SIL={rpm:900,bieg:1,zmiana:0,gazPrzed:false,strzaly:[],plomien:0};
+const BIEG_VMAX=[45,70,93,115,138,160];      // km/h przy 7000 obr./min na kolejnych biegach
+function obrotyNaBiegu(kmh,b){return 7000*kmh/BIEG_VMAX[b-1];}
+function silnikKrok(dt){
+  const kmh=Math.hypot(A.vx,A.vz)*3.6;
+  const we=stan==='jazda'&&!START.trzymaj?(A.we||{gaz:false}):wejscie();
+  const gaz=!!we.gaz&&stan!=='meta'&&stan!=='menu';
+  let cel;
+  if(stan==='odliczanie'||START.trzymaj||kmh<6){              // auto stoi albo rusza: obroty wolne (sprzęgło)
+    SIL.ln=(SIL.ln||0)*0.92+(Math.random()-0.5)*0.16;SIL.bieg=1;cel=gaz?4900*(1+0.012*SIL.ln):900;if(kmh>=1&&gaz)cel=Math.max(cel,obrotyNaBiegu(kmh,1));   // na starcie maks. 5000 obr./min (ogranicznik startowy)
+  }else{
+    let r=obrotyNaBiegu(kmh,SIL.bieg);
+    if(r>6900&&SIL.bieg<BIEG_VMAX.length){SIL.bieg++;SIL.zmiana=0.14;SIL.strzaly.push(0.02,0.09);}   // zmiana w górę + strzał z rury
+    else if(SIL.bieg>1&&obrotyNaBiegu(kmh,SIL.bieg-1)<(gaz?6000:4300)&&r<3300){SIL.bieg--;SIL.zmiana=0.1;}   // redukcja
+    cel=Math.max(900,obrotyNaBiegu(kmh,SIL.bieg));
+    if(gaz&&A.dryf)cel+=350;                                   // drift na gazie: koła się kręcą szybciej
+    if(gaz&&cel>7200){SIL.ln=(SIL.ln||0)*0.92+(Math.random()-0.5)*0.16;cel=7080*(1+0.01*SIL.ln);}   // ogranicznik – wygładzone drżenie zamiast skoków co klatkę
+  }
+  if(SIL.zmiana>0){SIL.zmiana-=dt;cel=Math.min(cel,SIL.rpm);}  // w czasie zmiany biegu obroty nie rosną
+  const tempo=cel>SIL.rpm?(gaz?7000:3000):3500;
+  SIL.rpm+=Math.max(-tempo*dt,Math.min(tempo*dt,cel-SIL.rpm));
+  // strzały z wydechu: puszczenie gazu powyżej 4000 obr./min; poniżej 4000 cisza
+  if(SIL.gazPrzed&&!gaz&&SIL.rpm>4000){const ile=2+Math.floor(Math.random()*3);for(let k=0;k<ile;k++)SIL.strzaly.push(0.05+Math.random()*0.7);}
+  if(!gaz&&SIL.rpm>4000&&Math.random()<dt*1.2)SIL.strzaly.push(0.02);
+  if((gaz&&SIL.zmiana<=0)||SIL.rpm<=4000)SIL.strzaly=SIL.strzaly.filter(t=>t<0.03);
+  if(AUTO==="andrzej")SIL.strzaly.length=0;   // Kropek Andrzeja nie strzela z rury
+  SIL.strzaly=SIL.strzaly.map(t=>t-dt);const teraz=SIL.strzaly.filter(t=>t<=0).length;SIL.strzaly=SIL.strzaly.filter(t=>t>0);
+  for(let k=0;k<teraz;k++){dzwiekStrzal();SIL.plomien=0.07;}
+  SIL.plomien=Math.max(0,SIL.plomien-dt);SIL.gazPrzed=gaz;
+  dzwiekAktualizuj(gaz);
+}
+
+// ----- obrotomierz w stylu „Kropkowego licznika”, rysowany w małej rozdzielczości (piksele) -----
+const OBR={cv:document.getElementById('obrotomierz')};OBR.c=OBR.cv.getContext('2d');OBR.c.imageSmoothingEnabled=false;
+OBR.tlo=(()=>{const S=96,cv=document.createElement('canvas');cv.width=cv.height=S;const c=cv.getContext('2d');const cx=48,cy=50,R=44;
+  c.fillStyle='#111';c.beginPath();c.arc(cx,cy,R+2,0,7);c.fill();c.fillStyle='#2a2a2a';c.beginPath();c.arc(cx,cy,R,0,7);c.fill();
+  c.fillStyle='#f4f4f2';c.beginPath();c.arc(cx,cy,R-4,0,7);c.fill();
+  c.fillStyle='#262628';c.beginPath();c.moveTo(cx-30,cy+22);c.quadraticCurveTo(cx,cy+10,cx+30,cy+22);c.arc(cx,cy,R-4,Math.atan2(22,30),Math.PI-Math.atan2(22,30));c.closePath();c.fill();
+  const kat=v=>(203.471+(v/80)*(-24.049-203.471))*Math.PI/180;
+  c.strokeStyle='#d01818';c.lineWidth=4;c.beginPath();c.arc(cx,cy,R-7,-kat(70),-kat(80),false);c.stroke();
+  for(let v=0;v<=80;v+=5){const a=kat(v),d=v%10===0?6:3;c.strokeStyle='#111';c.lineWidth=v%10===0?2:1;c.beginPath();c.moveTo(cx+Math.cos(a)*(R-5),cy-Math.sin(a)*(R-5));c.lineTo(cx+Math.cos(a)*(R-5-d),cy-Math.sin(a)*(R-5-d));c.stroke();}
+  c.fillStyle='#111';c.font='bold 9px Arial';c.textAlign='center';c.textBaseline='middle';
+  for(let v=0;v<=80;v+=10){const a=kat(v);c.fillText(String(v),cx+Math.cos(a)*(R-17),cy-Math.sin(a)*(R-17));}
+  c.font='bold 6px Arial';c.fillText('rpm x100',cx,cy-13);return {cv,kat,cx,cy,R};})();
+function rysujObrotomierz(){const c=OBR.c,t=OBR.tlo;c.clearRect(0,0,96,96);c.drawImage(t.cv,0,0);
+  const a=t.kat(Math.min(82,SIL.rpm/100));c.strokeStyle='#e8241c';c.lineWidth=3;c.beginPath();c.moveTo(t.cx+Math.cos(a)*6,t.cy-Math.sin(a)*6);c.lineTo(t.cx+Math.cos(a)*(t.R-9),t.cy-Math.sin(a)*(t.R-9));c.stroke();
+  c.fillStyle='#151515';c.beginPath();c.arc(t.cx,t.cy,8,0,7);c.fill();c.fillStyle='#3a3a3a';c.beginPath();c.arc(t.cx-2,t.cy-2,3,0,7);c.fill();}
+
+// ----- dźwięk (Web Audio) -----
+// SILNIK: bank fragmentów z onboardu Kropka (PS1 Brzyska, dzwieki/silnik_bank.ogg + silnik_bank.js) o zmierzonych obrotach 900–6520.
+// Odtwarzanie ziarniste: co ~45 ms startuje krótkie „ziarno” (110 ms, okno Hanna) z fragmentu o obrotach najbliższych aktualnym,
+// z lekką korektą tempa (obroty / obroty fragmentu). Dzięki temu słychać prawdziwy silnik Kropka, a nie przestrojoną jedną próbkę.
+// PISK OPON: pętla z dzwieki/pisk.ogg (nagranie od użytkownika), głośność wg poślizgu.
+const DZW={ok:false,wycisz:false,bank:null,nast:0,pisk:null};
+async function wczytaj(ctx,url){let ab;const k=url.indexOf("pisk")>=0?"pisk":"petle";
+  if(window.AUDIO_B64&&AUDIO_B64[k]){const s=atob(AUDIO_B64[k]);const u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);ab=u.buffer;}   /* dźwięki wbudowane w audio_dane.js – działa też po otwarciu pliku z dysku (file://) */
+  else ab=await (await fetch(url)).arrayBuffer();
+  return await new Promise((ok,blad)=>ctx.decodeAudioData(ab,ok,blad));}
+function petlaBezTrzasku(ctx,buf,X){const d=buf.getChannelData(0),n=Math.floor(buf.sampleRate*X),L=d.length-n;const nb=ctx.createBuffer(1,L,buf.sampleRate);const o=nb.getChannelData(0);
+  for(let i=0;i<L;i++)o[i]=d[i];for(let i=0;i<n;i++){const u=i/n;o[i]=d[i]*u+d[L+i]*(1-u);}return nb;}
+function dzwiekStart(){if(DZW.ok){DZW.ctx.resume();return;}try{
+  const ctx=new (window.AudioContext||window.webkitAudioContext)();DZW.ctx=ctx;
+  const master=ctx.createGain();master.gain.value=0.7;master.connect(ctx.destination);DZW.master=master;const an=ctx.createAnalyser();an.fftSize=1024;master.connect(an);DZW.an=an;   /* miernik do testów */
+  const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=8000;const gs=ctx.createGain();gs.gain.value=0;lp.connect(gs);gs.connect(master);DZW.silWej=lp;DZW.silLp=lp;DZW.silG=gs;
+  const buf=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;DZW.szum=buf;
+  DZW.okno=new Float32Array(64).map((_,i)=>Math.sin(Math.PI*i/63)**2);
+  wczytaj(ctx,'dzwieki/silnik_petle.wav').then(b=>{DZW.petle=(window.SILNIK_PETLE||[]).map(q=>{const src=ctx.createBufferSource();src.buffer=b;src.loop=true;src.loopStart=q.od+(q.dluga?0:0.005);src.loopEnd=q.od+q.dl-(q.dluga?0:0.005);const g=ctx.createGain();g.gain.value=0;src.connect(g);g.connect(DZW.silWej);src.start(0,q.od+(q.dluga?0:0.005));return {q,src,g};});}).catch(()=>{});   /* pętle silnika z nagrania z zewnątrz (Janusz / Arkadiusz) */
+  wczytaj(ctx,'dzwieki/pisk.ogg').then(b=>{const src=ctx.createBufferSource();src.buffer=petlaBezTrzasku(ctx,b,0.15);src.loop=true;const g=ctx.createGain();g.gain.value=0;src.connect(g);g.connect(master);src.start();DZW.pisk={src,g};}).catch(()=>{});
+  DZW.ok=true;}catch(e){DZW.ok=false;}}
+// ziarno silnika z fragmentu banku najbliższego obrotom
+function ziarno(t,rpm,gaz){const B=SILNIK_BANK;let best=B[0],bd=1e9;for(const s of B){const d=Math.abs(Math.log(rpm/s.rpm));if(d<bd){bd=d;best=s;}}
+  const ctx=DZW.ctx,DL=0.11,tempo=Math.max(0.6,Math.min(1.6,rpm/best.rpm));const src=ctx.createBufferSource();src.buffer=DZW.bank;src.playbackRate.value=tempo;
+  const g=ctx.createGain();g.gain.setValueAtTime(0,t);g.gain.setValueCurveAtTime(DZW.okno,t,DL);src.connect(g);g.connect(DZW.silWej);
+  const zakres=Math.max(0.01,best.dl-DL*tempo-0.02);src.start(t,best.od+0.01+Math.random()*zakres,DL*tempo+0.01);src.stop(t+DL+0.02);}
+function dzwiekAktualizuj(gaz){if(!DZW.ok)return;const ctx=DZW.ctx,t=ctx.currentTime,cisza=DZW.wycisz||stan==='menu';
+  if(DZW.ctx.state!=='running')DZW.ctx.resume();
+  if(DZW.petle&&DZW.petle.length){const rpm=Math.max(800,SIL.rpm);const WOL=DZW.petle.find(e=>e.q.wolne),P2=DZW.petle.filter(e=>!e.q.wolne);
+    /* wolne obroty: prawdziwe nagranie Kropka (onboard); od ~2600 obr/min pętle z nagrania z zewnątrz, obniżane najwyżej o 25% */
+    const JEDNA=P2.length===1;const ww=WOL?Math.max(0,Math.min(1,(2700-rpm)/1100)):0,rE=JEDNA?rpm*(1+0.004*(DZW.dr=(DZW.dr||0)*0.92+(Math.random()-0.5)*0.25)):Math.max(rpm,P2[0].q.rpm*0.75);   /* jedna długa pętla z nagrania: zakres przez prędkość odtwarzania, drobne drżenie obrotów */
+    if(WOL){WOL.g.gain.setTargetAtTime(Math.sin(ww*Math.PI/2)*1.1,t,.04);WOL.src.playbackRate.setTargetAtTime(Math.max(0.9,Math.min(1.9,rpm/WOL.q.rpm)),t,.04);}
+    let j=P2.findIndex(e=>e.q.rpm>=rE),ia,ib,u;if(j<0){ia=ib=P2.length-1;u=0;}else if(j===0){ia=ib=0;u=0;}else{ia=j-1;ib=j;u=(rE-P2[ia].q.rpm)/(P2[ib].q.rpm-P2[ia].q.rpm);}
+    const we=Math.cos(ww*Math.PI/2);
+    P2.forEach((e,k)=>{const w=k===ia&&k===ib?1:k===ia?Math.cos(u*Math.PI/2):k===ib?Math.sin(u*Math.PI/2):0;e.g.gain.setTargetAtTime(w*we,t,.03);
+      e.src.playbackRate.setTargetAtTime(Math.max(JEDNA?0.21:0.75,Math.min(2.0,rE/e.q.rpm*(JEDNA?1+0.26*Math.pow(Math.max(0,Math.min(1,(rE-4700)/2300)),1.2):1))),t,.03);   /* góra skali podkręcona o 26% */});
+    DZW.silLp.frequency.setTargetAtTime(gaz?9000:2600,t,.08);DZW.silG.gain.setTargetAtTime(cisza?0:(AUTO==="andrzej"?.75:1)*(gaz?1.0:0.6)*(0.35+0.65*Math.pow(Math.min(1,rpm/7000),1.3)),t,.06);   /* Kropek Andrzeja trochę cichszy */   /* głośność rośnie z obrotami */}
+  // pisk opon: poślizg boczny lub ręczny, tylko na asfalcie i przy prędkości
+  const v=Math.hypot(A.vx,A.vz),s=samples[A.idx],n=nrm(s),off=Math.abs((A.x-s.p.x)*n.x+(A.z-s.p.z)*n.z);
+  let p=0;if(v>6&&off<wDrogi(A.idx)/2+0.5&&!A.wPowietrzu){p=Math.max(0,Math.min(1,(Math.abs(A.poslizg||0)-0.12)/0.35));if(A.we&&A.we.reczny)p=Math.max(p,0.7);if(A.we&&A.we.ham&&v>15)p=Math.max(p,0.35);}
+  if(DZW.pisk){DZW.pisk.g.gain.setTargetAtTime(cisza?0:Math.pow(p,1.2)*0.9,t,.05);DZW.pisk.src.playbackRate.setTargetAtTime(0.92+p*0.12+Math.min(v,40)*0.002,t,.1);}}
+function dzwiekStrzal(){if(!DZW.ok||DZW.wycisz)return;const ctx=DZW.ctx,t0=ctx.currentTime;const ile=1+Math.floor(Math.random()*3);   /* seria 1–3 strzałów z wydechu */
+  for(let k=0;k<ile;k++){const t=t0+k*(0.035+Math.random()*0.05),moc=k?0.6+Math.random()*0.4:1;
+  const s=ctx.createBufferSource();s.buffer=DZW.szum;const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1100+Math.random()*900;const g=ctx.createGain();
+  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(2.2*moc,t+0.004);g.gain.exponentialRampToValueAtTime(0.0001,t+0.07+Math.random()*0.05);
+  s.connect(lp);lp.connect(g);g.connect(DZW.master);s.start(t,Math.random()*1.5,0.14);
+  const o=ctx.createOscillator();o.type='triangle';o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(48,t+0.07);const go=ctx.createGain();go.gain.setValueAtTime(1.4*moc,t);go.gain.exponentialRampToValueAtTime(0.0001,t+0.09);o.connect(go);go.connect(DZW.master);o.start(t);o.stop(t+0.11);}}
+setInterval(()=>{if(DZW.ok)dzwiekAktualizuj(SIL.gazPrzed);},40);   /* dźwięk niezależny od klatek obrazu (nie przerywa się przy spadkach płynności) */
+addEventListener('keydown',e=>{if(e.code==='KeyM'){DZW.wycisz=!DZW.wycisz;pokazKomunikat(DZW.wycisz?'DŹWIĘK WYŁĄCZONY':'DŹWIĘK WŁĄCZONY');}});
+['keydown','touchstart','mousedown'].forEach(ev=>addEventListener(ev,()=>{if(stan!=='menu'||ev!=='keydown')dzwiekStart();},{passive:true}));
+
+// płomień z wydechu przy strzale (mała pomarańczowa plama za autem)
+const PLOMIEN=new THREE.Mesh(new THREE.SphereGeometry(.22,6,4),new THREE.MeshBasicMaterial({color:0xffa21c}));PLOMIEN.visible=false;scene.add(PLOMIEN);
+function plomienRysuj(){PLOMIEN.visible=SIL.plomien>0;if(!PLOMIEN.visible)return;const fx=-Math.sin(A.h),fz=-Math.cos(A.h),rx=-fz,rz=fx;
+  PLOMIEN.position.set(A.x-fx*2.15-rx*0.45,A.y+0.35,A.z-fz*2.15-rz*0.45);   /* rura wydechowa z lewej strony tyłu */PLOMIEN.scale.setScalar(0.8+Math.random()*0.7);PLOMIEN.material.color.setHex(Math.random()<.5?0xffa21c:0xfff070);}
+// dźwięk uderzenia o bandę, opony szykany albo bariery mostka (głośność wg siły uderzenia, przerwa min. 0,25 s)
+let ostUderzenie=0;
+function dzwiekUderzenie(sila){if(!DZW.ok||DZW.wycisz||sila<1.2)return;const ctx=DZW.ctx,t=ctx.currentTime;if(t-ostUderzenie<0.25)return;ostUderzenie=t;const g0=Math.min(1,sila/14);
+  const s=ctx.createBufferSource();s.buffer=DZW.szum;const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=500+g0*900;const g=ctx.createGain();
+  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.25+g0*0.9,t+0.005);g.gain.exponentialRampToValueAtTime(0.0001,t+0.22+g0*0.15);s.connect(lp);lp.connect(g);g.connect(DZW.master);s.start(t,Math.random(),0.45);
+  const o=ctx.createOscillator();o.type='triangle';o.frequency.setValueAtTime(90+g0*40,t);o.frequency.exponentialRampToValueAtTime(38,t+0.18);const go=ctx.createGain();go.gain.setValueAtTime(0.35+g0*0.6,t);go.gain.exponentialRampToValueAtTime(0.0001,t+0.25);o.connect(go);go.connect(DZW.master);o.start(t);o.stop(t+0.28);}
+// pętla: fizyka w stałym kroku 60 Hz, rysowanie co klatkę ekranu (max 60 kl./s)
+let ostT=performance.now(),akum=0,klatka=0,ostRys=0;const POP={x:0,z:0,y:0,h:0};
+// procedura startu (wywoływana co klatkę): czeka na ręczny → 5 czerwonych co 1 s → zielone po 6 s
+function startKrok(dt){if(stan!=='odliczanie')return;const we=wejscie();
+  if(START.faza==='czeka'){if(we.reczny){START.faza='swiatla';START.t=0;}return;}
+  START.t+=dt;
+  if(!we.reczny&&we.gaz){START.falstart=true;kara+=10;stan='jazda';czas=0;czasyIdx=[];START.trzymaj=false;pokazKomunikat('<span style="color:#ff5a4a">FALSTART +10 S</span>');}
+  else if(START.t>=6){stan='jazda';czas=0;czasyIdx=[];START.trzymaj=we.reczny;}}
+function petla(t){requestAnimationFrame(petla);if(window.PAUZA)return;   // PAUZA – zatrzymanie do zrzutów testowych
+  if(t-ostRys<1000/78)return;   /* obraz w rytmie odświeżania ekranu (60 Hz = każda klatka, 120/144 Hz = co druga) – równe odstępy klatek, bez szarpania; fizyka 60 Hz w stałym kroku z interpolacją */const dt=Math.min(0.1,(t-ostRys)/1000);ostRys=t;
+  startKrok(dt);
+  silnikKrok(dt);rysujObrotomierz();plomienRysuj();
+  if(stan!=='menu'){akum+=dt;while(akum>=DT){POP.x=A.x;POP.z=A.z;POP.y=A.y;POP.h=A.h;krok();akum-=DT;if(stan==='jazda'&&(czasyIdx.length===0||czasyIdx[czasyIdx.length-1][0]<A.idx))czasyIdx.push([A.idx,czas+kara]);}}
+  // auto
+  {const u=Math.min(1,akum/DT);let dh=A.h-POP.h;if(dh>Math.PI)dh-=2*Math.PI;if(dh<-Math.PI)dh+=2*Math.PI;   /* płynny ruch auta między krokami fizyki (60 Hz) przy 40 kl./s */
+   car.position.set(POP.x+(A.x-POP.x)*u,POP.y+(A.y-POP.y)*u,POP.z+(A.z-POP.z)*u);car.rotation.set(A.wPowietrzu?-0.08:0,POP.h+dh*u,0);}
+  if(car.userData.ustawStop)car.userData.ustawStop(A.we&&A.we.ham&&Math.hypot(A.vx,A.vz)>0.5||stan==='meta'&&Math.hypot(A.vx,A.vz)>0.5);   // światła stop przy hamowaniu
+  if(car.userData.ustawKola)car.userData.ustawKola(A.skretW*0.5,A.droga||0);   // przednie koła skręcają, wszystkie się toczą
+  // duch: odtworzenie najlepszego przejazdu
+  if(duchZapis&&stan==='jazda'){const f=czas*10;const i=Math.floor(f);if(i<duchZapis.length-1){const a=duchZapis[i],b=duchZapis[i+1],u=f-i;ghost.visible=true;ghost.position.set(a[0]+(b[0]-a[0])*u,0,a[1]+(b[1]-a[1])*u);ghost.rotation.y=a[2]+(b[2]-a[2])*u;el.pasek[0].style.display='block';}else ghost.visible=false;}
+  else ghost.visible=false;
+  if(ghost.visible){const r=najblizsza(ghost.position.x,ghost.position.z)[1];el.pasek[0].style.left=(Math.max(0,Math.min(1,(r-START_I)/(META_I-START_I)))*506)+'px';}else el.pasek[0].style.display='none';
+  // kurz
+  for(let i=0;i<80;i++){const k=kurz[i];if(k.t>0){k.t-=dt*1.4;k.x+=k.vx*dt;k.y+=k.vy*dt;k.z+=k.vz*dt;k.vy-=dt;}const sc=Math.max(0.001,k.t)*1.2+0.2*(k.t>0);
+    _m.compose(_p.set(k.x,k.t>0?k.y:-9,k.z),_q.identity(),_s.set(sc,sc,sc));KURZ.setMatrixAt(i,_m);}KURZ.instanceMatrix.needsUpdate=true;
+  TX_WODA.offset.y-=dt*0.08;   /* nurt strumienia */
+  kamera(dt);hud(klatka++);renderer.render(scene,camera);}
+// ===================== TEST: autopilot w symulacji (bez rysowania) =====================
+// window.testPrzejazd() – przejeżdża odcinek automatem: celuje w punkt 14 m przed autem, hamuje przed ostrymi łukami.
+window.testKadr=function(sek){window.PAUZA=true;const w=window.testPrzejazd(sek,true);kamera(1);for(let i=0;i<400;i++)kamera(1/60);hud(0);hud(4);renderer.render(scene,camera);return w;};
+window.testPrzejazd=function(maxS=400,zostaw=false){const stary=wejscie;let banda=0,wyjazdy=0,maxV=0,hop=0,ostPowietrze=false;
+  wejscie=function(){const s=samples[A.idx];const look=Math.min(N,A.idx+Math.round((14+Math.hypot(A.vx,A.vz)*0.35)/DS));const c=samples[look].p.clone();
+    // slalom w szykanie: punkt docelowy przesunięty na wolną stronę najbliższej bramki przed autem
+    let wSzyk=false;for(const gk of [-1,0,1]){const gi=CH_I+gk*SZ_ODST;if(gi>=A.idx-(window.AP_ZA||2)&&gi-A.idx<(window.AP_ZASIEG||24)){const sg=gk===0?1:-1;const nb=nrm(samples[gi]);const sl=samples[Math.min(N,Math.max(look,gi))].p;c.copy(sl).addScaledVector(nb,-sg*(window.AP_OFF||wDrogi(gi)*0.31));wSzyk=true;break;}}
+    const dx=c.x-A.x,dz=c.z-A.z;const fx=-Math.sin(A.h),fz=-Math.cos(A.h);const kat=Math.atan2(fx*dz-fz*dx,fx*dx+fz*dz);
+    const v=Math.hypot(A.vx,A.vz);let vCel=P.vmax/3.6;
+    {const doSz=(CH_I-SZ_ODST-A.idx)*DS;if(doSz<60&&doSz>-SZ_ODST*3*DS)vCel=Math.min(vCel,(window.AP_V||8)+Math.max(0,doSz)*0.25);}   // przed szykaną i w niej ok. 55 km/hfor(let m=10;m<80;m+=5){const i=Math.min(N-8,A.idx+Math.round(m/DS));const k=krzywizna(i,14);if(k.ang>0.15){const vk=Math.max(9,Math.sqrt(14/(k.ang/(28*DS)))*1.0);vCel=Math.min(vCel,vk+m*0.35);}}
+    return {gaz:v<vCel,ham:v>vCel+3,skret:Math.max(-1,Math.min(1,-kat*2.2)),reczny:false};};
+  nowyPrzejazd();stan='jazda';czas=0;czasyIdx=[];let k=0;
+  while(stan==='jazda'&&czas<maxS){const vx=A.vx,vz=A.vz;krok();k++;const v=Math.hypot(A.vx,A.vz);maxV=Math.max(maxV,v);
+    if(Math.hypot(A.vx-vx,A.vz-vz)>1.5)banda++;const s=samples[A.idx],n=nrm(s);if(Math.abs((A.x-s.p.x)*n.x+(A.z-s.p.z)*n.z)>wDrogi(A.idx)/2+0.8)wyjazdy++;
+    if(A.wPowietrzu&&!ostPowietrze)hop++;ostPowietrze=A.wPowietrzu;}
+  wejscie=stary;const wynik={czas:+czas.toFixed(2),kara:kara,meta:meta,kmhMax:Math.round(maxV*3.6),uderzenia:banda,klatkiPozaAsfaltem:wyjazdy,wybicia:hop,dl:Math.round(DLUGOSC),czasRajdu:+CZAS_RAJDU.toFixed(2)};
+  if(!zostaw){try{localStorage.removeItem("krt_best_"+AUTO);localStorage.removeItem("krt_duch_"+AUTO);}catch(e){}stan="menu";}else{car.position.set(A.x,A.y,A.z);car.rotation.set(0,A.h,0);document.getElementById("menu").style.display="none";}return wynik;};
+function rozgrzej(){   /* jednorazowo przy starcie: kompilacja wszystkich shaderów i wysłanie wszystkich tekstur do karty – bez przycięć, gdy nowe obiekty wjeżdżają w kadr */
+  const fc=[];scene.traverse(o=>{if(o.isMesh||o.isSprite||o.isLineSegments){fc.push([o,o.frustumCulled,o.visible]);o.frustumCulled=false;if(o.userData.kafel)o.visible=true;}});
+  try{renderer.compile(scene,camera);renderer.render(scene,camera);}catch(e){}
+  for(const [o,f,v] of fc){o.frustumCulled=f;o.visible=v;}}
+// optymalizacja bez zmiany wyglądu: nieruchome obiekty sceny nie przeliczają macierzy w każdej klatce (ruszają się tylko auto, duch, cień auta, płomień, słońce i kamera)
+function zamrozStatyczne(){const ruch=new Set([car,ghost,CIEN_AUTA,PLOMIEN,sun,sun.target,camera]);for(const c of scene.children){if(ruch.has(c))continue;c.updateMatrixWorld(true);c.traverse(o=>{o.matrixAutoUpdate=false;});}}
+document.fonts.ready.then(()=>{nowyPrzejazd();stan='menu';kamera(1);zamrozStatyczne();rozgrzej();requestAnimationFrame(petla);document.title='KRT Time Attack – PS1 Brzyska';document.body.dataset.gotowe=JSON.stringify({scalone:SCALENIE,dl:Math.round(DLUGOSC)});
+  /* podgląd testowy z dysku: ?kadr=sek[&zoom=7] albo ?test=1 (wynik autopilota w tytule) */
+  if(QS.get('test')){const w=window.testPrzejazd(+QS.get('test')>1?+QS.get('test'):120);document.title='TEST '+JSON.stringify(w);}
+  else if(QS.get('kadr')){window.testKadr(+QS.get('kadr'));{const qi=QS.get('i');if(qi){const ii=qi==='most'?IB:qi==='szyk'?CH_I:qi==='meta'?META_I:qi==='start'?START_I:+qi;const sm=samples[ii];A.x=sm.p.x;A.z=sm.p.z;A.idx=ii;A.vx=A.vz=0;A.h=Math.atan2(-sm.d.x,-sm.d.z);car.position.set(A.x,A.y,A.z);car.rotation.set(0,A.h,0);for(let k=0;k<400;k++)kamera(1/60);renderer.render(scene,camera);}}const z=+(QS.get('zoom')||0);if(z){const d=new THREE.Vector3();camera.getWorldDirection(d);const cel=car.position.clone().add(new THREE.Vector3(+(QS.get('dx')||0),0,+(QS.get('dz')||0)));const t=cel.clone().sub(camera.position).dot(d);camera.position.copy(cel).addScaledVector(d,-t);camera.zoom=z;camera.updateProjectionMatrix();}dopasuj();renderer.render(scene,camera);}});
+</script>
+</body>
+</html>
