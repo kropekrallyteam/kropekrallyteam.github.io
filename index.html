@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>KRT Time Attack – PS1 Brzyska</title>
+<title>Kropek Rally Team Time Attack 🏁</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
@@ -31,7 +31,8 @@
   #swiatla b{display:block;width:70px;height:70px;border-radius:50%;background:#3a0c0c}
   #komunikat{left:0;right:0;top:400px;text-align:center;font-size:40px;color:#ffd21f;display:none}
   #menu{position:absolute;left:0;top:0;width:1600px;height:900px;background:rgba(10,10,20,.82);color:#fff;text-align:center}
-  #menu h1{font-size:52px;color:#ffd21f;margin:110px 0 10px;text-shadow:6px 6px 0 #1a3a9c}
+  #menu h1{font-size:44px;line-height:1.35;color:#ffd21f;margin:80px 0 10px;text-shadow:6px 6px 0 #1a3a9c}
+  #menu h1 .flaga{text-shadow:none;font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif}
   #menu h2{font-size:22px;margin:0 0 60px;color:#fff}
   .auta{display:flex;justify-content:center;gap:60px;margin-bottom:50px}
   .auto{width:380px;padding:26px;border:6px solid #555;background:#1a1a28;cursor:pointer}
@@ -71,7 +72,7 @@
 <div id="dotyk"><div id="tL" style="left:40px">&lt;</div><div id="tP" style="left:270px">&gt;</div><div id="tH" style="right:270px;font-size:22px">RĘCZNY</div><div id="tG" style="right:40px;font-size:26px">GAZ</div><div id="tB" style="right:40px;bottom:260px;width:150px;height:150px;font-size:20px">HAM.</div></div>
 <div id="strojenie"></div>
 <div id="menu">
-  <h1>TIME ATTACK</h1>
+  <h1>Kropek Rally Team<br>Time Attack <span class="flaga">🏁</span></h1>
   <h2>PS1 · 25 RAJD NIEPODLEGŁOŚCI · BRZYSKA</h2>
   <div class="auta">
     <div class="auto wyb" data-auto="janusz"><b>KROPEK JANUSZA</b><span>Smoła / Prokop<br>KGR 11761 · IRBUD</span></div>
@@ -1132,7 +1133,7 @@ function rozgrzej(){   /* jednorazowo przy starcie: kompilacja wszystkich shader
   for(const [o,f,v] of fc){o.frustumCulled=f;o.visible=v;}}
 // optymalizacja bez zmiany wyglądu: nieruchome obiekty sceny nie przeliczają macierzy w każdej klatce (ruszają się tylko auto, duch, cień auta, płomień, słońce i kamera)
 function zamrozStatyczne(){const ruch=new Set([car,ghost,CIEN_AUTA,PLOMIEN,sun,sun.target,camera]);for(const c of scene.children){if(ruch.has(c))continue;c.updateMatrixWorld(true);c.traverse(o=>{o.matrixAutoUpdate=false;});}}
-document.fonts.ready.then(()=>{nowyPrzejazd();stan='menu';kamera(1);zamrozStatyczne();rozgrzej();requestAnimationFrame(petla);document.title='KRT Time Attack – PS1 Brzyska';document.body.dataset.gotowe=JSON.stringify({scalone:SCALENIE,dl:Math.round(DLUGOSC)});
+document.fonts.ready.then(()=>{nowyPrzejazd();stan='menu';kamera(1);zamrozStatyczne();rozgrzej();requestAnimationFrame(petla);document.title='Kropek Rally Team Time Attack 🏁';document.body.dataset.gotowe=JSON.stringify({scalone:SCALENIE,dl:Math.round(DLUGOSC)});
   /* podgląd testowy z dysku: ?kadr=sek[&zoom=7] albo ?test=1 (wynik autopilota w tytule) */
   if(QS.get('test')){const w=window.testPrzejazd(+QS.get('test')>1?+QS.get('test'):120);document.title='TEST '+JSON.stringify(w);}
   else if(QS.get('kadr')){window.testKadr(+QS.get('kadr'));{const qi=QS.get('i');if(qi){const ii=qi==='most'?IB:qi==='szyk'?CH_I:qi==='meta'?META_I:qi==='start'?START_I:+qi;const sm=samples[ii];A.x=sm.p.x;A.z=sm.p.z;A.idx=ii;A.vx=A.vz=0;A.h=Math.atan2(-sm.d.x,-sm.d.z);car.position.set(A.x,A.y,A.z);car.rotation.set(0,A.h,0);for(let k=0;k<400;k++)kamera(1/60);renderer.render(scene,camera);}}const z=+(QS.get('zoom')||0);if(z){const d=new THREE.Vector3();camera.getWorldDirection(d);const cel=car.position.clone().add(new THREE.Vector3(+(QS.get('dx')||0),0,+(QS.get('dz')||0)));const t=cel.clone().sub(camera.position).dot(d);camera.position.copy(cel).addScaledVector(d,-t);camera.zoom=z;camera.updateProjectionMatrix();}dopasuj();renderer.render(scene,camera);}});
