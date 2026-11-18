@@ -57,6 +57,7 @@
   #rTab td.c{width:300px;text-align:right;font-variant-numeric:tabular-nums}
   #rTab tr.p1 td{color:#ffd21f}
   #rTab tr.ja td{background:#2a3a7c}
+  #rTab .nowy{font-size:11px;color:#101018;background:#3cff6a;padding:3px 6px;margin-left:10px;vertical-align:middle}
   #rTab tr.kropki td{border:none;color:#666;padding:2px}
   #rTab .medal{font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:24px;line-height:1;vertical-align:middle;margin-left:10px;display:inline-block;width:34px;height:24px}
   #rInfo{min-height:30px;margin:22px 0 6px;font-size:16px;color:#ccc;line-height:30px}
@@ -857,35 +858,39 @@ function pokazMenu(){stan='menu';document.getElementById('menu').style.display='
 const RANK={el:document.getElementById('ranking'),plik:'wyniki/brzyska_2026.json',ile:10};
 function rankingOtwarty(){return RANK.el.style.display==='block';}
 function htmlTekst(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function mojNajlepszy(){let b=null;for(const a of ['janusz','andrzej']){const v=+localStorage.getItem('krt_best_'+a);if(v>0&&(b===null||v<b))b=v;}return b;}
-async function pokazRanking(mojCzas){RANK.poMecie=mojCzas!=null;odswiezWysylke();document.getElementById('menu').style.display='none';document.getElementById('komunikat').style.display='none';RANK.el.style.display='block';
-  const tab=document.getElementById('rTab'),info=document.getElementById('rInfo'),akt=document.getElementById('rAkt');
-  tab.innerHTML='<tr><td colspan="3" style="color:#888;border:none">WCZYTUJĘ...</td></tr>';akt.textContent='';
-  const opis=najl=>[mojCzas!=null?`TWÓJ CZAS: <b>${fmt(mojCzas)}</b>`:'',najl?`TWÓJ NAJLEPSZY CZAS TO: <b>${fmt(najl)}</b>`:''].filter(Boolean).join(' · ');
-  let najl=mojNajlepszy();if(mojCzas!=null&&(najl===null||mojCzas<najl))najl=mojCzas;info.innerHTML=opis(najl);
+async function pokazRanking(mojCzas){RANK.poMecie=mojCzas!=null;RANK.zaladowany=false;RANK.W=null;RANK.akt=null;odswiezWysylke();document.getElementById('menu').style.display='none';document.getElementById('komunikat').style.display='none';RANK.el.style.display='block';
+  document.getElementById('rTab').innerHTML='<tr><td colspan="3" style="color:#888;border:none">WCZYTUJĘ...</td></tr>';document.getElementById('rAkt').textContent='';
+  RANK.mojCzas=mojCzas;RANK.najlPlik=null;odswiezInfo();
   let d=null;try{const o=await fetch(RANK.plik+'?t='+Date.now(),{cache:'no-store'});if(o.ok)d=await o.json();}catch(e){}
   if(!rankingOtwarty())return;
-  const W=d&&Array.isArray(d.wyniki)?d.wyniki:null;
+  RANK.W=d&&Array.isArray(d.wyniki)?d.wyniki:null;RANK.akt=d&&d.aktualizacja;RANK.zaladowany=true;rysujTabele();}
+// tabela: opublikowany ranking + (tuż po mecie) Twój nowy rekord potwierdzony przez pośrednika – widoczny od razu, zanim ranking na stronie się odświeży
+function rysujTabele(){const tab=document.getElementById('rTab'),akt=document.getElementById('rAkt');
+  let W=RANK.W?RANK.W.slice():null;const o=WYSYLKA.odp;let nowy=false;
+  if(RANK.poMecie&&o&&o.ok&&o.status==='ok'&&o.rekordOsobisty&&GRACZ.nick){W=(W||[]).filter(w=>w.nick!==GRACZ.nick);W.push({nick:GRACZ.nick,czas:o.czas});W.sort((a,b)=>a.czas-b.czas);nowy=true;}
   if(!W||!W.length){tab.innerHTML=`<tr><td colspan="3" style="color:#aaa;border:none;padding:40px">${W?'RANKING JEST JESZCZE PUSTY':'RANKING JESZCZE NIE DZIAŁA'}</td></tr>`;return;}
   const medal=['🏆','🥈','🥉'];const moje=W.findIndex(w=>w.nick===GRACZ.nick);
-  if(moje>=0&&(najl===null||+W[moje].czas<najl)){najl=+W[moje].czas;info.innerHTML=opis(najl);}   // najlepszy czas: z tej przeglądarki albo z rankingu (np. z innego urządzenia)
-  const wiersz=(w,i)=>`<tr class="${i===0?'p1':''}${i===moje?' ja':''}"><td class="m">${i+1}.</td><td class="n">${htmlTekst(w.nick)}</td><td class="c">${fmt(+w.czas)}<span class="medal">${medal[i]||''}</span></td></tr>`;
+  RANK.najlPlik=moje>=0?+W[moje].czas:null;odswiezInfo();   // najlepszy czas – z rankingu (i z odpowiedzi pośrednika po nowym rekordzie)
+  const wiersz=(w,i)=>`<tr class="${i===0?'p1':''}${i===moje?' ja':''}"><td class="m">${i+1}.</td><td class="n">${htmlTekst(w.nick)}${i===moje&&nowy?' <span class="nowy">NOWY</span>':''}</td><td class="c">${fmt(+w.czas)}<span class="medal">${medal[i]||''}</span></td></tr>`;
   let h=W.slice(0,RANK.ile).map(wiersz).join('');
   if(moje>=RANK.ile)h+='<tr class="kropki"><td colspan="3">...</td></tr>'+wiersz(W[moje],moje);
   tab.innerHTML=h;
-  if(d.aktualizacja){const t=new Date(d.aktualizacja);if(!isNaN(t))akt.textContent='RANKING AKTUALIZOWANY AUTOMATYCZNIE · OSTATNIO: '+t.toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}}
+  if(RANK.akt){const t=new Date(RANK.akt);if(!isNaN(t))akt.textContent='RANKING AKTUALIZOWANY AUTOMATYCZNIE · OSTATNIO: '+t.toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}}
 function zamknijRanking(){RANK.el.style.display='none';pokazMenu();}
+// najlepszy czas gracza: z pliku rankingu (uznany przez pośrednika), a tuż po mecie – z odpowiedzi pośrednika, jeśli właśnie poprawił rekord; nie z pamięci przeglądarki
+function odswiezInfo(){let najl=RANK.najlPlik;const o=WYSYLKA.odp;if(RANK.poMecie&&o&&o.ok&&o.status==='ok'&&o.rekordOsobisty&&(najl==null||o.czas<najl))najl=o.czas;
+  document.getElementById('rInfo').innerHTML=[RANK.mojCzas!=null?`TWÓJ CZAS: <b>${fmt(RANK.mojCzas)}</b>`:'',najl!=null?`TWÓJ NAJLEPSZY CZAS TO: <b>${fmt(najl)}</b>`:''].filter(Boolean).join(' · ');}
 // ===================== WYSYŁKA PRZEJAZDU DO POŚREDNIKA =====================
 // na mecie gra wysyła powtórkę (klawisze); pośrednik sam przelicza czas i odpowiada: zapisany (miejsce) / do weryfikacji / odrzucony
 const TRASA_ID='brzyska_2026_v1';
 const WYSYLKA={stan:'',odp:null};
 function kodujPowtorke(z){let p=0;return z.map(e=>{const d=[e[0]-p,e[1],Math.round(e[2]*32)];p=e[0];return d;});}   // [kroki od poprzedniej zmiany, bity, skręt×32]
-function odswiezWysylke(){const el=document.getElementById('rWyslij');el.className='';
+function odswiezWysylke(){if(RANK.poMecie&&rankingOtwarty()){if(RANK.zaladowany)rysujTabele();else odswiezInfo();}const el=document.getElementById('rWyslij');el.className='';
   if(!RANK.poMecie||!WYSYLKA.stan){el.textContent='';return;}
   const o=WYSYLKA.odp;
   if(WYSYLKA.stan==='wysylam')el.textContent='WYSYŁAM WYNIK...';
   else if(WYSYLKA.stan==='blad'){el.className='blad';el.textContent='BRAK POŁĄCZENIA – WYNIK WYŚLĘ PRZY NASTĘPNYM URUCHOMIENIU GRY';}
-  else if(o&&o.ok&&o.status==='ok')el.textContent=`WYNIK ZAPISANY · MIEJSCE W RANKINGU: ${o.miejsce}`+(o.rekordOsobisty?' · TABELA ODŚWIEŻY SIĘ ZA KILKA MINUT':'');
+  else if(o&&o.ok&&o.status==='ok')el.textContent=`WYNIK ZAPISANY · MIEJSCE W RANKINGU: ${o.miejsce}`+(o.rekordOsobisty?' · INNI GRACZE ZOBACZĄ GO ZA KILKA MINUT':'');
   else if(o&&o.ok&&o.status==='moderacja')el.textContent='WYNIK CZEKA NA WERYFIKACJĘ';
   else{el.className='blad';el.textContent=(o&&o.blad)||'WYNIK NIE ZOSTAŁ ZAPISANY';}}
 async function wyslijDane(dane){WYSYLKA.stan='wysylam';WYSYLKA.odp=null;odswiezWysylke();
