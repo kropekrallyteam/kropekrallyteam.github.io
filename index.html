@@ -44,11 +44,40 @@
   .rozdz .opcja{padding:12px 18px;border:5px solid #555;background:#1a1a28;color:#fff;cursor:pointer;font-size:14px}
   .rozdz .opcja small{display:block;font-size:10px;color:#aaa;margin-top:6px}
   .rozdz .opcja.wyb{border-color:#ffd21f;box-shadow:0 0 0 4px #101018,0 0 20px #ffd21f88}
+  #menu .przyciski{display:flex;justify-content:center;gap:26px;margin-top:24px}
+  #menu .przyciski .start{margin-top:0}
+  #menu .start.drugi{background:#e8e4da}
+  #ranking{position:absolute;left:0;top:0;width:1600px;height:900px;background:rgba(10,10,20,.9);color:#fff;text-align:center;display:none;z-index:6}
+  #ranking h1{font-size:40px;color:#ffd21f;margin:56px 0 8px;text-shadow:5px 5px 0 #1a3a9c}
+  #ranking h2{font-size:16px;color:#ccc;margin:0 0 26px}
+  #rTab{margin:0 auto;border-collapse:collapse;width:900px;font-size:22px}
+  #rTab td{padding:9px 14px;border-bottom:3px solid #2a2a3c}
+  #rTab td.m{width:90px;text-align:right;color:#aaa}
+  #rTab td.n{text-align:left}
+  #rTab td.c{width:300px;text-align:right;font-variant-numeric:tabular-nums}
+  #rTab tr.p1 td{color:#ffd21f}
+  #rTab tr.ja td{background:#2a3a7c}
+  #rTab tr.kropki td{border:none;color:#666;padding:2px}
+  #rTab .medal{font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:24px;line-height:1;vertical-align:middle;margin-left:10px;display:inline-block;width:34px;height:24px}
+  #rInfo{min-height:30px;margin:22px 0 6px;font-size:16px;color:#ccc;line-height:30px}
+  #rInfo b{color:#ffd21f}
+  #rWyslij{min-height:24px;font-size:14px;color:#8fe3ff;line-height:24px}
+  #rWyslij.blad{color:#ff8a7a}
+  #ranking .start{display:inline-block;margin-top:16px;font-size:24px;color:#101018;background:#ffd21f;padding:16px 34px;border:6px solid #101018;box-shadow:6px 6px 0 #000;cursor:pointer}
+  #rAkt{margin-top:18px;font-size:11px;color:#888}
+  .nickpasek{margin-top:14px;font-size:15px;color:#ccc}
+  .nickpasek b{color:#ffd21f}
+  .nickpasek .zmien{margin-left:14px;font-size:11px;color:#101018;background:#ccc;padding:5px 9px;cursor:pointer}
+  #nickOkno{position:absolute;left:0;top:0;width:1600px;height:900px;background:rgba(5,5,12,.88);display:none;z-index:5}
+  #nickOkno .ramka{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:760px;background:#1a1a28;border:6px solid #ffd21f;box-shadow:8px 8px 0 #000;padding:34px 40px 30px}
+  #nickOkno h3{font-size:26px;color:#ffd21f;margin:0 0 18px}
+  #nickOkno p{font-size:13px;line-height:24px;color:#ccc;margin:0 0 20px}
+  #nickPole{width:560px;font-family:inherit;font-size:24px;padding:14px 16px;background:#0c0c14;color:#fff;border:5px solid #555;outline:none;text-align:center;text-transform:uppercase}
+  #nickPole:focus{border-color:#ffd21f}
+  #nickBlad{min-height:22px;margin:14px 0 4px;font-size:12px;color:#ff5a4a}
+  #nickOkno .start{font-size:22px;padding:14px 30px;margin-top:6px}
+  #nickAnuluj{display:inline-block;margin-left:18px;font-size:12px;color:#aaa;cursor:pointer}
   #menu .start{display:inline-block;margin-top:24px;font-size:28px;color:#101018;background:#ffd21f;padding:18px 34px;border:6px solid #101018;box-shadow:6px 6px 0 #000;cursor:pointer}
-  #strojenie{position:absolute;right:20px;top:170px;width:470px;background:rgba(10,10,20,.9);border:4px solid #ffd21f;padding:14px 18px;display:none;font-size:11px;color:#fff;line-height:18px}
-  #strojenie label{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:6px 0}
-  #strojenie input{width:200px}
-  #strojenie button{font-family:inherit;font-size:11px;margin-top:8px;padding:6px 10px}
   #dotyk{position:absolute;left:0;top:0;width:1600px;height:900px;display:none}
   #dotyk div{position:absolute;bottom:40px;width:190px;height:190px;border:6px solid rgba(255,255,255,.6);border-radius:50%;background:rgba(16,16,24,.35);color:#fff;font-size:40px;display:flex;align-items:center;justify-content:center}
 </style>
@@ -70,7 +99,7 @@
 <div class="hud" id="swiatla" style="display:none"><b></b><b></b><b></b><b></b><b></b></div>
 <div class="hud" id="komunikat"></div>
 <div id="dotyk"><div id="tL" style="left:40px">&lt;</div><div id="tP" style="left:270px">&gt;</div><div id="tH" style="right:270px;font-size:22px">RĘCZNY</div><div id="tG" style="right:40px;font-size:26px">GAZ</div><div id="tB" style="right:40px;bottom:260px;width:150px;height:150px;font-size:20px">HAM.</div></div>
-<div id="strojenie"></div>
+<div id="ranking"><h1>RANKING</h1><h2>PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY</h2><table id="rTab"></table><div id="rInfo"></div><div id="rWyslij"></div><div class="start" id="rPowrot">POWRÓT (ESC)</div><div id="rAkt"></div></div>
 <div id="menu">
   <h1>Kropek Rally Team<br>Time Attack <span class="flaga">🏁</span></h1>
   <h2>PS1 · 25 RAJD NIEPODLEGŁOŚCI · BRZYSKA</h2>
@@ -80,12 +109,17 @@
   </div>
   <div class="rozdz">ROZDZIELCZOŚĆ:<div class="opcja" data-r="720">1280×720<small>PŁYNNIEJ · ZALECANA</small></div><div class="opcja" data-r="1080">1920×1080<small>OSTRZEJ · MOCNY KOMPUTER</small></div></div>
   <p>STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU</p>
-  <div class="start" id="startBtn">START (ENTER)</div>
+  <div class="nickpasek">KIEROWCA: <b id="nickPokaz">—</b><span class="zmien" id="nickZmien">ZMIEŃ NICK</span></div>
+  <div class="przyciski"><div class="start" id="startBtn">START (ENTER)</div><div class="start drugi" id="rankingBtn">RANKING</div></div>
+  <div id="nickOkno"><div class="ramka"><h3>PODAJ NICK KIEROWCY</h3><p>NICK BĘDZIE WIDOCZNY W RANKINGU.<br>LITERY, CYFRY, SPACJA, _ - . (3–16)</p><input id="nickPole" maxlength="16" autocomplete="off" spellcheck="false"><div id="nickBlad"></div><div class="start" id="nickOk">ZAPISZ (ENTER)</div><span id="nickAnuluj">ANULUJ (ESC)</span></div></div>
 </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="makieta/trasa_ps1.js"></script>
+<script src="makieta/fizyka.js?v=3"></script>
+<script src="makieta/nick.js?v=3"></script>
+<script src="makieta/trasa_brzyska_2026_fizyka.js?v=1"></script>
 <script src="makieta/kropek_mesh.js"></script>
 <script src="makieta/kropek_model.js?v=1711zb"></script>
 <script src="makieta/pojazdy_model.js?v=1711e"></script>
@@ -252,9 +286,9 @@ function distRoad(x,z){const r=najblizsza(x,z);return r[1]<0?60:r[0];}
 // --- wyposażenie OS-u: opony w folii, separatory z czerwonymi pasami, beczki
 const TX_SEP=(()=>{const cv=document.createElement('canvas');cv.width=16;cv.height=48;const c=cv.getContext('2d');c.fillStyle='#f4f4f4';c.fillRect(0,0,16,48);c.fillStyle='#d42020';for(let k=-2;k<6;k++){c.beginPath();c.moveTo(0,k*10);c.lineTo(16,k*10+8);c.lineTo(16,k*10+13);c.lineTo(0,k*10+5);c.fill();}const t=new THREE.CanvasTexture(cv);t.magFilter=THREE.NearestFilter;return t;})();
 const SEPARATORY=[];   /* pozycje separatorów do kolizji */
-function separator(x,z,ry){SEPARATORY.push({x,z,t:0});const g=new THREE.Group();const b=new THREE.Mesh(new THREE.BoxGeometry(.5,1.2,.1),[M(0xdddddd),M(0xdddddd),M(0xeeeeee),M(0xeeeeee),new THREE.MeshLambertMaterial({map:TX_SEP}),new THREE.MeshLambertMaterial({map:TX_SEP})]);b.position.y=.62;b.castShadow=true;g.add(b);
+function separator(x,z,ry){SEPARATORY.push({x,z,t:-9});const g=new THREE.Group();const b=new THREE.Mesh(new THREE.BoxGeometry(.5,1.2,.1),[M(0xdddddd),M(0xdddddd),M(0xeeeeee),M(0xeeeeee),new THREE.MeshLambertMaterial({map:TX_SEP}),new THREE.MeshLambertMaterial({map:TX_SEP})]);b.position.y=.62;b.castShadow=true;g.add(b);
   const s=new THREE.Mesh(new THREE.BoxGeometry(.5,.08,.4),M(0x222222));s.position.y=.04;g.add(s);g.position.set(x,0,z);g.rotation.y=ry;scene.add(g);}
-function opony(x,z,ile=3){const g=new THREE.Group();const fol=[0xd42020,0xeeeeea,0x1a1a1a];   /* folia: czerwona, biała, czarna */
+function opony(x,z,ile=3,kolizja=true){if(kolizja)SEPARATORY.push({x,z,t:-9});   /* uderzenie w opony spowalnia jak separator (ta sama kolizja) */const g=new THREE.Group();const fol=[0xd42020,0xeeeeea,0x1a1a1a];   /* folia: czerwona, biała, czarna */
   for(let k=0;k<ile;k++){const o=new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,.24,9),M(k%2?fol[(Math.abs(Math.round(x*7+z*3)))%3]:0x1c1c1e));o.position.y=.12+k*.24;o.castShadow=true;g.add(o);}
   const OL=new THREE.Mesh(new THREE.CylinderGeometry(.37,.37,ile*.24+.04,9),new THREE.MeshBasicMaterial({color:0x0c0c0c,side:THREE.BackSide}));OL.position.y=ile*.12;g.add(OL);g.position.set(x,0,z);scene.add(g);}
 function beczka(x,z){const b=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.9,8),M(0x1d8a3a));b.position.set(x,.45,z);b.castShadow=true;scene.add(b);const p=new THREE.Mesh(new THREE.CylinderGeometry(.305,.305,.16,8),M(0xf0f0f0));p.position.set(x,.55,z);scene.add(p);}
@@ -494,7 +528,7 @@ if(!MAPA){
  }
  // szykana z opon i separatorów + beczki
  if(true){[-1,0,1].forEach((gk,gi)=>{const i=CH_I+gk*SZ_ODST;const s=samples[i],n=nrm(s);RD=wDrogi(i);const side=gk===0?1:-1;
-   for(let o=RD/2-0.3;o>RD/2-RD*SZ_GLEB;o-=0.75){opony(s.p.x+n.x*side*o,s.p.z+n.z*side*o,2);}
+   for(let o=RD/2-0.3;o>RD/2-RD*SZ_GLEB;o-=0.75){opony(s.p.x+n.x*side*o,s.p.z+n.z*side*o,2,false);   /* bramki szykany mają własną kolizję z karą */}
    const tip=RD/2-RD*SZ_GLEB-0.2;separator(s.p.x+n.x*side*tip,s.p.z+n.z*side*tip,Math.atan2(s.d.x,s.d.z)+Math.PI/2);
    beczka(s.p.x+n.x*side*(RD/2+0.9)+s.d.x*1.2,s.p.z+n.z*side*(RD/2+0.9)+s.d.z*1.2);});}
  // start: biała linia, tablica świetlna z zielonym światłem, kibice i samochód organizatora
@@ -772,20 +806,15 @@ const _m=new THREE.Matrix4(),_q=new THREE.Quaternion(),_s=new THREE.Vector3(),_p
 
 // ===================== PARAMETRY FIZYKI (strojone suwakami, klawisz T) =====================
 const VMAX_OS=160;   // maks. prędkość Kropka w grze (7000 obr./min na 6. biegu), dochodzi się do niej ciężko
-const P_DOMYSLNE={vmax:VMAX_OS,przysp:6.48,hamulec:19,skret:2.5,przyczep:7.0,przyczepDrift:1.9,przyczepReczny:0.9,progDriftu:0.22,odzysk:0.3,pobocze:1.2,bandaStrata:0.15};
-const P_OPIS={vmax:['prędkość maks. km/h',60,VMAX_OS,1],przysp:['przyspieszenie (7,2 = 0–100 w ok. 6 s)',3,14,.1],hamulec:['hamowanie',8,30,.5],skret:['szybkość skrętu',1,4,.05],przyczep:['przyczepność boczna',2,14,.1],
-  przyczepDrift:['przyczepność w drifcie',.4,5,.05],przyczepReczny:['przyczepność na ręcznym',.1,3,.05],progDriftu:['kąt wejścia w drift (rad)',.08,.5,.01],odzysk:['odzysk prędkości z driftu',0,1,.05],pobocze:['opór pobocza',0,4,.1],bandaStrata:['strata przy uderzeniu',0,.6,.01]};
-let P=Object.assign({},P_DOMYSLNE);try{Object.assign(P,JSON.parse(localStorage.getItem('krt_fizyka')||'{}'));}catch(e){}if(P.przysp===7.2)P.przysp=6.48;   /* stare zapisane strojenie: przyspieszenie -10% */
-P.vmax=Math.min(P.vmax,VMAX_OS);   // na tym odcinku nie szybciej niż na rajdzie
-(function panel(){const el=document.getElementById('strojenie');let h='<b style="color:#ffd21f">STROJENIE FIZYKI (T)</b>';
-  for(const k in P_OPIS){const [n,a,b,s]=P_OPIS[k];h+=`<label>${n}<input type="range" min="${a}" max="${b}" step="${s}" value="${P[k]}" data-k="${k}"><span id="w_${k}">${P[k]}</span></label>`;}
-  h+='<button id="pReset">DOMYŚLNE</button>';el.innerHTML=h;
-  el.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{P[i.dataset.k]=+i.value;document.getElementById('w_'+i.dataset.k).textContent=i.value;try{localStorage.setItem('krt_fizyka',JSON.stringify(P));}catch(e){}}));
-  document.getElementById('pReset').onclick=()=>{P=Object.assign({},P_DOMYSLNE);try{localStorage.removeItem('krt_fizyka');}catch(e){}panel();};})();
+const P_DOMYSLNE=KRT_P;   // ustawienia fizyki – jedno źródło: makieta/fizyka.js
+// fizyka zawsze domyślna – bez możliwości zmiany (wymóg uczciwego rankingu: pośrednik przelicza przejazd tą samą fizyką)
+const P=KRT_P;try{localStorage.removeItem('krt_fizyka');}catch(e){}
 
 // ===================== STEROWANIE =====================
-const K={};addEventListener('keydown',e=>{K[e.code]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
-  if(e.code==='KeyR'&&stan!=='menu')nowyPrzejazd();if(e.code==='KeyT'){const s=document.getElementById('strojenie');s.style.display=s.style.display==='block'?'none':'block';}
+const K={};addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT')return;   /* wpisywanie nicku: bez sterowania autem */
+  if(nickOtwarte())return;K[e.code]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
+  if(e.code==='KeyR'&&stan!=='menu')nowyPrzejazd();
+  if(rankingOtwarty()){if(e.code==='Escape'||e.code==='Enter')zamknijRanking();return;}
   if(e.code==='Escape')pokazMenu();if(e.code==='Enter'&&stan==='menu')startGry();});
 addEventListener('keyup',e=>{K[e.code]=false;});
 const DOT={};['tL','tP','tH','tG','tB'].forEach(id=>{const el=document.getElementById(id);const on=e=>{e.preventDefault();DOT[id]=true;},off=e=>{e.preventDefault();DOT[id]=false;};
@@ -795,27 +824,119 @@ let wejscie=function(){const gp=(navigator.getGamepads&&navigator.getGamepads()[
   let gaz=K.ArrowUp||K.KeyW||DOT.tG,ham=K.ArrowDown||K.KeyS||DOT.tB,lewo=K.ArrowLeft||K.KeyA||DOT.tL,prawo=K.ArrowRight||K.KeyD||DOT.tP,reczny=K.Space||DOT.tH;
   let skret=(lewo?1:0)-(prawo?1:0);
   if(gp){const ax=gp.axes[0]||0;if(Math.abs(ax)>.15)skret=-ax;gaz=gaz||gp.buttons[7]?.value>.2||gp.buttons[0]?.pressed;ham=ham||gp.buttons[6]?.value>.2||gp.buttons[1]?.pressed;reczny=reczny||gp.buttons[2]?.pressed;}
-  return {gaz:!!gaz,ham:!!ham,skret,reczny:!!reczny};}
+  return {gaz:!!gaz,ham:!!ham,skret:Math.round(Math.max(-1,Math.min(1,skret))*32)/32,reczny:!!reczny};}
+// powtórka: wejście czytane RAZ na krok fizyki (WE) i zapisywane jako zmiany [nr kroku, bity gaz/ham/ręczny, skręt]
+let WE={gaz:false,ham:false,skret:0,reczny:false};const POWT={k:0,z:[],ost:''};
+function zapiszWE(){const b=(WE.gaz?1:0)|(WE.ham?2:0)|(WE.reczny?4:0);const key=b+','+WE.skret;if(key!==POWT.ost){POWT.z.push([POWT.k,b,WE.skret]);POWT.ost=key;}POWT.k++;}
+function wePowt(z,i){return {gaz:!!(z[i][1]&1),ham:!!(z[i][1]&2),reczny:!!(z[i][1]&4),skret:z[i][2]};}
 
 // ===================== STAN GRY =====================
 const DLUGOSC=(LEN-ZAPAS-ZAPAS_META);                          // m odcinka od startu do mety
 const CZAS_RAJDU=98.69*DLUGOSC/2175;                  // tempo Kropka z rajdu (oficjalnie 1:38,69 na 2175 m GPS)
-let stan='menu',czas=0,meta=false,kara=0;const trafione=new Set();   // kara: +5 s za bramkę szykany, +10 s za falstart
+let stan='menu',czas=0,meta=false,kara=0;   // kara: +5 s za bramkę szykany, +10 s za falstart (liczone w module fizyki)
 // start: trzymasz ręczny (spacja), 5 lamp zapala się na czerwono co sekundę, potem wszystkie zielone; puszczenie ręcznego = ruszenie.
 // Puszczenie ręcznego z wciśniętym gazem przed zielonym = falstart (+10 s, zegar rusza od razu).
-const START={faza:'czeka',t:0,trzymaj:false,falstart:false};
-const A={x:0,z:0,y:0,h:0,vx:0,vz:0,vy:0,skretW:0,dryf:false,poslizg:0,idx:0,wPowietrzu:false,lastGy:0,lastVyG:0};
+// fizyka i procedura startu liczone we wspólnym module (makieta/fizyka.js) – tym samym, którym pośrednik sprawdza powtórki
+const SIM=KRT_SYMULACJA(TRASA_BRZYSKA_2026,{uderzenie:s=>dzwiekUderzenie(s),szykana:()=>pokazKomunikat('<span style="color:#ff5a4a">SZYKANA +5 S</span>'),
+  falstart:()=>{czasyIdx=[];pokazKomunikat('<span style="color:#ff5a4a">FALSTART +10 S</span>');},zielone:()=>{czasyIdx=[];},meta:()=>{zSIM();koniec();}});
+const START=SIM.START;
+function doSIM(){SIM.stan=stan;SIM.czas=czas;SIM.kara=kara;SIM.meta=meta;}   // stan gry → moduł
+function zSIM(){stan=SIM.stan;czas=SIM.czas;kara=SIM.kara;meta=SIM.meta;}    // moduł → stan gry
+const A=SIM.A;
 let zapis=[],duchZapis=null,duchCzasy=null;
 function wczytajDucha(){try{const d=JSON.parse(localStorage.getItem('krt_duch_'+AUTO)||'null');duchZapis=d?d.p:null;duchCzasy=d?d.c:null;}catch(e){duchZapis=null;duchCzasy=null;}}
 function najlepszy(){const v=+localStorage.getItem('krt_best_'+AUTO);return v>0?v:null;}
 function fmt(t){if(t==null)return '---';const m=Math.floor(t/60),s=t-m*60;return m+"'"+(s<10?'0':'')+s.toFixed(2).replace('.','"');}
 function nowyPrzejazd(){
-  const s=samples[START_I-5];A.x=s.p.x;A.z=s.p.z;A.y=0;A.h=Math.atan2(-s.d.x,-s.d.z);A.vx=A.vz=A.vy=0;A.skretW=0;A.dryf=false;A.idx=START_I-5;A.wPowietrzu=false;A.lastGy=0;A.lastVyG=0;
-  czas=0;kara=0;trafione.clear();START.faza='czeka';START.t=0;START.trzymaj=false;START.falstart=false;A.droga=0;meta=false;zapis=[];SLADY.count=0;sladIdx=0;wczytajDucha();stan='odliczanie';
+  SIM.nowyPrzejazd();zSIM();POWT.k=0;POWT.z=[];POWT.ost='';A.sladD=0;zapis=[];SLADY.count=0;sladIdx=0;wczytajDucha();
   document.getElementById('best').textContent=fmt(najlepszy());document.getElementById('komunikat').style.display='none';}
 function pokazKomunikat(t){const k=document.getElementById('komunikat');if(stan==='meta')return;k.style.display='block';k.innerHTML='<span style="font-size:26px">'+t+'</span>';clearTimeout(pokazKomunikat.t);pokazKomunikat.t=setTimeout(()=>{if(stan!=='meta')k.style.display='none';},1500);}
 function pokazMenu(){stan='menu';document.getElementById('menu').style.display='block';}
-function startGry(){dzwiekStart();document.getElementById('menu').style.display='none';try{localStorage.setItem('krt_auto',AUTO);}catch(e){}zbudujAuto();nowyPrzejazd();}
+// ===================== RANKING =====================
+// dane: wyniki/brzyska_2026.json publikowany przez pośrednika: {trasa, aktualizacja, wyniki:[{nick,czas}, ...]} posortowane od najszybszego
+const RANK={el:document.getElementById('ranking'),plik:'wyniki/brzyska_2026.json',ile:10};
+function rankingOtwarty(){return RANK.el.style.display==='block';}
+function htmlTekst(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function mojNajlepszy(){let b=null;for(const a of ['janusz','andrzej']){const v=+localStorage.getItem('krt_best_'+a);if(v>0&&(b===null||v<b))b=v;}return b;}
+async function pokazRanking(mojCzas){RANK.poMecie=mojCzas!=null;odswiezWysylke();document.getElementById('menu').style.display='none';document.getElementById('komunikat').style.display='none';RANK.el.style.display='block';
+  const tab=document.getElementById('rTab'),info=document.getElementById('rInfo'),akt=document.getElementById('rAkt');
+  tab.innerHTML='<tr><td colspan="3" style="color:#888;border:none">WCZYTUJĘ...</td></tr>';akt.textContent='';
+  const opis=najl=>[mojCzas!=null?`TWÓJ CZAS: <b>${fmt(mojCzas)}</b>`:'',najl?`TWÓJ NAJLEPSZY CZAS TO: <b>${fmt(najl)}</b>`:''].filter(Boolean).join(' · ');
+  let najl=mojNajlepszy();if(mojCzas!=null&&(najl===null||mojCzas<najl))najl=mojCzas;info.innerHTML=opis(najl);
+  let d=null;try{const o=await fetch(RANK.plik+'?t='+Date.now(),{cache:'no-store'});if(o.ok)d=await o.json();}catch(e){}
+  if(!rankingOtwarty())return;
+  const W=d&&Array.isArray(d.wyniki)?d.wyniki:null;
+  if(!W||!W.length){tab.innerHTML=`<tr><td colspan="3" style="color:#aaa;border:none;padding:40px">${W?'RANKING JEST JESZCZE PUSTY':'RANKING JESZCZE NIE DZIAŁA'}</td></tr>`;return;}
+  const medal=['🏆','🥈','🥉'];const moje=W.findIndex(w=>w.nick===GRACZ.nick);
+  if(moje>=0&&(najl===null||+W[moje].czas<najl)){najl=+W[moje].czas;info.innerHTML=opis(najl);}   // najlepszy czas: z tej przeglądarki albo z rankingu (np. z innego urządzenia)
+  const wiersz=(w,i)=>`<tr class="${i===0?'p1':''}${i===moje?' ja':''}"><td class="m">${i+1}.</td><td class="n">${htmlTekst(w.nick)}</td><td class="c">${fmt(+w.czas)}<span class="medal">${medal[i]||''}</span></td></tr>`;
+  let h=W.slice(0,RANK.ile).map(wiersz).join('');
+  if(moje>=RANK.ile)h+='<tr class="kropki"><td colspan="3">...</td></tr>'+wiersz(W[moje],moje);
+  tab.innerHTML=h;
+  if(d.aktualizacja){const t=new Date(d.aktualizacja);if(!isNaN(t))akt.textContent='RANKING AKTUALIZOWANY AUTOMATYCZNIE · OSTATNIO: '+t.toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}}
+function zamknijRanking(){RANK.el.style.display='none';pokazMenu();}
+// ===================== WYSYŁKA PRZEJAZDU DO POŚREDNIKA =====================
+// na mecie gra wysyła powtórkę (klawisze); pośrednik sam przelicza czas i odpowiada: zapisany (miejsce) / do weryfikacji / odrzucony
+const TRASA_ID='brzyska_2026_v1';
+const WYSYLKA={stan:'',odp:null};
+function kodujPowtorke(z){let p=0;return z.map(e=>{const d=[e[0]-p,e[1],Math.round(e[2]*32)];p=e[0];return d;});}   // [kroki od poprzedniej zmiany, bity, skręt×32]
+function odswiezWysylke(){const el=document.getElementById('rWyslij');el.className='';
+  if(!RANK.poMecie||!WYSYLKA.stan){el.textContent='';return;}
+  const o=WYSYLKA.odp;
+  if(WYSYLKA.stan==='wysylam')el.textContent='WYSYŁAM WYNIK...';
+  else if(WYSYLKA.stan==='blad'){el.className='blad';el.textContent='BRAK POŁĄCZENIA – WYNIK WYŚLĘ PRZY NASTĘPNYM URUCHOMIENIU GRY';}
+  else if(o&&o.ok&&o.status==='ok')el.textContent=`WYNIK ZAPISANY · MIEJSCE W RANKINGU: ${o.miejsce}`+(o.rekordOsobisty?' · TABELA ODŚWIEŻY SIĘ ZA KILKA MINUT':'');
+  else if(o&&o.ok&&o.status==='moderacja')el.textContent='WYNIK CZEKA NA WERYFIKACJĘ';
+  else{el.className='blad';el.textContent=(o&&o.blad)||'WYNIK NIE ZOSTAŁ ZAPISANY';}}
+async function wyslijDane(dane){WYSYLKA.stan='wysylam';WYSYLKA.odp=null;odswiezWysylke();
+  try{WYSYLKA.odp=await posrednik(dane);WYSYLKA.stan='gotowe';try{if(JSON.parse(localStorage.getItem('krt_niewyslany')||'null')?.czas===dane.czas)localStorage.removeItem('krt_niewyslany');}catch(e){}
+    if(WYSYLKA.odp&&!WYSYLKA.odp.ok&&/NICK/.test(WYSYLKA.odp.blad||'')){GRACZ.potw=false;try{localStorage.removeItem('krt_nick_potw');}catch(e){}}}
+  catch(e){WYSYLKA.stan='blad';   // bez internetu: zapamiętaj najlepszy niewysłany przejazd i wyślij go później
+    try{const st=JSON.parse(localStorage.getItem('krt_niewyslany')||'null');if(!st||dane.czas<st.czas)localStorage.setItem('krt_niewyslany',JSON.stringify(dane));}catch(e2){}}
+  odswiezWysylke();}
+function wyslijPrzejazd(t){WYSYLKA.stan='';WYSYLKA.odp=null;if(!POSREDNIK_URL||!GRACZ.nick)return;
+  const dane={akcja:'przejazd',kod:GRACZ.kod,nick:GRACZ.nick,trasa:TRASA_ID,wersja:KRT_FIZYKA_WERSJA,czas:t,auto:AUTO,powt:kodujPowtorke(POWT.z)};   // zbierane od razu – zanim gracz wciśnie R
+  wyslijDane(dane);}
+async function wyslijZalegly(){if(!POSREDNIK_URL)return;let d=null;try{d=JSON.parse(localStorage.getItem('krt_niewyslany')||'null');}catch(e){}
+  if(!d||d.kod!==GRACZ.kod||d.wersja!==KRT_FIZYKA_WERSJA){try{localStorage.removeItem('krt_niewyslany');}catch(e){}return;}
+  d.nick=GRACZ.nick||d.nick;try{const o=await posrednik(d);if(o)localStorage.removeItem('krt_niewyslany');}catch(e){}}
+document.getElementById('rankingBtn').onclick=()=>pokazRanking(null);document.getElementById('rPowrot').onclick=zamknijRanking;
+// ===================== NICK GRACZA I TAJNY KOD =====================
+// kod gracza: losowy, tworzony po cichu przy pierwszym uruchomieniu; pośrednik przypisze do niego nick (nikt inny nie użyje tego nicku)
+// adres pośrednika (skrypt Google) – wpisywany po wdrożeniu; pusty = gra działa bez sprawdzania online
+let POSREDNIK_URL='https://script.google.com/macros/s/AKfycbx5zg-Thl1rRqM4sXZ3-yBfzdcR_c5c_2Nllxh7w32uAqAk7MohyhAKyuTYW7roGF8/exec';
+async function posrednik(dane){const o=await fetch(POSREDNIK_URL,{method:'POST',body:JSON.stringify(dane)});return await o.json();}   // zwykły tekst w treści – bez dodatkowego zapytania CORS
+const GRACZ={kod:'',nick:'',potw:false};   // potw: nick potwierdzony przez pośrednika (wolny i przypisany do tego kodu)
+try{GRACZ.kod=localStorage.getItem('krt_kod')||'';GRACZ.nick=localStorage.getItem('krt_nick')||'';GRACZ.potw=localStorage.getItem('krt_nick_potw')===GRACZ.nick&&!!GRACZ.nick;}catch(e){}
+if(!/^[0-9a-f]{32}$/.test(GRACZ.kod)){const b=new Uint8Array(16);crypto.getRandomValues(b);GRACZ.kod=Array.from(b,x=>x.toString(16).padStart(2,'0')).join('');try{localStorage.setItem('krt_kod',GRACZ.kod);}catch(e){}}
+if(GRACZ.nick){const w=KRT_NICK_SPRAWDZ(GRACZ.nick);GRACZ.nick=w.ok?w.nick:'';try{localStorage.setItem('krt_nick',GRACZ.nick);}catch(e){}}   // starszy nick → wielkie litery
+const NICK={el:document.getElementById('nickOkno'),pole:document.getElementById('nickPole'),blad:document.getElementById('nickBlad'),poZapisieStart:false,czeka:false};
+function nickOtwarte(){return NICK.el.style.display==='block';}
+function pokazNick(){document.getElementById('nickPokaz').textContent=GRACZ.nick||'—';}
+function otworzNick(poZapisieStart){NICK.poZapisieStart=poZapisieStart;NICK.pole.value=GRACZ.nick;NICK.blad.textContent='';
+  document.getElementById('nickAnuluj').style.display=GRACZ.nick?'inline-block':'none';NICK.el.style.display='block';setTimeout(()=>NICK.pole.focus(),0);}
+// zapis nicku: najpierw sprawdzenie w grze (długość, znaki, wulgaryzmy), potem u pośrednika, czy nikt inny go nie używa
+async function zapiszNick(){if(NICK.czeka)return;const w=KRT_NICK_SPRAWDZ(NICK.pole.value);if(!w.ok){NICK.blad.textContent=w.blad;NICK.pole.focus();return;}
+  let potw=false;
+  if(POSREDNIK_URL){NICK.czeka=true;NICK.blad.style.color='#ccc';NICK.blad.textContent='SPRAWDZAM NICK...';
+    try{const o=await posrednik({akcja:'nick',kod:GRACZ.kod,nick:w.nick});NICK.czeka=false;NICK.blad.style.color='';
+      if(!o.ok){NICK.blad.textContent=o.blad||'TEN NICK JEST ZAJĘTY – WPISZ INNY';NICK.pole.focus();return;}potw=true;}
+    catch(e){NICK.czeka=false;NICK.blad.style.color='';}}   // brak połączenia: nick zostaje w grze, sprawdzimy go przy następnym połączeniu
+  GRACZ.nick=w.nick;GRACZ.potw=potw;try{localStorage.setItem('krt_nick',w.nick);localStorage.setItem('krt_nick_potw',potw?w.nick:'');}catch(e){}
+  pokazNick();NICK.el.style.display='none';if(NICK.poZapisieStart)startGry();}
+// nick wpisany bez połączenia (albo przed uruchomieniem rankingu) – ciche sprawdzenie przy starcie gry; zajęty → prośba o inny
+async function sprawdzNickPozniej(){if(!POSREDNIK_URL||!GRACZ.nick||GRACZ.potw)return;
+  try{const o=await posrednik({akcja:'nick',kod:GRACZ.kod,nick:GRACZ.nick});
+    if(o.ok){GRACZ.potw=true;try{localStorage.setItem('krt_nick_potw',GRACZ.nick);}catch(e){}}
+    else{const stary=GRACZ.nick;GRACZ.nick='';try{localStorage.removeItem('krt_nick');}catch(e){}pokazNick();if(stan==='menu'){otworzNick(false);NICK.pole.value=stary;NICK.blad.textContent=o.blad||'TEN NICK JEST ZAJĘTY – WPISZ INNY';}}}
+  catch(e){}}
+function anulujNick(){if(!GRACZ.nick)return;NICK.el.style.display='none';}   // bez nicku nie da się zamknąć okna
+NICK.pole.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();zapiszNick();}else if(e.key==='Escape'){e.preventDefault();anulujNick();}});
+NICK.pole.addEventListener('input',()=>{NICK.blad.textContent='';});
+document.getElementById('nickOk').onclick=zapiszNick;document.getElementById('nickAnuluj').onclick=anulujNick;
+document.getElementById('nickZmien').onclick=()=>otworzNick(false);
+pokazNick();if(!GRACZ.nick)otworzNick(false);else sprawdzNickPozniej().then(wyslijZalegly);
+function startGry(){if(!GRACZ.nick){otworzNick(true);return;}dzwiekStart();document.getElementById('menu').style.display='none';try{localStorage.setItem('krt_auto',AUTO);}catch(e){}zbudujAuto();nowyPrzejazd();}
 document.querySelectorAll('.auto').forEach(el=>el.onclick=()=>{AUTO=el.dataset.auto;document.querySelectorAll('.auto').forEach(e=>e.classList.toggle('wyb',e===el));});
 document.querySelector(`.auto[data-auto="${AUTO}"]`)?.click();
 document.getElementById('startBtn').onclick=startGry;
@@ -827,69 +948,17 @@ document.querySelectorAll('.rozdz .opcja').forEach(el=>el.onclick=()=>ustawRozdz
 // ===================== FIZYKA (stały krok 60 Hz) =====================
 const DT=1/60;
 function krok(){
-  if(stan==='odliczanie'||(stan==='jazda'&&START.trzymaj)){A.vx=A.vz=0;if(START.trzymaj&&!wejscie().reczny)START.trzymaj=false;return;}   // auto stoi na ręcznym do startu
-  const we=stan==='jazda'?wejscie():{gaz:false,ham:true,skret:0,reczny:false};A.we=we;
-  const vmax=P.vmax/3.6;
-  A.skretW+=Math.max(-DT*7,Math.min(DT*7,we.skret-A.skretW));
-  const fx=-Math.sin(A.h),fz=-Math.cos(A.h),rx=-fz,rz=fx;      // przód i prawo auta
-  let vL=A.vx*fx+A.vz*fz, vB=A.vx*rx+A.vz*rz;                  // prędkość wzdłuż i w bok
-  const v=Math.hypot(A.vx,A.vz);
-  // położenie względem drogi
-  const s=samples[A.idx],n=nrm(s);const off=(A.x-s.p.x)*n.x+(A.z-s.p.z)*n.z;const poza=Math.abs(off)>wDrogi(A.idx)/2+0.8,trawa=Math.abs(off)>wDrogi(A.idx)/2+2.2;   // poza asfaltem: żwir, dalej trawa
-  if(!A.wPowietrzu){
-    // skręt: rośnie z prędkością, słabnie przy v-max; na ręcznym ostrzej
-    const ks=Math.min(1,v/7)*(1-0.35*Math.min(1,v/vmax))*(we.reczny?1.35:1)*(A.dryf?1.15:1);
-    A.h+=A.skretW*P.skret*ks*DT*(vL<-0.5?-1:1);
-    // napęd 4×4 i hamulec
-    if(we.gaz)vL+=P.przysp*Math.max(0,1-Math.max(0,vL)/vmax)*(poza?0.6:1)*DT;   // przy dużej prędkości siła mocno słabnie: 0–100 ok. 6 s, 0–140 ok. 13 s, 0–150 ok. 17 s, 158 dopiero po ok. 27 s   // równiej niż wcześniej: bez „kopa” na starcie, 0–100 ok. 6 s
-    if(we.ham){if(vL>0.3)vL-=P.hamulec*DT;else if(stan==='jazda')vL=Math.max(-8,vL-5*DT);else vL=0;}
-    if(!we.gaz&&!we.ham)vL*=1-0.25*DT;
-    if(!we.gaz)vL*=1-0.012*DT*Math.abs(vL)/10;   /* opór powietrza tylko bez gazu – na gazie jest już w krzywej przyspieszenia, więc 140 km/h jest osiągalne */
-    // wyjazd poza trasę mocno spowalnia: żwir do ~80 km/h, trawa do ~45 km/h (siła wg suwaka „opór pobocza”)
-    if(poza){const k=P.pobocze/1.2,vlim=(trawa?45:80)/3.6,dec=(trawa?9:4.5)*k;if(Math.abs(vL)>vlim)vL-=Math.sign(vL)*Math.min(Math.abs(vL)-vlim,dec*1.6*DT);vL-=Math.sign(vL)*Math.min(Math.abs(vL),dec*0.35*DT);}
-    // poślizg boczny: drift wchodzi powyżej progu, ręczny zrywa przyczepność, kontra przywraca
-    A.poslizg=Math.atan2(vB,Math.max(1,Math.abs(vL)));
-    if(Math.abs(A.poslizg)>P.progDriftu||we.reczny)A.dryf=v>6;else if(Math.abs(A.poslizg)<0.07)A.dryf=false;
-    let g=we.reczny?P.przyczepReczny:A.dryf?P.przyczepDrift:P.przyczep;
-    if(A.dryf&&A.skretW*Math.sign(-vB)>0.3)g*=1.6;           // kontra
-    if(A.dryf&&we.gaz)g*=0.85;                                 // gaz w drifcie utrzymuje kąt (4×4)
-    if(poza)g*=0.7;
-    const vB2=vB*Math.exp(-g*DT);const vPrzed=Math.hypot(vL,vB);vL+=Math.sign(vL||1)*Math.abs(vB-vB2)*P.odzysk;vB=vB2;
-    {const vPo=Math.hypot(vL,vB);if(vPo>vPrzed&&vPo>0.01){const k=vPrzed/vPo;vL*=k;vB*=k;}}   // drift nie może dodawać prędkości, tylko mniej jej zabierać
-    if(A.dryf||we.reczny)vL*=1-Math.min(0.6,Math.abs(A.poslizg))*0.45*DT;   /* poślizg spowalnia: przy 30° ok. 25%/s */
-    A.vx=fx*vL+rx*vB;A.vz=fz*vL+rz*vB;
-  }
-  A.x+=A.vx*DT;A.z+=A.vz*DT;A.droga=(A.droga||0)+(A.vx*(-Math.sin(A.h))+A.vz*(-Math.cos(A.h)))*DT;
-  // śledzenie najbliższej próbki trasy
-  let b=A.idx,bd=1e9;for(let i=Math.max(0,A.idx-30);i<=Math.min(N,A.idx+60);i++){const p=samples[i].p;const d=(p.x-A.x)**2+(p.z-A.z)**2;if(d<bd){bd=d;b=i;}}A.idx=b;
-  // banda (opony / rów): łagodne odbicie i ślizg wzdłuż, bez obrotu auta
-  const s2=samples[A.idx],n2=nrm(s2);const off2=(A.x-s2.p.x)*n2.x+(A.z-s2.p.z)*n2.z;const GR=wDrogi(A.idx)/2+3.2;
-  if(Math.abs(off2)>GR){const sg=Math.sign(off2);A.x-=n2.x*(off2-sg*GR);A.z-=n2.z*(off2-sg*GR);const vn=A.vx*n2.x+A.vz*n2.z;if(vn*sg>0){dzwiekUderzenie(Math.abs(vn));A.vx-=n2.x*vn*1.3;A.vz-=n2.z*vn*1.3;const k=1-P.bandaStrata;A.vx*=k;A.vz*=k;}}
-  // zwężenie na mostku: bariery od ±(wDrogi(IB)/2+0,3) zwężają się do ±MOST_ZWEZ na 7 m przed mostkiem i trzymają na całym mostku
-  {const dm=Math.abs(A.idx-IB)*DS;if(dm<MOST_POL+7){const sc=dm<=MOST_POL?MOST_ZWEZ:MOST_ZWEZ+(wDrogi(IB)/2+0.3-MOST_ZWEZ)*(dm-MOST_POL)/7;const GW=sc-0.85;const sm=samples[A.idx],nm=nrm(sm);const om=(A.x-sm.p.x)*nm.x+(A.z-sm.p.z)*nm.z;
-    if(Math.abs(om)>GW){const sg=Math.sign(om);A.x-=nm.x*(om-sg*GW);A.z-=nm.z*(om-sg*GW);const vn=A.vx*nm.x+A.vz*nm.z;if(vn*sg>0){dzwiekUderzenie(Math.abs(vn));A.vx-=nm.x*vn*1.3;A.vz-=nm.z*vn*1.3;const k=1-P.bandaStrata;A.vx*=k;A.vz*=k;}}}}
-  // separator: przejazd po nim spowalnia i delikatnie odbija auto (raz na 0,5 s dla danego separatora)
-  for(const sp of SEPARATORY){const dx=A.x-sp.x,dz=A.z-sp.z;if(Math.abs(dx)>1.6||Math.abs(dz)>1.6)continue;const d=Math.hypot(dx,dz);if(d<1.15&&czas-sp.t>0.5){sp.t=czas;const nx=dx/(d||1),nz=dz/(d||1);const v=Math.hypot(A.vx,A.vz);
-    A.vx=A.vx*0.88+nx*Math.min(2.5,v*0.08);A.vz=A.vz*0.88+nz*Math.min(2.5,v*0.08);dzwiekUderzenie(Math.max(2,v*0.3));}}
-  // szykana: bramki z opon zajmujące pół drogi
-  for(const gk of [-1,0,1]){const gi=CH_I+gk*SZ_ODST;if(Math.abs(A.idx-gi)*DS>1.3)continue;const sg=gk===0?1:-1;const sb=samples[gi],nb=nrm(sb);const o=(A.x-sb.p.x)*nb.x+(A.z-sb.p.z)*nb.z;const kraw=wDrogi(gi)/2-wDrogi(gi)*SZ_GLEB-0.2-0.9;
-    if(o*sg>kraw){if(stan==='jazda'&&!trafione.has(gi)){trafione.add(gi);kara+=5;pokazKomunikat('<span style="color:#ff5a4a">SZYKANA +5 S</span>');}A.x-=nb.x*(o-sg*kraw);A.z-=nb.z*(o-sg*kraw);const vn=A.vx*nb.x+A.vz*nb.z;if(vn*sg>0){dzwiekUderzenie(Math.abs(vn)+3);A.vx-=nb.x*vn;A.vz-=nb.z*vn;}A.vx*=0.985;A.vz*=0.985;}}
-  // wysokość: garb mostka = hopa (wybicie, gdy droga opada szybciej niż auto)
-  const sg0=samples[A.idx],fIdx=A.idx+((A.x-sg0.p.x)*sg0.d.x+(A.z-sg0.p.z)*sg0.d.z)/DS;   /* ciągła pozycja wzdłuż trasy – płynna wysokość rampy */
-  const gy=hy(fIdx),vyG=(gy-A.lastGy)/DT;
-  if(A.wPowietrzu){A.vy-=9.81*DT;A.y+=A.vy*DT;if(A.y<=gy){A.y=gy;A.wPowietrzu=false;A.vx*=0.97;A.vz*=0.97;}}
-  else{A.blokHopy=Math.max(0,(A.blokHopy||0)-DT);if(!A.blokHopy&&A.lastVyG>0.8&&vyG<A.lastVyG-1.2&&v>12){A.wPowietrzu=true;A.blokHopy=1.0;A.vy=A.lastVyG*1.0;A.y=gy;}else A.y=gy;}
-  A.lastGy=gy;A.lastVyG=vyG;
-  // ślady opon i kurz
+  doSIM();const st0=SIM.stan,c0=SIM.czas,stoi=st0==='odliczanie'||(st0==='jazda'&&SIM.START.trzymaj);SIM.krok(WE);zSIM();
+  if(st0==='jazda'&&czas!==c0&&Math.round(czas*60)%6===0)zapis.push([+A.x.toFixed(1),+A.z.toFixed(1),+A.h.toFixed(2)]);   // zapis ducha
+  if(stoi)return;   // auto stoi (odliczanie / ręczny po zielonym) – bez efektów
+  efektyKroku();}
+// ślady opon i kurz (tylko wygląd – poza fizyką)
+function efektyKroku(){const o=SIM.ost,v=o.v,fx=o.fx,fz=o.fz,rx=o.rx,rz=o.rz,we=o.we;if(!we)return;
   A.sladD=(A.sladD||0)+v*DT;const sladOn=(A.dryf||we.reczny||(we.ham&&v>8))&&!A.wPowietrzu&&v>4;if(!sladOn)A.sladD=0;if(sladOn&&A.sladD>=0.9){const dl=A.sladD;A.sladD=0;for(const bok of [-0.72,0.72]){const tx=A.x+rx*bok-fx*1.25,tz=A.z+rz*bok-fz*1.25;
       _m.compose(_p.set(tx-A.vx/v*dl/2,A.y+0.06,tz-A.vz/v*dl/2),_q.setFromEuler(_e.set(0,Math.atan2(A.vx,A.vz),0)),_s.set(1,1,(dl+0.12)/0.8));SLADY.setMatrixAt(sladIdx,_m);sladIdx=(sladIdx+1)%900;SLADY.count=Math.min(900,SLADY.count+1);}
     SLADY.instanceMatrix.needsUpdate=true;
-    if(Math.random()<.6){const k=kurz[kurzIdx];kurzIdx=(kurzIdx+1)%80;k.x=A.x-fx*2;k.z=A.z-fz*2;k.y=A.y+.3;k.vx=-fx*2+(Math.random()-.5)*2;k.vz=-fz*2+(Math.random()-.5)*2;k.vy=1+Math.random();k.t=1;}}
-  // czas, zapis przejazdu, meta
-  if(stan==='jazda'){czas+=DT;if(Math.round(czas*60)%6===0)zapis.push([+A.x.toFixed(1),+A.z.toFixed(1),+A.h.toFixed(2)]);
-    if(A.idx>=META_I&&!meta){meta=true;koniec();}}
-}
-function koniec(){stan='meta';const t=czas+kara;const b=najlepszy();const rekord=!b||t<b;
+    if(Math.random()<.6){const k=kurz[kurzIdx];kurzIdx=(kurzIdx+1)%80;k.x=A.x-fx*2;k.z=A.z-fz*2;k.y=A.y+.3;k.vx=-fx*2+(Math.random()-.5)*2;k.vz=-fz*2+(Math.random()-.5)*2;k.vy=1+Math.random();k.t=1;}}}
+function koniec(){stan='meta';const t=czas+kara;const b=najlepszy();const rekord=!b||t<b;if(!window.PAUZA)wyslijPrzejazd(t);setTimeout(()=>{if(stan==='meta'&&!window.PAUZA)pokazRanking(t);},3000);   /* ranking po przejechaniu odcinka */
   const km=document.getElementById('komunikat');km.style.display='block';
   km.innerHTML=`META!<br><span style="font-size:56px;color:#fff">${fmt(t)}</span><br><span style="font-size:22px;color:${rekord?'#3cff6a':'#fff'}">${rekord?'NOWY REKORD!':'NAJLEPSZY: '+fmt(b)}</span>${kara?`<br><span style="font-size:18px;color:#ff5a4a">W TYM KARA ZA SZYKANĘ: +${kara} S</span>`:""}<br><span style="font-size:18px;color:#ccc">KROPEK Z RAJDU: ${fmt(CZAS_RAJDU)} · R – JESZCZE RAZ</span>`;
   if(rekord){const c=[];let k=0;for(let i=START_I;i<=META_I;i+=20){while(k<czasyIdx.length&&czasyIdx[k][0]<i)k++;c.push(k<czasyIdx.length?czasyIdx[k][1]:t);}
@@ -1086,16 +1155,11 @@ function dzwiekUderzenie(sila){if(!DZW.ok||DZW.wycisz||sila<1.2)return;const ctx
 // pętla: fizyka w stałym kroku 60 Hz, rysowanie co klatkę ekranu (max 60 kl./s)
 let ostT=performance.now(),akum=0,klatka=0,ostRys=0;const POP={x:0,z:0,y:0,h:0};
 // procedura startu (wywoływana co klatkę): czeka na ręczny → 5 czerwonych co 1 s → zielone po 6 s
-function startKrok(dt){if(stan!=='odliczanie')return;const we=wejscie();
-  if(START.faza==='czeka'){if(we.reczny){START.faza='swiatla';START.t=0;}return;}
-  START.t+=dt;
-  if(!we.reczny&&we.gaz){START.falstart=true;kara+=10;stan='jazda';czas=0;czasyIdx=[];START.trzymaj=false;pokazKomunikat('<span style="color:#ff5a4a">FALSTART +10 S</span>');}
-  else if(START.t>=6){stan='jazda';czas=0;czasyIdx=[];START.trzymaj=we.reczny;}}
+function startKrok(dt){doSIM();SIM.startKrok(WE);zSIM();}   // procedura startu w module fizyki (stały krok)
 function petla(t){requestAnimationFrame(petla);if(window.PAUZA)return;   // PAUZA – zatrzymanie do zrzutów testowych
   if(t-ostRys<1000/78)return;   /* obraz w rytmie odświeżania ekranu (60 Hz = każda klatka, 120/144 Hz = co druga) – równe odstępy klatek, bez szarpania; fizyka 60 Hz w stałym kroku z interpolacją */const dt=Math.min(0.1,(t-ostRys)/1000);ostRys=t;
-  startKrok(dt);
   silnikKrok(dt);rysujObrotomierz();plomienRysuj();
-  if(stan!=='menu'){akum+=dt;while(akum>=DT){POP.x=A.x;POP.z=A.z;POP.y=A.y;POP.h=A.h;krok();akum-=DT;if(stan==='jazda'&&(czasyIdx.length===0||czasyIdx[czasyIdx.length-1][0]<A.idx))czasyIdx.push([A.idx,czas+kara]);}}
+  if(stan!=='menu'){akum+=dt;while(akum>=DT){POP.x=A.x;POP.z=A.z;POP.y=A.y;POP.h=A.h;if(stan==='odliczanie'||stan==='jazda'){WE=wejscie();zapiszWE();}startKrok(DT);krok();akum-=DT;if(stan==='jazda'&&(czasyIdx.length===0||czasyIdx[czasyIdx.length-1][0]<A.idx))czasyIdx.push([A.idx,czas+kara]);}}
   // auto
   {const u=Math.min(1,akum/DT);let dh=A.h-POP.h;if(dh>Math.PI)dh-=2*Math.PI;if(dh<-Math.PI)dh+=2*Math.PI;   /* płynny ruch auta między krokami fizyki (60 Hz) przy 40 kl./s */
    car.position.set(POP.x+(A.x-POP.x)*u,POP.y+(A.y-POP.y)*u,POP.z+(A.z-POP.z)*u);car.rotation.set(A.wPowietrzu?-0.08:0,POP.h+dh*u,0);}
@@ -1110,19 +1174,27 @@ function petla(t){requestAnimationFrame(petla);if(window.PAUZA)return;   // PAUZ
     _m.compose(_p.set(k.x,k.t>0?k.y:-9,k.z),_q.identity(),_s.set(sc,sc,sc));KURZ.setMatrixAt(i,_m);}KURZ.instanceMatrix.needsUpdate=true;
   TX_WODA.offset.y-=dt*0.08;   /* nurt strumienia */
   kamera(dt);hud(klatka++);renderer.render(scene,camera);}
+// ===================== POWTÓRKA: przeliczenie przejazdu z zapisanych klawiszy (to samo zrobi pośrednik) =====================
+window.odtworzPowtorke=function(z,maxKrokow=60*600){const zachowaj=stan;nowyPrzejazd();let i=0;
+  for(let k=0;k<maxKrokow;k++){while(i+1<z.length&&z[i+1][0]<=k)i++;WE=z.length&&z[0][0]<=k?wePowt(z,i):{gaz:false,ham:false,skret:0,reczny:false};startKrok(DT);krok();if(meta)break;}
+  const w={meta,czas:+czas.toFixed(4),kara,razem:+(czas+kara).toFixed(4),x:A.x,z:A.z,h:A.h};stan='menu';return w;};
 // ===================== TEST: autopilot w symulacji (bez rysowania) =====================
 // window.testPrzejazd() – przejeżdża odcinek automatem: celuje w punkt 14 m przed autem, hamuje przed ostrymi łukami.
 window.testKadr=function(sek){window.PAUZA=true;const w=window.testPrzejazd(sek,true);kamera(1);for(let i=0;i<400;i++)kamera(1/60);hud(0);hud(4);renderer.render(scene,camera);return w;};
-window.testPrzejazd=function(maxS=400,zostaw=false){const stary=wejscie;let banda=0,wyjazdy=0,maxV=0,hop=0,ostPowietrze=false;
-  wejscie=function(){const s=samples[A.idx];const look=Math.min(N,A.idx+Math.round((14+Math.hypot(A.vx,A.vz)*0.35)/DS));const c=samples[look].p.clone();
+window.AUTOPILOT=function(){const s=samples[A.idx];const look=Math.min(N,A.idx+Math.round((14+Math.hypot(A.vx,A.vz)*0.35)/DS));const c=samples[look].p.clone();
     // slalom w szykanie: punkt docelowy przesunięty na wolną stronę najbliższej bramki przed autem
     let wSzyk=false;for(const gk of [-1,0,1]){const gi=CH_I+gk*SZ_ODST;if(gi>=A.idx-(window.AP_ZA||2)&&gi-A.idx<(window.AP_ZASIEG||24)){const sg=gk===0?1:-1;const nb=nrm(samples[gi]);const sl=samples[Math.min(N,Math.max(look,gi))].p;c.copy(sl).addScaledVector(nb,-sg*(window.AP_OFF||wDrogi(gi)*0.31));wSzyk=true;break;}}
     const dx=c.x-A.x,dz=c.z-A.z;const fx=-Math.sin(A.h),fz=-Math.cos(A.h);const kat=Math.atan2(fx*dz-fz*dx,fx*dx+fz*dz);
     const v=Math.hypot(A.vx,A.vz);let vCel=P.vmax/3.6;
     {const doSz=(CH_I-SZ_ODST-A.idx)*DS;if(doSz<60&&doSz>-SZ_ODST*3*DS)vCel=Math.min(vCel,(window.AP_V||8)+Math.max(0,doSz)*0.25);}   // przed szykaną i w niej ok. 55 km/hfor(let m=10;m<80;m+=5){const i=Math.min(N-8,A.idx+Math.round(m/DS));const k=krzywizna(i,14);if(k.ang>0.15){const vk=Math.max(9,Math.sqrt(14/(k.ang/(28*DS)))*1.0);vCel=Math.min(vCel,vk+m*0.35);}}
-    return {gaz:v<vCel,ham:v>vCel+3,skret:Math.max(-1,Math.min(1,-kat*2.2)),reczny:false};};
+    return {gaz:v<vCel,ham:v>vCel+3,skret:Math.round(Math.max(-1,Math.min(1,-kat*2.2))*32)/32,reczny:false};};
+// test pełnego przejazdu jak w grze: procedura startu (ręczny do zielonego) + autopilot; zwraca czas i zapis powtórki
+window.testPelny=function(maxS=400){nowyPrzejazd();let k=0;while(!meta&&k<60*(maxS+15)){WE=stan==='odliczanie'?{gaz:false,ham:false,skret:0,reczny:true}:window.AUTOPILOT();zapiszWE();startKrok(DT);krok();k++;}
+  const w={meta,razem:+(czas+kara).toFixed(4),kara,krokow:k,powt:POWT.z.slice()};stan='menu';return w;};
+window.testPrzejazd=function(maxS=400,zostaw=false){const stary=wejscie;let banda=0,wyjazdy=0,maxV=0,hop=0,ostPowietrze=false;
+  wejscie=window.AUTOPILOT;
   nowyPrzejazd();stan='jazda';czas=0;czasyIdx=[];let k=0;
-  while(stan==='jazda'&&czas<maxS){const vx=A.vx,vz=A.vz;krok();k++;const v=Math.hypot(A.vx,A.vz);maxV=Math.max(maxV,v);
+  while(stan==='jazda'&&czas<maxS){const vx=A.vx,vz=A.vz;WE=wejscie();zapiszWE();krok();k++;const v=Math.hypot(A.vx,A.vz);maxV=Math.max(maxV,v);
     if(Math.hypot(A.vx-vx,A.vz-vz)>1.5)banda++;const s=samples[A.idx],n=nrm(s);if(Math.abs((A.x-s.p.x)*n.x+(A.z-s.p.z)*n.z)>wDrogi(A.idx)/2+0.8)wyjazdy++;
     if(A.wPowietrzu&&!ostPowietrze)hop++;ostPowietrze=A.wPowietrzu;}
   wejscie=stary;const wynik={czas:+czas.toFixed(2),kara:kara,meta:meta,kmhMax:Math.round(maxV*3.6),uderzenia:banda,klatkiPozaAsfaltem:wyjazdy,wybicia:hop,dl:Math.round(DLUGOSC),czasRajdu:+CZAS_RAJDU.toFixed(2)};
