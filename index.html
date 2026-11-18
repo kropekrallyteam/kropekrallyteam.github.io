@@ -65,6 +65,16 @@
   #rWyslij{min-height:24px;font-size:14px;color:#8fe3ff;line-height:24px}
   #rWyslij.blad{color:#ff8a7a}
   #ranking .start{display:inline-block;margin-top:16px;font-size:24px;color:#101018;background:#ffd21f;padding:16px 34px;border:6px solid #101018;box-shadow:6px 6px 0 #000;cursor:pointer}
+  #zasady{position:absolute;left:0;top:0;width:1600px;height:900px;background:rgba(10,10,20,.92);color:#fff;display:none;z-index:6;text-align:center}
+  #zasady h1{font-size:40px;color:#ffd21f;margin:46px 0 26px;text-shadow:5px 5px 0 #1a3a9c}
+  #zasady .kol{display:flex;justify-content:center;gap:40px;text-align:left}
+  #zasady .blok{width:600px}
+  #zasady h3{font-size:17px;color:#ffd21f;margin:0 0 10px}
+  #zasady ul{list-style:none;margin:0 0 24px;padding:0}
+  #zasady li{font-size:13px;line-height:24px;color:#ddd;margin:0 0 6px;padding-left:22px;position:relative}
+  #zasady li:before{content:'';position:absolute;left:0;top:8px;width:9px;height:9px;background:#ffd21f}
+  #zasady .kara{color:#ff5a4a}
+  #zasady .start{display:inline-block;margin-top:4px;font-size:24px;color:#101018;background:#ffd21f;padding:16px 34px;border:6px solid #101018;box-shadow:6px 6px 0 #000;cursor:pointer}
   #rAkt{margin-top:18px;font-size:11px;color:#888}
   #nickOkno{position:absolute;left:0;top:0;width:1600px;height:900px;background:rgba(5,5,12,.88);display:none;z-index:5}
   #nickOkno .ramka{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:760px;background:#1a1a28;border:6px solid #ffd21f;box-shadow:8px 8px 0 #000;padding:34px 40px 30px}
@@ -119,6 +129,7 @@
 <div class="hud" id="komunikat"></div>
 <div id="dotyk"><div id="tL" style="left:40px">&lt;</div><div id="tP" style="left:270px">&gt;</div><div id="tH" style="right:270px;font-size:22px">RĘCZNY</div><div id="tG" style="right:40px;font-size:26px">GAZ</div><div id="tB" style="right:40px;bottom:260px;width:150px;height:150px;font-size:20px">HAM.</div></div>
 <div id="kontoOkno"><div class="ramka"><div class="ekran" data-e="wybor"><h3>WITAJ KIEROWCO!</h3><p>CZY GRAŁEŚ JUŻ W KROPEK RALLY TEAM TIME ATTACK?</p><div class="wybor"><div class="start" id="kNowy">NIE GRAŁEM JESZCZE</div><div class="start drugi" id="kMam">GRAŁEM JUŻ</div></div></div><div class="ekran" data-e="login"><h3>ZALOGUJ SIĘ</h3><p>PODAJ SWÓJ NICK I KLUCZ (6 ZNAKÓW), KTÓRY DOSTAŁEŚ PRZY ZAKŁADANIU KONTA.</p><div class="etyk">NICK</div><input id="lNick" maxlength="16" autocomplete="off" spellcheck="false"><div class="etyk">KLUCZ</div><input id="lKlucz" maxlength="7" autocomplete="off" spellcheck="false"><div class="blad" id="lBlad"></div><div class="start" id="lOk">ZALOGUJ (ENTER)</div><span class="link" id="lWroc">POWRÓT (ESC)</span></div><div class="ekran" data-e="klucz"><h3>TWÓJ KLUCZ</h3><p>ZAPISZ GO! RAZEM Z NICKIEM POZWOLI ZAGRAĆ NA INNYM KOMPUTERZE LUB TELEFONIE (TEN SAM WYNIK W RANKINGU).</p><div class="klucz" id="kKluczDuzy">------</div><div class="start" id="kKluczOk">ZAPISAŁEM (ENTER)</div></div><div class="ekran" data-e="konto"><h3>TWOJE KONTO</h3><div class="dane">NICK: <b id="kNick">—</b><br>KLUCZ: <b id="kKlucz">—</b></div><div class="przyc"><div class="start" id="kZmien">ZMIEŃ NICK</div><div class="start drugi" id="kWyloguj">WYLOGUJ</div></div><div style="margin-top:18px"><span class="link" id="kZamknij">ZAMKNIJ (ESC)</span></div></div><div class="ekran" data-e="wyloguj"><h3>WYLOGOWAĆ?</h3><p>ŻEBY WRÓCIĆ NA TO KONTO, BĘDZIESZ POTRZEBOWAĆ NICKU I KLUCZA:</p><div class="klucz" id="kKluczWyl">------</div><div class="przyc"><div class="start" id="kWylTak">WYLOGUJ</div><div class="start drugi" id="kWylNie">ANULUJ (ESC)</div></div></div></div></div>
+<div id="zasady"><h1>ZASADY</h1><div class="kol"><div class="blok"><h3>START</h3><ul><li>PRZYTRZYMAJ RĘCZNY (SPACJA) – ZAPALA SIĘ 5 CZERWONYCH ŚWIATEŁ, CO SEKUNDĘ JEDNO.</li><li>GDY WSZYSTKIE ZMIENIĄ SIĘ NA ZIELONE, PUŚĆ RĘCZNY I JEDŹ. GAZ MOŻESZ TRZYMAĆ WCZEŚNIEJ.</li><li>CZAS LICZY SIĘ OD ZAPALENIA ZIELONEGO – TAKŻE GDY JESZCZE TRZYMASZ RĘCZNY.</li></ul><h3>KARY</h3><ul><li><span class="kara">FALSTART +10 S</span> – PUSZCZENIE RĘCZNEGO Z GAZEM PRZED ZIELONYM. ZEGAR RUSZA OD RAZU.</li><li><span class="kara">SZYKANA +5 S</span> – ZA KAŻDĄ TRĄCONĄ BRAMKĘ Z OPON W SZYKANIE.</li></ul></div><div class="blok"><h3>TRASA</h3><ul><li>WYJAZD NA POBOCZE I TRAWĘ, UDERZENIE W OPONY, SEPARATORY I BANDY – BEZ KARY CZASOWEJ, ALE MOCNO SPOWALNIA.</li><li>NA MOSTKU JEST HOPA – PRZY DUŻEJ PRĘDKOŚCI AUTO SIĘ WYBIJA. JEZDNIA NA MOSTKU JEST WĘŻSZA.</li><li>ŻÓŁTA TABLICA 50 M PRZED METĄ ZAPOWIADA METĘ LOTNĄ. CZAS STAJE NA CZERWONEJ TABLICY METY.</li></ul><h3>RANKING</h3><ul><li>LICZY SIĘ TWÓJ NAJLEPSZY CZAS (Z KARAMI). WYNIK WYSYŁA SIĘ SAM PO MECIE.</li><li>KAŻDY PRZEJAZD JEST SPRAWDZANY NA SERWERZE. PODEJRZANE WYNIKI CZEKAJĄ NA WERYFIKACJĘ.</li><li>STEROWANIE: STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU.</li></ul></div></div><div class="start" id="zPowrot">POWRÓT (ESC)</div></div>
 <div id="ranking"><h1>RANKING</h1><h2>PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY</h2><table id="rTab"></table><div id="rInfo"></div><div id="rWyslij"></div><div class="start" id="rPowrot">POWRÓT (ESC)</div><div id="rAkt"></div></div>
 <div id="menu">
   <h1>Kropek Rally Team<br>Time Attack <span class="flaga">🏁</span></h1>
@@ -130,7 +141,7 @@
   <div class="rozdz">ROZDZIELCZOŚĆ:<div class="opcja" data-r="720">1280×720<small>PŁYNNIEJ · ZALECANA</small></div><div class="opcja" data-r="1080">1920×1080<small>OSTRZEJ · MOCNY KOMPUTER</small></div></div>
   <p>STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU</p>
   <div id="kontoBtn" title="KONTO"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="5" y="1" width="6" height="6" fill="#ffd21f"/><rect x="4" y="2" width="8" height="4" fill="#ffd21f"/><rect x="2" y="9" width="12" height="6" fill="#ffd21f"/><rect x="3" y="8" width="10" height="2" fill="#ffd21f"/></svg><span id="nickPokaz">—</span></div>
-  <div class="przyciski"><div class="start" id="startBtn">START (ENTER)</div><div class="start drugi" id="rankingBtn">RANKING</div></div>
+  <div class="przyciski"><div class="start" id="startBtn">START (ENTER)</div><div class="start drugi" id="rankingBtn">RANKING</div><div class="start drugi" id="zasadyBtn">ZASADY</div></div>
   <div id="nickOkno"><div class="ramka"><h3>PODAJ NICK KIEROWCY</h3><p>NICK BĘDZIE WIDOCZNY W RANKINGU.<br>LITERY, CYFRY, SPACJA, _ - . (3–16)</p><input id="nickPole" maxlength="16" autocomplete="off" spellcheck="false"><div id="nickBlad"></div><div class="start" id="nickOk">ZAPISZ (ENTER)</div><span id="nickAnuluj">ANULUJ (ESC)</span></div></div>
 </div>
 </div>
@@ -835,6 +846,7 @@ const K={};addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT
   if(nickOtwarte())return;if(kontoOtwarte()){if(e.code==='Escape')kontoEsc();else if(e.code==='Enter')kontoEnter();return;}K[e.code]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
   if(e.code==='KeyR'&&stan!=='menu')nowyPrzejazd();
   if(rankingOtwarty()){if(e.code==='Escape'||e.code==='Enter')zamknijRanking();return;}
+  if(zasadyOtwarte()){if(e.code==='Escape'||e.code==='Enter')zamknijZasady();return;}
   if(e.code==='Escape')pokazMenu();if(e.code==='Enter'&&stan==='menu')startGry();});
 addEventListener('keyup',e=>{K[e.code]=false;});
 const DOT={};['tL','tP','tH','tG','tB'].forEach(id=>{const el=document.getElementById(id);const on=e=>{e.preventDefault();DOT[id]=true;},off=e=>{e.preventDefault();DOT[id]=false;};
@@ -924,7 +936,12 @@ function wyslijPrzejazd(t){WYSYLKA.stan='';WYSYLKA.odp=null;if(!POSREDNIK_URL||!
 async function wyslijZalegly(){if(!POSREDNIK_URL)return;let d=null;try{d=JSON.parse(localStorage.getItem('krt_niewyslany')||'null');}catch(e){}
   if(!d||d.kod!==GRACZ.kod||d.wersja!==KRT_FIZYKA_WERSJA){try{localStorage.removeItem('krt_niewyslany');}catch(e){}return;}
   d.nick=GRACZ.nick||d.nick;try{const o=await posrednik(d);if(o)localStorage.removeItem('krt_niewyslany');}catch(e){}}
-document.getElementById('rankingBtn').onclick=()=>pokazRanking(null);document.getElementById('rPowrot').onclick=zamknijRanking;
+document.getElementById('rankingBtn').onclick=()=>pokazRanking(null);
+// ekran zasad (start, kary, trasa, ranking)
+function zasadyOtwarte(){return document.getElementById('zasady').style.display==='block';}
+function pokazZasady(){document.getElementById('menu').style.display='none';document.getElementById('zasady').style.display='block';}
+function zamknijZasady(){document.getElementById('zasady').style.display='none';pokazMenu();}
+document.getElementById('zasadyBtn').onclick=pokazZasady;document.getElementById('zPowrot').onclick=zamknijZasady;document.getElementById('rPowrot').onclick=zamknijRanking;
 // ===================== NICK GRACZA I TAJNY KOD =====================
 // kod gracza: losowy, tworzony po cichu przy pierwszym uruchomieniu; pośrednik przypisze do niego nick (nikt inny nie użyje tego nicku)
 // adres pośrednika (skrypt Google) – wpisywany po wdrożeniu; pusty = gra działa bez sprawdzania online
