@@ -168,6 +168,12 @@
 <script>
 // KRT Time Attack – grywalny prototyp PS1 Brzyska. Scena budowana tym samym kodem co makieta (makieta/makieta_pixel.html),
 // ale dla całej trasy naraz; statyczne obiekty scalane w kilkadziesiąt siatek (wydajność na telefonie).
+// przeprowadzka ze starego adresu: #przenies=… niesie ustawienia/ducha (bez tajemnic) i jednorazowy bilet na konto; adres czyszczony od razu
+const PRZENIES={token:''};
+try{const m=location.hash.match(/^#przenies=(.+)$/);if(m){history.replaceState(null,'',location.pathname+location.search);
+  const d=JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1])))));PRZENIES.token=String(d.t||'');
+  const DOZW=/^krt_(auto|rozdz|duch_wl|best_(janusz|andrzej)|duch_(janusz|andrzej))$/;
+  for(const k in (d.l||{}))if(DOZW.test(k)&&localStorage.getItem(k)===null)localStorage.setItem(k,String(d.l[k]));}}catch(e){}
 let seed=7;function rnd(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646;}
 let ROZDZ=720;try{if(localStorage.getItem('krt_rozdz')==='1080')ROZDZ=1080;}catch(e){}   /* wybór w menu: 1280×720 (domyślnie) lub 1920×1080 */
 const W=16,H=9;   // proporcje obrazu (kadr niezależny od rozdzielczości); logika 60 Hz
@@ -1031,7 +1037,14 @@ document.getElementById('kZamknij').onclick=zamknijKonto;
 document.getElementById('kontoBtn').onclick=()=>otworzKonto(GRACZ.nick?'konto':'wybor',false);
 ['lNick','lKlucz'].forEach(id=>{const el=document.getElementById(id);el.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();if(id==='lNick')document.getElementById('lKlucz').focus();else zaloguj();}else if(e.key==='Escape'){e.preventDefault();otworzKonto('wybor');}});
   el.addEventListener('input',()=>{document.getElementById('lBlad').textContent='';});});
-pokazNick();if(!GRACZ.nick)otworzKonto('wybor',false);else sprawdzNickPozniej().then(pobierzKlucz).then(wyslijZalegly);
+// konto przeniesione ze starego adresu (jednorazowy bilet) – bez ponownego logowania
+async function odbierzKonto(){if(!PRZENIES.token||!POSREDNIK_URL)return false;
+  try{const o=await posrednik({akcja:'przenies_odbior',token:PRZENIES.token});PRZENIES.token='';
+    if(!o.ok||!o.kod)return false;GRACZ.kod=o.kod;GRACZ.nick=o.nick;GRACZ.klucz=o.klucz;GRACZ.potw=true;zapiszGracza();pokazNick();if(kontoOtwarte()&&KONTO.ekran==='wybor')zamknijKonto();return true;}
+  catch(e){return false;}}
+pokazNick();
+if(!GRACZ.nick){if(PRZENIES.token)odbierzKonto().then(ok=>{if(!ok&&!GRACZ.nick&&!kontoOtwarte()&&!nickOtwarte())otworzKonto('wybor',false);});else otworzKonto('wybor',false);}
+else sprawdzNickPozniej().then(pobierzKlucz).then(wyslijZalegly);
 function startGry(){if(!GRACZ.nick){otworzKonto('wybor',true);return;}dzwiekStart();document.getElementById('menu').style.display='none';try{localStorage.setItem('krt_auto',AUTO);}catch(e){}zbudujAuto();nowyPrzejazd();}
 document.querySelectorAll('.auto').forEach(el=>el.onclick=()=>{AUTO=el.dataset.auto;document.querySelectorAll('.auto').forEach(e=>e.classList.toggle('wyb',e===el));});
 document.querySelector(`.auto[data-auto="${AUTO}"]`)?.click();
