@@ -18,7 +18,7 @@
   #czasL{right:24px;top:20px;font-size:16px;color:#ffd21f;text-align:right}
   #czas{right:24px;top:44px;font-size:56px;text-align:right;color:#fff;text-shadow:4px 4px 0 #1a3a9c,8px 8px 0 #101018}
   #delta{right:24px;top:116px;font-size:20px;color:#3cff6a}
-  #notka{left:0;top:0;transform:translate(-50%,-50%);display:flex;gap:12px;align-items:flex-start;text-shadow:none;filter:drop-shadow(4px 4px 0 #101018)}
+  #notka{left:0;top:0;transform:translate(-50%,-50%);will-change:transform;display:flex;gap:12px;align-items:flex-start;text-shadow:none;filter:drop-shadow(4px 4px 0 #101018)}
   #kmh{right:290px;bottom:30px;font-size:44px}
   #obrotomierz{right:14px;bottom:10px;width:260px;height:260px;image-rendering:pixelated;filter:drop-shadow(4px 4px 0 #101018)}
   #kmh small{font-size:16px;color:#ffd21f}
@@ -108,7 +108,7 @@
 <div class="hud" id="czasL">CZAS</div>
 <div class="hud" id="czas">0'00"00</div>
 <div class="hud" id="delta"></div>
-<div class="hud" id="kmh">0<small> KM/H</small></div>
+<div class="hud" id="kmh"><span id="kmhW">0</span><small> KM/H</small></div>
 <canvas class="hud" id="obrotomierz" width="96" height="96"></canvas>
 <div class="hud" id="fps" style="left:24px;top:90px;font-size:14px;color:#7ff3ff"></div>
 <div class="hud" id="dzwiek" style="left:24px;bottom:80px;font-size:12px;color:#ccc"></div>
@@ -1049,7 +1049,7 @@ function kamera(dt){cienAuta();const v=Math.hypot(A.vx,A.vz);const lead=4+Math.m
   sun.position.set(cel.x-40,75,cel.z+30);sun.target.position.copy(cel);}   /* słońce z lewej z przodu: ściany od strony kamery oświetlone, cienie w górę ekranu (jak na wzorze) */   /* słońce wyżej: krótsze cienie, jak w grach z automatów */
 
 // HUD
-const el={czas:document.getElementById('czas'),delta:document.getElementById('delta'),kmh:document.getElementById('kmh'),notka:document.getElementById('notka'),pasek:document.querySelectorAll('#pasek i'),sw:document.getElementById('swiatla'),km:document.getElementById('komunikat')};
+const el={czas:document.getElementById('czas'),delta:document.getElementById('delta'),kmh:document.getElementById('kmh'),kmhW:document.getElementById('kmhW'),notka:document.getElementById('notka'),pasek:document.querySelectorAll('#pasek i'),sw:document.getElementById('swiatla'),km:document.getElementById('komunikat')};
 document.querySelector('#ps small').textContent='JESIEN - '+(DLUGOSC/1000).toFixed(2).replace('.',',')+' KM';
 function zakret(t0,t1){const a=curve.getTangentAt(Math.min(t0,1)),b=curve.getTangentAt(Math.min(t1,1));return {lewy:(-a.x*b.z+a.z*b.x)>0,ang:Math.acos(Math.max(-1,Math.min(1,a.x*b.x+a.z*b.z)))};}
 function piktogram(z,size){const kol=z.ang<0.5?'#3cd65a':z.ang<1.1?'#ffd21f':'#e8302a';const sciezka=z.ang<0.35?'M12.5 31.5 V12 H4 L16.5 2 L29 12 H20.5 V31.5 Z':z.ang<2.0?'M29 31.5 V11 H14 V4 L3 13.5 L14 23 V18 H21.5 V31.5 Z':'M29.5 31.5 V8.5 Q29.5 2 23 2 H10.5 Q4 2 4 8.5 V15 H2.5 L10 25 L17.5 15 H11.5 V9.5 H22 V31.5 Z';   /* strzałki na cały kwadracik */const odb=(!z.lewy&&z.ang>=0.35)?' transform="translate(33,0) scale(-1,1)"':'';return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 33 33" shape-rendering="crispEdges"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><path d="'+sciezka+'"'+odb+' fill="'+kol+'" stroke="#101018" stroke-width="1.4" stroke-linejoin="round"/></svg>';}
@@ -1067,13 +1067,13 @@ function zakretyPrzed(i){const a=ZAKRETY.find(z=>z.koniec+8>i&&(z.idx-i)*DS<135)
 function nastepny(od,zasieg){for(let m=0;m<zasieg;m+=4){const t=od+m2t(m);if(t>1)break;const z=zakret(t,t+m2t(25));if(z.ang>0.2){return {z:zakret(t,t+m2t(55)),t:t+m2t(55)};}}return null;}
 const HOPA='<svg width="132" height="132" viewBox="0 0 33 33" shape-rendering="crispEdges"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><path d="M2 29 L13 29 L19 22 L31 22 L31 29" fill="none" stroke="#ffd21f" stroke-width="3.5"/><path d="M4 21 Q13 3 27 12" fill="none" stroke="#fff" stroke-width="2.4" stroke-dasharray="2.5 2"/><path d="M27 8 L30 14 L23.5 14.5 Z" fill="#fff"/></svg>';
 const SZYK='<svg width="132" height="132" viewBox="0 0 33 33" shape-rendering="crispEdges"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><path d="M16.5 31 V25 L8 19.5 L25 11.5 L16.5 7 V2" fill="none" stroke="#101018" stroke-width="7"/><path d="M16.5 31 V25 L8 19.5 L25 11.5 L16.5 7 V2" fill="none" stroke="#ffd21f" stroke-width="3.6"/><rect x="2" y="17" width="5" height="5" fill="#d42020"/><rect x="26" y="9" width="5" height="5" fill="#d42020"/></svg>';
-let ostNotka='';
+let ostNotka='';const HUDP={kmh:-1,rozgrzewka:0};
 const FPS={k:0,t:performance.now(),v:0,pokaz:false};addEventListener('keydown',e=>{if(e.code==='KeyF'){FPS.pokaz=!FPS.pokaz;document.getElementById('fps').textContent='';}});
 function hud(klatka){
   el.czas.textContent=fmt(czas+kara);
   {const n=performance.now();FPS.k++;if(n-FPS.t>1000){FPS.v=Math.round(FPS.k*1000/(n-FPS.t));FPS.k=0;FPS.t=n;if(FPS.pokaz)document.getElementById('fps').textContent=FPS.v+' KL/S';}}
-  if(klatka%15===0){const ed=document.getElementById('dzwiek');ed.textContent=!DZW.ok?'DŹWIĘK: KLIKNIJ EKRAN':DZW.wycisz?'DŹWIĘK: WYCISZONY (M)':DZW.ctx.state!=='running'?'DŹWIĘK: ZABLOKOWANY – KLIKNIJ':!DZW.bank?'DŹWIĘK: WCZYTYWANIE…':'DŹWIĘK: WŁ.';}   /* stan dźwięku na ekranie */
-  const v=Math.hypot(A.vx,A.vz);el.kmh.innerHTML=Math.round(v*3.6)+'<small> KM/H</small>';
+  if(klatka%15===0){const ed=document.getElementById('dzwiek');ed.textContent=!DZW.ok?'DŹWIĘK: KLIKNIJ EKRAN':DZW.wycisz?'DŹWIĘK: WYCISZONY (M)':DZW.ctx.state!=='running'?'DŹWIĘK: ZABLOKOWANY – KLIKNIJ':'DŹWIĘK: WŁ.';}   /* stan dźwięku na ekranie */
+  const v=Math.hypot(A.vx,A.vz);{const kv=Math.round(v*3.6);if(kv!==HUDP.kmh){HUDP.kmh=kv;el.kmhW.textContent=kv;}}   /* tylko przy zmianie – mniej przeliczeń strony */
   // różnica do ducha: własny najlepszy przejazd albo tempo Kropka z rajdu
   if(stan==='jazda'&&A.idx>START_I){const dist=(A.idx-START_I)*DS;let tD;
     if(duchCzasy){const j=Math.min(duchCzasy.length-1,Math.floor((A.idx-START_I)/20));tD=duchCzasy[j];}else tD=CZAS_RAJDU*dist/DLUGOSC;
@@ -1085,9 +1085,9 @@ function hud(klatka){
     const doMostu=(IB-A.idx)*DS,doSzyk=(CH_I-A.idx)*DS-SZ_ODST*DS;let h='';
     if(doMostu>3&&doMostu<110)h=HOPA;else if(doSzyk>-5&&doSzyk<110)h=SZYK;else{const zz=zakretyPrzed(A.idx);if(zz[0])h=piktogram(zz[0].z,132);if(zz[1])h+=piktogram(zz[1].z,72);}
     if(stan==='odliczanie')h='';   // w czasie odliczania tylko lampy
-    if(h!==ostNotka){el.notka.innerHTML=h;ostNotka=h;}
+    if(HUDP.rozgrzewka>0)HUDP.rozgrzewka--;else if(h!==ostNotka){if(ostNotka===null){el.notka.style.flexWrap='';el.notka.style.width='';el.notka.style.opacity='';}el.notka.innerHTML=h;ostNotka=h;}
     camera.updateMatrixWorld();const fx=-Math.sin(A.h),fz=-Math.cos(A.h);const p=new THREE.Vector3(A.x-fx*0,A.y,A.z-fz*0).add(new THREE.Vector3(curve.getTangentAt(tc).x*7.5,0,curve.getTangentAt(tc).z*7.5)).project(camera);
-    el.notka.style.left=((p.x+1)/2*1600+190)+'px';el.notka.style.top=Math.max(120,Math.min(700,(1-p.y)/2*900))+'px';}
+    el.notka.style.transform=`translate(${((p.x+1)/2*1600+190).toFixed(1)}px,${Math.max(120,Math.min(700,(1-p.y)/2*900)).toFixed(1)}px) translate(-50%,-50%)`;}   /* przesunięcie warstwy zamiast left/top – bez przeliczania układu strony */
   // światła startowe
   // 5 lamp od lewej zapala się na czerwono co sekundę, start = wszystkie zielone
   const sw=el.sw.children;
@@ -1264,7 +1264,9 @@ window.testPrzejazd=function(maxS=400,zostaw=false){const stary=wejscie;let band
     if(A.wPowietrzu&&!ostPowietrze)hop++;ostPowietrze=A.wPowietrzu;}
   wejscie=stary;const wynik={czas:+czas.toFixed(2),kara:kara,meta:meta,kmhMax:Math.round(maxV*3.6),uderzenia:banda,klatkiPozaAsfaltem:wyjazdy,wybicia:hop,dl:Math.round(DLUGOSC),czasRajdu:+CZAS_RAJDU.toFixed(2)};
   if(!zostaw){try{localStorage.removeItem("krt_best_"+AUTO);localStorage.removeItem("krt_duch_"+AUTO);}catch(e){}stan="menu";}else{car.position.set(A.x,A.y,A.z);car.rotation.set(0,A.h,0);document.getElementById("menu").style.display="none";}return wynik;};
-function rozgrzej(){   /* jednorazowo przy starcie: kompilacja wszystkich shaderów i wysłanie wszystkich tekstur do karty – bez przycięć, gdy nowe obiekty wjeżdżają w kadr */
+function rozgrzejZnaki(){const wz=[HOPA,SZYK];for(const a of [0.2,0.8,1.5])for(const l of [true,false]){wz.push(piktogram({ang:a,lewy:l},132));wz.push(piktogram({ang:a,lewy:l},72));}
+  el.notka.style.transform='translate(800px,450px) translate(-50%,-50%)';el.notka.style.flexWrap='wrap';el.notka.style.width='1500px';el.notka.style.opacity='0.02';el.notka.innerHTML=wz.join('');ostNotka=null;HUDP.rozgrzewka=3;}
+function rozgrzej(){rozgrzejZnaki();   /* jednorazowo przy starcie: kompilacja wszystkich shaderów i wysłanie wszystkich tekstur do karty – bez przycięć, gdy nowe obiekty wjeżdżają w kadr */
   const fc=[];scene.traverse(o=>{if(o.isMesh||o.isSprite||o.isLineSegments){fc.push([o,o.frustumCulled,o.visible]);o.frustumCulled=false;if(o.userData.kafel)o.visible=true;}});
   try{renderer.compile(scene,camera);renderer.render(scene,camera);}catch(e){}
   for(const [o,f,v] of fc){o.frustumCulled=f;o.visible=v;}}
