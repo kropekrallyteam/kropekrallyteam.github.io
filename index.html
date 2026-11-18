@@ -66,9 +66,6 @@
   #rWyslij.blad{color:#ff8a7a}
   #ranking .start{display:inline-block;margin-top:16px;font-size:24px;color:#101018;background:#ffd21f;padding:16px 34px;border:6px solid #101018;box-shadow:6px 6px 0 #000;cursor:pointer}
   #rAkt{margin-top:18px;font-size:11px;color:#888}
-  .nickpasek{margin-top:14px;font-size:15px;color:#ccc}
-  .nickpasek b{color:#ffd21f}
-  .nickpasek .zmien{margin-left:14px;font-size:11px;color:#101018;background:#ccc;padding:5px 9px;cursor:pointer}
   #nickOkno{position:absolute;left:0;top:0;width:1600px;height:900px;background:rgba(5,5,12,.88);display:none;z-index:5}
   #nickOkno .ramka{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:760px;background:#1a1a28;border:6px solid #ffd21f;box-shadow:8px 8px 0 #000;padding:34px 40px 30px}
   #nickOkno h3{font-size:26px;color:#ffd21f;margin:0 0 18px}
@@ -78,6 +75,27 @@
   #nickBlad{min-height:22px;margin:14px 0 4px;font-size:12px;color:#ff5a4a}
   #nickOkno .start{font-size:22px;padding:14px 30px;margin-top:6px}
   #nickAnuluj{display:inline-block;margin-left:18px;font-size:12px;color:#aaa;cursor:pointer}
+  #kontoBtn{position:absolute;right:40px;top:30px;display:flex;align-items:center;gap:12px;padding:10px 16px;background:#1a1a28;border:4px solid #555;cursor:pointer;font-size:14px;color:#ffd21f}
+  #kontoBtn:hover{border-color:#ffd21f}
+  #kontoBtn svg{width:30px;height:30px;display:block}
+  #kontoOkno{position:absolute;left:0;top:0;width:1600px;height:900px;background:rgba(5,5,12,.88);display:none;z-index:5;text-align:center;color:#fff}
+  #kontoOkno .ramka{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:780px;background:#1a1a28;border:6px solid #ffd21f;box-shadow:8px 8px 0 #000;padding:34px 40px 30px}
+  #kontoOkno h3{font-size:26px;color:#ffd21f;margin:0 0 18px}
+  #kontoOkno p{font-size:13px;line-height:24px;color:#ccc;margin:0 0 20px}
+  #kontoOkno .ekran{display:none}
+  #kontoOkno .wybor{display:flex;flex-direction:column;gap:18px;align-items:center;margin:10px 0 6px}
+  #kontoOkno .start{display:inline-block;font-size:20px;color:#101018;background:#ffd21f;padding:14px 28px;border:6px solid #101018;box-shadow:6px 6px 0 #000;cursor:pointer}
+  #kontoOkno .start.drugi{background:#e8e4da}
+  #kontoOkno .wybor .start{width:520px}
+  #kontoOkno input{width:520px;font-family:inherit;font-size:22px;padding:12px 16px;background:#0c0c14;color:#fff;border:5px solid #555;outline:none;text-align:center;text-transform:uppercase;margin:6px 0}
+  #kontoOkno input:focus{border-color:#ffd21f}
+  #kontoOkno .etyk{font-size:12px;color:#aaa;margin-top:10px}
+  #kontoOkno .blad{min-height:22px;margin:12px 0 4px;font-size:12px;color:#ff5a4a}
+  #kontoOkno .link{display:inline-block;margin-left:18px;font-size:12px;color:#aaa;cursor:pointer}
+  #kontoOkno .klucz{font-size:54px;letter-spacing:14px;color:#3cff6a;margin:10px 0 22px;text-shadow:4px 4px 0 #000}
+  #kontoOkno .dane{font-size:16px;line-height:34px;margin:0 0 22px;color:#ccc}
+  #kontoOkno .dane b{color:#ffd21f}
+  #kontoOkno .przyc{display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
   #menu .start{display:inline-block;margin-top:24px;font-size:28px;color:#101018;background:#ffd21f;padding:18px 34px;border:6px solid #101018;box-shadow:6px 6px 0 #000;cursor:pointer}
   #dotyk{position:absolute;left:0;top:0;width:1600px;height:900px;display:none}
   #dotyk div{position:absolute;bottom:40px;width:190px;height:190px;border:6px solid rgba(255,255,255,.6);border-radius:50%;background:rgba(16,16,24,.35);color:#fff;font-size:40px;display:flex;align-items:center;justify-content:center}
@@ -100,6 +118,7 @@
 <div class="hud" id="swiatla" style="display:none"><b></b><b></b><b></b><b></b><b></b></div>
 <div class="hud" id="komunikat"></div>
 <div id="dotyk"><div id="tL" style="left:40px">&lt;</div><div id="tP" style="left:270px">&gt;</div><div id="tH" style="right:270px;font-size:22px">RĘCZNY</div><div id="tG" style="right:40px;font-size:26px">GAZ</div><div id="tB" style="right:40px;bottom:260px;width:150px;height:150px;font-size:20px">HAM.</div></div>
+<div id="kontoOkno"><div class="ramka"><div class="ekran" data-e="wybor"><h3>WITAJ KIEROWCO!</h3><p>CZY GRAŁEŚ JUŻ W KROPEK RALLY TEAM TIME ATTACK?</p><div class="wybor"><div class="start" id="kNowy">NIE GRAŁEM JESZCZE</div><div class="start drugi" id="kMam">GRAŁEM JUŻ</div></div></div><div class="ekran" data-e="login"><h3>ZALOGUJ SIĘ</h3><p>PODAJ SWÓJ NICK I KLUCZ (6 ZNAKÓW), KTÓRY DOSTAŁEŚ PRZY ZAKŁADANIU KONTA.</p><div class="etyk">NICK</div><input id="lNick" maxlength="16" autocomplete="off" spellcheck="false"><div class="etyk">KLUCZ</div><input id="lKlucz" maxlength="7" autocomplete="off" spellcheck="false"><div class="blad" id="lBlad"></div><div class="start" id="lOk">ZALOGUJ (ENTER)</div><span class="link" id="lWroc">POWRÓT (ESC)</span></div><div class="ekran" data-e="klucz"><h3>TWÓJ KLUCZ</h3><p>ZAPISZ GO! RAZEM Z NICKIEM POZWOLI ZAGRAĆ NA INNYM KOMPUTERZE LUB TELEFONIE (TEN SAM WYNIK W RANKINGU).</p><div class="klucz" id="kKluczDuzy">------</div><div class="start" id="kKluczOk">ZAPISAŁEM (ENTER)</div></div><div class="ekran" data-e="konto"><h3>TWOJE KONTO</h3><div class="dane">NICK: <b id="kNick">—</b><br>KLUCZ: <b id="kKlucz">—</b></div><div class="przyc"><div class="start" id="kZmien">ZMIEŃ NICK</div><div class="start drugi" id="kWyloguj">WYLOGUJ</div></div><div style="margin-top:18px"><span class="link" id="kZamknij">ZAMKNIJ (ESC)</span></div></div><div class="ekran" data-e="wyloguj"><h3>WYLOGOWAĆ?</h3><p>ŻEBY WRÓCIĆ NA TO KONTO, BĘDZIESZ POTRZEBOWAĆ NICKU I KLUCZA:</p><div class="klucz" id="kKluczWyl">------</div><div class="przyc"><div class="start" id="kWylTak">WYLOGUJ</div><div class="start drugi" id="kWylNie">ANULUJ (ESC)</div></div></div></div></div>
 <div id="ranking"><h1>RANKING</h1><h2>PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY</h2><table id="rTab"></table><div id="rInfo"></div><div id="rWyslij"></div><div class="start" id="rPowrot">POWRÓT (ESC)</div><div id="rAkt"></div></div>
 <div id="menu">
   <h1>Kropek Rally Team<br>Time Attack <span class="flaga">🏁</span></h1>
@@ -110,7 +129,7 @@
   </div>
   <div class="rozdz">ROZDZIELCZOŚĆ:<div class="opcja" data-r="720">1280×720<small>PŁYNNIEJ · ZALECANA</small></div><div class="opcja" data-r="1080">1920×1080<small>OSTRZEJ · MOCNY KOMPUTER</small></div></div>
   <p>STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU</p>
-  <div class="nickpasek">KIEROWCA: <b id="nickPokaz">—</b><span class="zmien" id="nickZmien">ZMIEŃ NICK</span></div>
+  <div id="kontoBtn" title="KONTO"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="5" y="1" width="6" height="6" fill="#ffd21f"/><rect x="4" y="2" width="8" height="4" fill="#ffd21f"/><rect x="2" y="9" width="12" height="6" fill="#ffd21f"/><rect x="3" y="8" width="10" height="2" fill="#ffd21f"/></svg><span id="nickPokaz">—</span></div>
   <div class="przyciski"><div class="start" id="startBtn">START (ENTER)</div><div class="start drugi" id="rankingBtn">RANKING</div></div>
   <div id="nickOkno"><div class="ramka"><h3>PODAJ NICK KIEROWCY</h3><p>NICK BĘDZIE WIDOCZNY W RANKINGU.<br>LITERY, CYFRY, SPACJA, _ - . (3–16)</p><input id="nickPole" maxlength="16" autocomplete="off" spellcheck="false"><div id="nickBlad"></div><div class="start" id="nickOk">ZAPISZ (ENTER)</div><span id="nickAnuluj">ANULUJ (ESC)</span></div></div>
 </div>
@@ -813,7 +832,7 @@ const P=KRT_P;try{localStorage.removeItem('krt_fizyka');}catch(e){}
 
 // ===================== STEROWANIE =====================
 const K={};addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT')return;   /* wpisywanie nicku: bez sterowania autem */
-  if(nickOtwarte())return;K[e.code]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
+  if(nickOtwarte())return;if(kontoOtwarte()){if(e.code==='Escape')kontoEsc();else if(e.code==='Enter')kontoEnter();return;}K[e.code]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
   if(e.code==='KeyR'&&stan!=='menu')nowyPrzejazd();
   if(rankingOtwarty()){if(e.code==='Escape'||e.code==='Enter')zamknijRanking();return;}
   if(e.code==='Escape')pokazMenu();if(e.code==='Enter'&&stan==='menu')startGry();});
@@ -911,37 +930,78 @@ document.getElementById('rankingBtn').onclick=()=>pokazRanking(null);document.ge
 // adres pośrednika (skrypt Google) – wpisywany po wdrożeniu; pusty = gra działa bez sprawdzania online
 let POSREDNIK_URL='https://script.google.com/macros/s/AKfycbx5zg-Thl1rRqM4sXZ3-yBfzdcR_c5c_2Nllxh7w32uAqAk7MohyhAKyuTYW7roGF8/exec';
 async function posrednik(dane){const o=await fetch(POSREDNIK_URL,{method:'POST',body:JSON.stringify(dane)});return await o.json();}   // zwykły tekst w treści – bez dodatkowego zapytania CORS
-const GRACZ={kod:'',nick:'',potw:false};   // potw: nick potwierdzony przez pośrednika (wolny i przypisany do tego kodu)
-try{GRACZ.kod=localStorage.getItem('krt_kod')||'';GRACZ.nick=localStorage.getItem('krt_nick')||'';GRACZ.potw=localStorage.getItem('krt_nick_potw')===GRACZ.nick&&!!GRACZ.nick;}catch(e){}
+const GRACZ={kod:'',nick:'',potw:false,klucz:''};   // klucz: 6 znaków do logowania w innej przeglądarce (nadaje pośrednik)   // potw: nick potwierdzony przez pośrednika (wolny i przypisany do tego kodu)
+try{GRACZ.kod=localStorage.getItem('krt_kod')||'';GRACZ.nick=localStorage.getItem('krt_nick')||'';GRACZ.potw=localStorage.getItem('krt_nick_potw')===GRACZ.nick&&!!GRACZ.nick;GRACZ.klucz=localStorage.getItem('krt_klucz')||'';}catch(e){}
 if(!/^[0-9a-f]{32}$/.test(GRACZ.kod)){const b=new Uint8Array(16);crypto.getRandomValues(b);GRACZ.kod=Array.from(b,x=>x.toString(16).padStart(2,'0')).join('');try{localStorage.setItem('krt_kod',GRACZ.kod);}catch(e){}}
 if(GRACZ.nick){const w=KRT_NICK_SPRAWDZ(GRACZ.nick);GRACZ.nick=w.ok?w.nick:'';try{localStorage.setItem('krt_nick',GRACZ.nick);}catch(e){}}   // starszy nick → wielkie litery
-const NICK={el:document.getElementById('nickOkno'),pole:document.getElementById('nickPole'),blad:document.getElementById('nickBlad'),poZapisieStart:false,czeka:false};
+const NICK={el:document.getElementById('nickOkno'),pole:document.getElementById('nickPole'),blad:document.getElementById('nickBlad'),poZapisieStart:false,czeka:false,nowe:false};
+function zapiszGracza(){try{localStorage.setItem('krt_kod',GRACZ.kod);localStorage.setItem('krt_nick',GRACZ.nick);localStorage.setItem('krt_nick_potw',GRACZ.potw?GRACZ.nick:'');localStorage.setItem('krt_klucz',GRACZ.klucz||'');}catch(e){}}
 function nickOtwarte(){return NICK.el.style.display==='block';}
 function pokazNick(){document.getElementById('nickPokaz').textContent=GRACZ.nick||'—';}
-function otworzNick(poZapisieStart){NICK.poZapisieStart=poZapisieStart;NICK.pole.value=GRACZ.nick;NICK.blad.textContent='';
-  document.getElementById('nickAnuluj').style.display=GRACZ.nick?'inline-block':'none';NICK.el.style.display='block';setTimeout(()=>NICK.pole.focus(),0);}
+function otworzNick(poZapisieStart,nowe){NICK.poZapisieStart=poZapisieStart;NICK.nowe=!!nowe;NICK.pole.value=GRACZ.nick;NICK.blad.textContent='';
+  document.getElementById('nickAnuluj').textContent=GRACZ.nick?'ANULUJ (ESC)':'POWRÓT (ESC)';NICK.el.style.display='block';setTimeout(()=>NICK.pole.focus(),0);}
 // zapis nicku: najpierw sprawdzenie w grze (długość, znaki, wulgaryzmy), potem u pośrednika, czy nikt inny go nie używa
 async function zapiszNick(){if(NICK.czeka)return;const w=KRT_NICK_SPRAWDZ(NICK.pole.value);if(!w.ok){NICK.blad.textContent=w.blad;NICK.pole.focus();return;}
   let potw=false;
   if(POSREDNIK_URL){NICK.czeka=true;NICK.blad.style.color='#ccc';NICK.blad.textContent='SPRAWDZAM NICK...';
     try{const o=await posrednik({akcja:'nick',kod:GRACZ.kod,nick:w.nick});NICK.czeka=false;NICK.blad.style.color='';
-      if(!o.ok){NICK.blad.textContent=o.blad||'TEN NICK JEST ZAJĘTY – WPISZ INNY';NICK.pole.focus();return;}potw=true;}
+      if(!o.ok){NICK.blad.textContent=o.blad||'TEN NICK JEST ZAJĘTY – WPISZ INNY';NICK.pole.focus();return;}potw=true;if(o.klucz)GRACZ.klucz=o.klucz;}
     catch(e){NICK.czeka=false;NICK.blad.style.color='';}}   // brak połączenia: nick zostaje w grze, sprawdzimy go przy następnym połączeniu
-  GRACZ.nick=w.nick;GRACZ.potw=potw;try{localStorage.setItem('krt_nick',w.nick);localStorage.setItem('krt_nick_potw',potw?w.nick:'');}catch(e){}
-  pokazNick();NICK.el.style.display='none';if(NICK.poZapisieStart)startGry();}
+  GRACZ.nick=w.nick;GRACZ.potw=potw;zapiszGracza();
+  pokazNick();NICK.el.style.display='none';
+  if(NICK.nowe&&GRACZ.klucz){otworzKonto('klucz',NICK.poZapisieStart);return;}   // nowe konto: pokaż klucz do zapisania
+  if(NICK.poZapisieStart)startGry();}
 // nick wpisany bez połączenia (albo przed uruchomieniem rankingu) – ciche sprawdzenie przy starcie gry; zajęty → prośba o inny
 async function sprawdzNickPozniej(){if(!POSREDNIK_URL||!GRACZ.nick||GRACZ.potw)return;
   try{const o=await posrednik({akcja:'nick',kod:GRACZ.kod,nick:GRACZ.nick});
-    if(o.ok){GRACZ.potw=true;try{localStorage.setItem('krt_nick_potw',GRACZ.nick);}catch(e){}}
-    else{const stary=GRACZ.nick;GRACZ.nick='';try{localStorage.removeItem('krt_nick');}catch(e){}pokazNick();if(stan==='menu'){otworzNick(false);NICK.pole.value=stary;NICK.blad.textContent=o.blad||'TEN NICK JEST ZAJĘTY – WPISZ INNY';}}}
+    if(o.ok){GRACZ.potw=true;if(o.klucz)GRACZ.klucz=o.klucz;zapiszGracza();}
+    else{const stary=GRACZ.nick;GRACZ.nick='';try{localStorage.removeItem('krt_nick');}catch(e){}pokazNick();if(stan==='menu'){otworzNick(false,true);NICK.pole.value=stary;NICK.blad.textContent=o.blad||'TEN NICK JEST ZAJĘTY – WPISZ INNY';}}}
   catch(e){}}
-function anulujNick(){if(!GRACZ.nick)return;NICK.el.style.display='none';}   // bez nicku nie da się zamknąć okna
+function anulujNick(){NICK.el.style.display='none';if(!GRACZ.nick)otworzKonto('wybor',NICK.poZapisieStart);}   // bez nicku – powrót do wyboru: nowy gracz / grałem już
 NICK.pole.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();zapiszNick();}else if(e.key==='Escape'){e.preventDefault();anulujNick();}});
 NICK.pole.addEventListener('input',()=>{NICK.blad.textContent='';});
 document.getElementById('nickOk').onclick=zapiszNick;document.getElementById('nickAnuluj').onclick=anulujNick;
-document.getElementById('nickZmien').onclick=()=>otworzNick(false);
-pokazNick();if(!GRACZ.nick)otworzNick(false);else sprawdzNickPozniej().then(wyslijZalegly);
-function startGry(){if(!GRACZ.nick){otworzNick(true);return;}dzwiekStart();document.getElementById('menu').style.display='none';try{localStorage.setItem('krt_auto',AUTO);}catch(e){}zbudujAuto();nowyPrzejazd();}
+// ===================== KONTO: nowy gracz / logowanie kluczem / wylogowanie =====================
+const KONTO={el:document.getElementById('kontoOkno'),ekran:'',poStart:false,czeka:false};
+function kontoOtwarte(){return KONTO.el.style.display==='block';}
+function otworzKonto(ekran,poStart){if(poStart!==undefined)KONTO.poStart=poStart;KONTO.ekran=ekran;KONTO.el.style.display='block';
+  KONTO.el.querySelectorAll('.ekran').forEach(e=>e.style.display=e.dataset.e===ekran?'block':'none');
+  if(ekran==='login'){document.getElementById('lBlad').textContent='';setTimeout(()=>document.getElementById(document.getElementById('lNick').value?'lKlucz':'lNick').focus(),0);}
+  if(ekran==='klucz')document.getElementById('kKluczDuzy').textContent=GRACZ.klucz||'------';
+  if(ekran==='wyloguj')document.getElementById('kKluczWyl').textContent=GRACZ.klucz||'------';
+  if(ekran==='konto'){document.getElementById('kNick').textContent=GRACZ.nick||'—';document.getElementById('kKlucz').textContent=GRACZ.klucz||'POJAWI SIĘ PO POŁĄCZENIU Z INTERNETEM';}}
+function zamknijKonto(){KONTO.el.style.display='none';}
+function kontoEsc(){const e=KONTO.ekran;if(e==='login')otworzKonto('wybor');else if(e==='wyloguj')otworzKonto('konto');else if(e==='klucz')kluczZapisany();else if(e==='konto')zamknijKonto();}   // na ekranie wyboru bez nicku – zostajemy
+function kontoEnter(){const e=KONTO.ekran;if(e==='klucz')kluczZapisany();else if(e==='login')zaloguj();}
+function kluczZapisany(){zamknijKonto();if(KONTO.poStart){KONTO.poStart=false;startGry();}}
+async function zaloguj(){if(KONTO.czeka)return;const bl=document.getElementById('lBlad');
+  const nick=KRT_NICK_NORMUJ(document.getElementById('lNick').value),klucz=document.getElementById('lKlucz').value.toUpperCase().replace(/[^0-9A-Z]/g,'');
+  if(!nick||klucz.length!==6){bl.textContent='PODAJ NICK I 6-ZNAKOWY KLUCZ';return;}
+  if(!POSREDNIK_URL){bl.textContent='LOGOWANIE NIE JEST DOSTĘPNE';return;}
+  KONTO.czeka=true;bl.style.color='#ccc';bl.textContent='LOGUJĘ...';
+  try{const o=await posrednik({akcja:'logowanie',nick,klucz});KONTO.czeka=false;bl.style.color='';
+    if(!o.ok){bl.textContent=o.blad||'BŁĘDNY NICK LUB KLUCZ';return;}
+    GRACZ.kod=o.kod;GRACZ.nick=o.nick;GRACZ.klucz=o.klucz;GRACZ.potw=true;zapiszGracza();try{localStorage.removeItem('krt_niewyslany');}catch(e){}
+    pokazNick();zamknijKonto();if(KONTO.poStart){KONTO.poStart=false;startGry();}}
+  catch(e){KONTO.czeka=false;bl.style.color='';bl.textContent='BRAK POŁĄCZENIA Z INTERNETEM – SPRÓBUJ PONOWNIE';}}
+// wylogowanie: ta przeglądarka dostaje nowy, pusty kod gracza (stare konto zostaje – wraca się na nie nickiem i kluczem)
+function wyloguj(){const b=new Uint8Array(16);crypto.getRandomValues(b);GRACZ.kod=Array.from(b,x=>x.toString(16).padStart(2,'0')).join('');
+  GRACZ.nick='';GRACZ.klucz='';GRACZ.potw=false;zapiszGracza();try{localStorage.removeItem('krt_niewyslany');}catch(e){}
+  document.getElementById('lNick').value='';document.getElementById('lKlucz').value='';pokazNick();otworzKonto('wybor',false);}
+// klucz dla graczy, którzy grali, zanim pojawiły się klucze
+async function pobierzKlucz(){if(!POSREDNIK_URL||!GRACZ.nick||!GRACZ.potw||GRACZ.klucz)return;try{const o=await posrednik({akcja:'klucz',kod:GRACZ.kod});if(o.ok&&o.klucz){GRACZ.klucz=o.klucz;zapiszGracza();}}catch(e){}}
+document.getElementById('kNowy').onclick=()=>{zamknijKonto();otworzNick(KONTO.poStart,true);};
+document.getElementById('kMam').onclick=()=>otworzKonto('login');
+document.getElementById('lOk').onclick=zaloguj;document.getElementById('lWroc').onclick=()=>otworzKonto('wybor');
+document.getElementById('kKluczOk').onclick=kluczZapisany;
+document.getElementById('kZmien').onclick=()=>{zamknijKonto();otworzNick(false,false);};
+document.getElementById('kWyloguj').onclick=()=>otworzKonto('wyloguj');document.getElementById('kWylTak').onclick=wyloguj;document.getElementById('kWylNie').onclick=()=>otworzKonto('konto');
+document.getElementById('kZamknij').onclick=zamknijKonto;
+document.getElementById('kontoBtn').onclick=()=>otworzKonto(GRACZ.nick?'konto':'wybor',false);
+['lNick','lKlucz'].forEach(id=>{const el=document.getElementById(id);el.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();if(id==='lNick')document.getElementById('lKlucz').focus();else zaloguj();}else if(e.key==='Escape'){e.preventDefault();otworzKonto('wybor');}});
+  el.addEventListener('input',()=>{document.getElementById('lBlad').textContent='';});});
+pokazNick();if(!GRACZ.nick)otworzKonto('wybor',false);else sprawdzNickPozniej().then(pobierzKlucz).then(wyslijZalegly);
+function startGry(){if(!GRACZ.nick){otworzKonto('wybor',true);return;}dzwiekStart();document.getElementById('menu').style.display='none';try{localStorage.setItem('krt_auto',AUTO);}catch(e){}zbudujAuto();nowyPrzejazd();}
 document.querySelectorAll('.auto').forEach(el=>el.onclick=()=>{AUTO=el.dataset.auto;document.querySelectorAll('.auto').forEach(e=>e.classList.toggle('wyb',e===el));});
 document.querySelector(`.auto[data-auto="${AUTO}"]`)?.click();
 document.getElementById('startBtn').onclick=startGry;
