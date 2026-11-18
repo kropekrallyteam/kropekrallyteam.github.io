@@ -121,8 +121,8 @@
   #dotyk{position:absolute;left:0;top:0;width:1600px;height:900px;display:none}
   #dotyk div{position:absolute;bottom:40px;width:190px;height:190px;border:6px solid rgba(255,255,255,.6);border-radius:50%;background:rgba(16,16,24,.35);color:#fff;font-size:40px;display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none;-webkit-user-select:none}
   /* telefon: obrotomierz i km/h nad przyciskami, napisy z lewego dołu nad joystickiem */
-  .dotykowy #obrotomierz{right:250px;bottom:240px}
-  .dotykowy #kmh{right:290px;bottom:500px}
+  .dotykowy #obrotomierz{right:14px;bottom:420px}
+  .dotykowy #kmh{right:290px;bottom:520px}
   .dotykowy #dzwiek{bottom:300px!important}
   .dotykowy #tytul{bottom:268px}
   .dotykowy #rank{bottom:240px}
@@ -131,7 +131,7 @@
   #dotyk #tH{font-size:22px;transition:none}
   #dotyk.jazda #tH{right:40px;bottom:260px;width:150px;height:150px;font-size:18px}
   #dotyk.start #tH{left:40px;bottom:40px;width:190px;height:190px}
-  #dotyk #tJoy{left:40px;bottom:60px;width:440px;height:150px;border-radius:75px;background:rgba(16,16,24,.35);border-color:rgba(255,255,255,.6)}
+  #dotyk #tJoy{left:40px;bottom:60px;width:580px;height:150px;border-radius:75px;background:rgba(16,16,24,.35);border-color:rgba(255,255,255,.6)}
   #dotyk.start #tJoy{display:none}
   #dotyk #tJoy .galka{position:absolute;left:50%;top:50%;width:120px;height:120px;margin:-60px 0 0 -60px;border:none;border-radius:50%;background:rgba(255,210,31,.85);box-shadow:0 0 0 6px rgba(16,16,24,.5);font-size:0;bottom:auto}
   #dotyk #tJoy .os{position:absolute;left:30px;right:30px;top:50%;height:6px;margin-top:-3px;border:none;border-radius:0;width:auto;background:rgba(255,255,255,.35);bottom:auto}
@@ -892,8 +892,9 @@ const DOT={};['tH','tG','tB'].forEach(id=>{const el=document.getElementById(id);
 const JOY={el:document.getElementById('tJoy'),galka:document.getElementById('tJoyGalka'),id:null,wart:0};
 function joyUstaw(clientX){const r=JOY.el.getBoundingClientRect(),pol=r.width/2-r.height/2;let d=(clientX-(r.left+r.width/2))/Math.max(1,pol);d=Math.max(-1,Math.min(1,d));
   // 8 stopni w każdą stronę + histereza: płynnie dla gracza, a powtórka nie rośnie od drgań palca (krótka, mieści się w limicie serwera)
-  const cel=Math.abs(d)<0.08?0:-d;if(cel===0)JOY.wart=0;else if(Math.abs(cel*8-JOY.wart*8)>0.6)JOY.wart=Math.max(-1,Math.min(1,Math.round(cel*8)/8));
-  JOY.galka.style.transform=`translateX(${(d*pol/(r.width/440)).toFixed(1)}px)`;}
+  /* krzywa: delikatnie przy środku, pełny skręt dopiero przy końcu paska (mniejsza czułość) */
+  const m=Math.max(0,(Math.abs(d)-0.1)/0.9),cel=m===0?0:-Math.sign(d)*Math.pow(m,1.7);if(cel===0)JOY.wart=0;else if(Math.abs(cel*8-JOY.wart*8)>0.6)JOY.wart=Math.max(-1,Math.min(1,Math.round(cel*8)/8));
+  JOY.galka.style.transform=`translateX(${(d*pol/(r.width/580)).toFixed(1)}px)`;}
 function joyPusc(){JOY.id=null;JOY.wart=0;JOY.galka.style.transform='';}
 JOY.el.addEventListener('touchstart',e=>{e.preventDefault();const t=e.changedTouches[0];JOY.id=t.identifier;joyUstaw(t.clientX);},{passive:false});
 addEventListener('touchmove',e=>{if(JOY.id===null)return;for(const t of e.changedTouches)if(t.identifier===JOY.id){e.preventDefault();joyUstaw(t.clientX);}},{passive:false});
