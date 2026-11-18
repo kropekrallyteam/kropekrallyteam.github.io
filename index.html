@@ -65,6 +65,14 @@
   #rWyslij{min-height:24px;font-size:14px;color:#8fe3ff;line-height:24px}
   #rWyslij.blad{color:#ff8a7a}
   #ranking .start{display:inline-block;margin-top:16px;font-size:24px;color:#101018;background:#ffd21f;padding:16px 34px;border:6px solid #101018;box-shadow:6px 6px 0 #000;cursor:pointer}
+  .emoji{font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;text-shadow:none;font-weight:normal;font-size:.78em;line-height:1;display:inline-block;vertical-align:.36em}   /* ikonka tej samej wysokości co litery, góra równo z górą tekstu */
+  .tiki{margin:-14px 0 14px;font-size:14px;color:#ccc}
+  .tik{display:inline-flex;align-items:center;gap:14px;cursor:pointer;padding:6px 10px}
+  .tik:hover{color:#fff}
+  .tik i{width:26px;height:26px;border:4px solid #ccc;background:#101018;display:inline-flex;align-items:center;justify-content:center}
+  .tik svg{width:18px;height:18px;display:none}
+  .tik.wl svg{display:block}
+  .tik.wl i{border-color:#3cff6a}
   #zasady{position:absolute;left:0;top:0;width:1600px;height:900px;background:rgba(10,10,20,.92);color:#fff;display:none;z-index:6;text-align:center}
   #zasady h1{font-size:40px;color:#ffd21f;margin:46px 0 26px;text-shadow:5px 5px 0 #1a3a9c}
   #zasady .kol{display:flex;justify-content:center;gap:40px;text-align:left}
@@ -129,8 +137,8 @@
 <div class="hud" id="komunikat"></div>
 <div id="dotyk"><div id="tL" style="left:40px">&lt;</div><div id="tP" style="left:270px">&gt;</div><div id="tH" style="right:270px;font-size:22px">RĘCZNY</div><div id="tG" style="right:40px;font-size:26px">GAZ</div><div id="tB" style="right:40px;bottom:260px;width:150px;height:150px;font-size:20px">HAM.</div></div>
 <div id="kontoOkno"><div class="ramka"><div class="ekran" data-e="wybor"><h3>WITAJ KIEROWCO!</h3><p>CZY GRAŁEŚ JUŻ W KROPEK RALLY TEAM TIME ATTACK?</p><div class="wybor"><div class="start" id="kNowy">NIE GRAŁEM JESZCZE</div><div class="start drugi" id="kMam">GRAŁEM JUŻ</div></div></div><div class="ekran" data-e="login"><h3>ZALOGUJ SIĘ</h3><p>PODAJ SWÓJ NICK I KLUCZ (6 ZNAKÓW), KTÓRY DOSTAŁEŚ PRZY ZAKŁADANIU KONTA.</p><div class="etyk">NICK</div><input id="lNick" maxlength="16" autocomplete="off" spellcheck="false"><div class="etyk">KLUCZ</div><input id="lKlucz" maxlength="7" autocomplete="off" spellcheck="false"><div class="blad" id="lBlad"></div><div class="start" id="lOk">ZALOGUJ (ENTER)</div><span class="link" id="lWroc">POWRÓT (ESC)</span></div><div class="ekran" data-e="klucz"><h3>TWÓJ KLUCZ</h3><p>ZAPISZ GO! RAZEM Z NICKIEM POZWOLI ZAGRAĆ NA INNYM KOMPUTERZE LUB TELEFONIE (TEN SAM WYNIK W RANKINGU).</p><div class="klucz" id="kKluczDuzy">------</div><div class="start" id="kKluczOk">ZAPISAŁEM (ENTER)</div></div><div class="ekran" data-e="konto"><h3>TWOJE KONTO</h3><div class="dane">NICK: <b id="kNick">—</b><br>KLUCZ: <b id="kKlucz">—</b></div><div class="przyc"><div class="start" id="kZmien">ZMIEŃ NICK</div><div class="start drugi" id="kWyloguj">WYLOGUJ</div></div><div style="margin-top:18px"><span class="link" id="kZamknij">ZAMKNIJ (ESC)</span></div></div><div class="ekran" data-e="wyloguj"><h3>WYLOGOWAĆ?</h3><p>ŻEBY WRÓCIĆ NA TO KONTO, BĘDZIESZ POTRZEBOWAĆ NICKU I KLUCZA:</p><div class="klucz" id="kKluczWyl">------</div><div class="przyc"><div class="start" id="kWylTak">WYLOGUJ</div><div class="start drugi" id="kWylNie">ANULUJ (ESC)</div></div></div></div></div>
-<div id="zasady"><h1>ZASADY</h1><div class="kol"><div class="blok"><h3>START</h3><ul><li>PRZYTRZYMAJ RĘCZNY (SPACJA) – ZAPALA SIĘ 5 CZERWONYCH ŚWIATEŁ, CO SEKUNDĘ JEDNO.</li><li>GDY WSZYSTKIE ZMIENIĄ SIĘ NA ZIELONE, PUŚĆ RĘCZNY I JEDŹ. GAZ MOŻESZ TRZYMAĆ WCZEŚNIEJ.</li><li>CZAS LICZY SIĘ OD ZAPALENIA ZIELONEGO – TAKŻE GDY JESZCZE TRZYMASZ RĘCZNY.</li></ul><h3>KARY</h3><ul><li><span class="kara">FALSTART +10 S</span> – PUSZCZENIE RĘCZNEGO Z GAZEM PRZED ZIELONYM. ZEGAR RUSZA OD RAZU.</li><li><span class="kara">SZYKANA +5 S</span> – ZA KAŻDĄ TRĄCONĄ BRAMKĘ Z OPON W SZYKANIE.</li></ul></div><div class="blok"><h3>TRASA</h3><ul><li>WYJAZD NA POBOCZE I TRAWĘ, UDERZENIE W OPONY, SEPARATORY I BANDY – BEZ KARY CZASOWEJ, ALE MOCNO SPOWALNIA.</li><li>NA MOSTKU JEST HOPA – PRZY DUŻEJ PRĘDKOŚCI AUTO SIĘ WYBIJA. JEZDNIA NA MOSTKU JEST WĘŻSZA.</li><li>ŻÓŁTA TABLICA 50 M PRZED METĄ ZAPOWIADA METĘ LOTNĄ. CZAS STAJE NA CZERWONEJ TABLICY METY.</li></ul><h3>RANKING</h3><ul><li>LICZY SIĘ TWÓJ NAJLEPSZY CZAS (Z KARAMI). WYNIK WYSYŁA SIĘ SAM PO MECIE.</li><li>KAŻDY PRZEJAZD JEST SPRAWDZANY NA SERWERZE. PODEJRZANE WYNIKI CZEKAJĄ NA WERYFIKACJĘ.</li><li>STEROWANIE: STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU.</li></ul></div></div><div class="start" id="zPowrot">POWRÓT (ESC)</div></div>
-<div id="ranking"><h1>RANKING</h1><h2>PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY</h2><table id="rTab"></table><div id="rInfo"></div><div id="rWyslij"></div><div class="start" id="rPowrot">POWRÓT (ESC)</div><div id="rAkt"></div></div>
+<div id="zasady"><h1>ZASADY <span class="emoji">📄</span></h1><div class="kol"><div class="blok"><h3>START</h3><ul><li>PRZYTRZYMAJ RĘCZNY (SPACJA) – ZAPALA SIĘ 5 CZERWONYCH ŚWIATEŁ, CO SEKUNDĘ JEDNO.</li><li>GDY WSZYSTKIE ZMIENIĄ SIĘ NA ZIELONE, PUŚĆ RĘCZNY I JEDŹ. GAZ MOŻESZ TRZYMAĆ WCZEŚNIEJ.</li><li>CZAS LICZY SIĘ OD ZAPALENIA ZIELONEGO – TAKŻE GDY JESZCZE TRZYMASZ RĘCZNY.</li></ul><h3>KARY</h3><ul><li><span class="kara">FALSTART +10 S</span> – PUSZCZENIE RĘCZNEGO Z GAZEM PRZED ZIELONYM. ZEGAR RUSZA OD RAZU.</li><li><span class="kara">SZYKANA +5 S</span> – ZA KAŻDĄ TRĄCONĄ BRAMKĘ Z OPON W SZYKANIE.</li></ul></div><div class="blok"><h3>TRASA</h3><ul><li>WYJAZD NA POBOCZE I TRAWĘ, UDERZENIE W OPONY, SEPARATORY I BANDY – BEZ KARY CZASOWEJ, ALE MOCNO SPOWALNIA.</li><li>NA MOSTKU JEST HOPA – PRZY DUŻEJ PRĘDKOŚCI AUTO SIĘ WYBIJA. JEZDNIA NA MOSTKU JEST WĘŻSZA.</li><li>ŻÓŁTA TABLICA 50 M PRZED METĄ ZAPOWIADA METĘ LOTNĄ. CZAS STAJE NA CZERWONEJ TABLICY METY.</li></ul><h3>RANKING</h3><ul><li>LICZY SIĘ TWÓJ NAJLEPSZY CZAS (Z KARAMI). WYNIK WYSYŁA SIĘ SAM PO MECIE.</li><li>KAŻDY PRZEJAZD JEST SPRAWDZANY NA SERWERZE. PODEJRZANE WYNIKI CZEKAJĄ NA WERYFIKACJĘ.</li><li>STEROWANIE: STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU.</li></ul></div></div><div class="start" id="zPowrot">POWRÓT (ESC)</div></div>
+<div id="ranking"><h1>RANKING <span class="emoji">🏆</span></h1><h2>PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY</h2><table id="rTab"></table><div id="rInfo"></div><div id="rWyslij"></div><div class="start" id="rPowrot">POWRÓT (ESC)</div><div id="rAkt"></div></div>
 <div id="menu">
   <h1>Kropek Rally Team<br>Time Attack <span class="flaga">🏁</span></h1>
   <h2>PS1 · 25 RAJD NIEPODLEGŁOŚCI · BRZYSKA</h2>
@@ -139,9 +147,10 @@
     <div class="auto" data-auto="andrzej"><b>KROPEK ANDRZEJA</b><span>Wieczorek / Duda<br>SH 5583F · BUDMAX METAL</span></div>
   </div>
   <div class="rozdz">ROZDZIELCZOŚĆ:<div class="opcja" data-r="720">1280×720<small>PŁYNNIEJ · ZALECANA</small></div><div class="opcja" data-r="1080">1920×1080<small>OSTRZEJ · MOCNY KOMPUTER</small></div></div>
+  <div class="tiki"><div class="tik wl" id="duchTik"><i><svg viewBox="0 0 9 9"><path d="M1.2 4.8 L3.6 7.2 L7.9 1.8" stroke="#3cff6a" stroke-width="1.9" fill="none" stroke-linecap="square"/></svg></i>DUCH NAJLEPSZEGO PRZEJAZDU</div></div>
   <p>STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU</p>
   <div id="kontoBtn" title="KONTO"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="5" y="1" width="6" height="6" fill="#ffd21f"/><rect x="4" y="2" width="8" height="4" fill="#ffd21f"/><rect x="2" y="9" width="12" height="6" fill="#ffd21f"/><rect x="3" y="8" width="10" height="2" fill="#ffd21f"/></svg><span id="nickPokaz">—</span></div>
-  <div class="przyciski"><div class="start" id="startBtn">START (ENTER)</div><div class="start drugi" id="rankingBtn">RANKING</div><div class="start drugi" id="zasadyBtn">ZASADY</div></div>
+  <div class="przyciski"><div class="start" id="startBtn">START (ENTER)</div><div class="start drugi" id="rankingBtn">RANKING <span class="emoji">🏆</span></div><div class="start drugi" id="zasadyBtn">ZASADY <span class="emoji">📄</span></div></div>
   <div id="nickOkno"><div class="ramka"><h3>PODAJ NICK KIEROWCY</h3><p>NICK BĘDZIE WIDOCZNY W RANKINGU.<br>LITERY, CYFRY, SPACJA, _ - . (3–16)</p><input id="nickPole" maxlength="16" autocomplete="off" spellcheck="false"><div id="nickBlad"></div><div class="start" id="nickOk">ZAPISZ (ENTER)</div><span id="nickAnuluj">ANULUJ (ESC)</span></div></div>
 </div>
 </div>
@@ -937,6 +946,11 @@ async function wyslijZalegly(){if(!POSREDNIK_URL)return;let d=null;try{d=JSON.pa
   if(!d||d.kod!==GRACZ.kod||d.wersja!==KRT_FIZYKA_WERSJA){try{localStorage.removeItem('krt_niewyslany');}catch(e){}return;}
   d.nick=GRACZ.nick||d.nick;try{const o=await posrednik(d);if(o)localStorage.removeItem('krt_niewyslany');}catch(e){}}
 document.getElementById('rankingBtn').onclick=()=>pokazRanking(null);
+// przełącznik ducha (przejazd najlepszego czasu) – zapamiętany w przeglądarce, domyślnie włączony
+let DUCH_WL=true;try{DUCH_WL=localStorage.getItem('krt_duch_wl')!=='0';}catch(e){}
+function pokazTikDucha(){document.getElementById('duchTik').classList.toggle('wl',DUCH_WL);}
+document.getElementById('duchTik').onclick=()=>{DUCH_WL=!DUCH_WL;try{localStorage.setItem('krt_duch_wl',DUCH_WL?'1':'0');}catch(e){}pokazTikDucha();if(!DUCH_WL)ghost.visible=false;};
+pokazTikDucha();
 // ekran zasad (start, kary, trasa, ranking)
 function zasadyOtwarte(){return document.getElementById('zasady').style.display==='block';}
 function pokazZasady(){document.getElementById('menu').style.display='none';document.getElementById('zasady').style.display='block';}
@@ -1248,7 +1262,7 @@ function petla(t){requestAnimationFrame(petla);if(window.PAUZA)return;   // PAUZ
   if(car.userData.ustawStop)car.userData.ustawStop(A.we&&A.we.ham&&Math.hypot(A.vx,A.vz)>0.5||stan==='meta'&&Math.hypot(A.vx,A.vz)>0.5);   // światła stop przy hamowaniu
   if(car.userData.ustawKola)car.userData.ustawKola(A.skretW*0.5,A.droga||0);   // przednie koła skręcają, wszystkie się toczą
   // duch: odtworzenie najlepszego przejazdu
-  if(duchZapis&&stan==='jazda'){const f=czas*10;const i=Math.floor(f);if(i<duchZapis.length-1){const a=duchZapis[i],b=duchZapis[i+1],u=f-i;ghost.visible=true;ghost.position.set(a[0]+(b[0]-a[0])*u,0,a[1]+(b[1]-a[1])*u);ghost.rotation.y=a[2]+(b[2]-a[2])*u;el.pasek[0].style.display='block';}else ghost.visible=false;}
+  if(DUCH_WL&&duchZapis&&stan==='jazda'){const f=czas*10;const i=Math.floor(f);if(i<duchZapis.length-1){const a=duchZapis[i],b=duchZapis[i+1],u=f-i;ghost.visible=true;ghost.position.set(a[0]+(b[0]-a[0])*u,0,a[1]+(b[1]-a[1])*u);ghost.rotation.y=a[2]+(b[2]-a[2])*u;el.pasek[0].style.display='block';}else ghost.visible=false;}
   else ghost.visible=false;
   if(ghost.visible){const r=najblizsza(ghost.position.x,ghost.position.z)[1];el.pasek[0].style.left=(Math.max(0,Math.min(1,(r-START_I)/(META_I-START_I)))*506)+'px';}else el.pasek[0].style.display='none';
   // kurz
