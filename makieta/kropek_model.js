@@ -38,9 +38,15 @@ function kropek(ghost,malowanie){
          for(const j of L){const d=Math.hypot(P2.getX(j)-x,P2.getY(j)-y,P2.getZ(j)-z);if(d>R)continue;const w=1-d/R;sx+=nowe[j*3]*w;sy+=nowe[j*3+1]*w;sz+=nowe[j*3+2]*w;}}
        {const l0=Math.hypot(sx,sy,sz)||1;sx/=l0;sy/=l0;sz/=l0;sx*=.45;sy=sy*.45+.55;sz=sz*.45-.12;}const l=Math.hypot(sx,sy,sz)||1;nn[i*3]=sx/l;nn[i*3+1]=sy/l;nn[i*3+2]=sz/l;}   /* + dociągnięcie do gładkiej, lekko pochylonej powierzchni maski */
      const fy=t=>{const a=t*3,b=a+1,c=a+2;const ux=P2.getX(b)-P2.getX(a),uy=P2.getY(b)-P2.getY(a),uz=P2.getZ(b)-P2.getZ(a),vx=P2.getX(c)-P2.getX(a),vy=P2.getY(c)-P2.getY(a),vz=P2.getZ(c)-P2.getZ(a);return uz*vx-ux*vz;};   /* składowa y normalnej ściany */
-     for(let i=0;i<P2.count;i++){if(!maska(i))continue;if(fy(Math.floor(i/3))<0){nn[i*3]*=-1;nn[i*3+1]*=-1;nn[i*3+2]*=-1;}}   /* ściany odwrócone w siatce (rysowane tyłem) – normalna też odwrócona, by po odbiciu DoubleSide świeciła do góry */
      nowe.set(nn);}
-    {const C3=geo.attributes.color;for(let i=0;i<P2.count;i++){const ny=nowe[i*3+1];const k=.66+.4*Math.max(0,Math.min(1,ny*.5+.5))**1.3;C3.setXYZ(i,C3.getX(i)*Math.min(1.08,k*1.05),C3.getY(i)*Math.min(1.06,k),C3.getZ(i)*Math.min(1.04,k*.95));}C3.needsUpdate=true;}   /* malarskie cieniowanie: boki ciemniejsze, dach jaśniejszy – bryła czytelna przy 1280×720 */
+    {const C3=geo.attributes.color,N3=nowe.length,zew=new Float32Array(N3);
+     const ox=i=>P2.getX(i),oy=i=>P2.getY(i)-.55,oz=i=>P2.getZ(i)*.3;   /* kierunek „na zewnątrz” od środka bryły (oś długa ściśnięta) */
+     for(let i=0;i<P2.count;i++){let x=nowe[i*3],y=nowe[i*3+1],z=nowe[i*3+2];if(x*ox(i)+y*oy(i)+z*oz(i)<0){x=-x;y=-y;z=-z;}zew[i*3]=x;zew[i*3+1]=y;zew[i*3+2]=z;}
+     for(let i=0;i<P2.count;i++){const ny=zew[i*3+1];const k=.66+.4*Math.max(0,Math.min(1,ny*.5+.5))**1.3;C3.setXYZ(i,C3.getX(i)*Math.min(1.08,k*1.05),C3.getY(i)*Math.min(1.06,k),C3.getZ(i)*Math.min(1.04,k*.95));}C3.needsUpdate=true;   /* malarskie cieniowanie: boki ciemniejsze, dach jaśniejszy – liczone z normalnych na zewnątrz (bez ciemnych łat na masce) */
+     for(let t=0;t<P2.count/3;t++){const a=t*3,b=a+1,c=a+2;const ux=P2.getX(b)-P2.getX(a),uy=P2.getY(b)-P2.getY(a),uz=P2.getZ(b)-P2.getZ(a),vx=P2.getX(c)-P2.getX(a),vy=P2.getY(c)-P2.getY(a),vz=P2.getZ(c)-P2.getZ(a);
+       const fx=uy*vz-uz*vy,fy2=uz*vx-ux*vz,fz=ux*vy-uy*vx,cx=(ox(a)+ox(b)+ox(c)),cy=(oy(a)+oy(b)+oy(c)),cz=(oz(a)+oz(b)+oz(c));
+       const sg=(fx*cx+fy2*cy+fz*cz)<0?-1:1;   /* ściana o odwróconym nawinięciu jest rysowana tyłem (DoubleSide odwraca normalną) – zapisujemy ją do środka, żeby świeciła na zewnątrz */
+       for(const k of [a,b,c]){nowe[k*3]=zew[k*3]*sg;nowe[k*3+1]=zew[k*3+1]*sg;nowe[k*3+2]=zew[k*3+2]*sg;}}}
     geo.setAttribute('normal',new THREE.BufferAttribute(nowe,3));}
   const mat=ghost?new THREE.MeshLambertMaterial({vertexColors:true,flatShading:true,transparent:true,opacity:.4}):new THREE.MeshPhongMaterial({vertexColors:true,side:THREE.DoubleSide,shininess:45,specular:0x4a4230,stencilWrite:true,stencilRef:1,stencilFunc:THREE.AlwaysStencilFunc,stencilZPass:THREE.ReplaceStencilOp})   /* styl ilustracji wg wzoru: złocisty żółty, miękkie szerokie odblaski */;
   const body=new THREE.Mesh(geo,mat);body.castShadow=true;g.add(body);
@@ -210,7 +216,8 @@ function kropek(ghost,malowanie){
       c.strokeStyle='#c9ccd1';c.lineWidth=3;for(let k=-1;k<=1;k++){c.beginPath();c.ellipse(cx,cy,Math.abs(k)*14+1,h/2,0,0,7);c.stroke();}   // południki
       c.restore();
       c.fillStyle='#ffffff';c.fillRect(14,cy-16,w-28,32);c.font='bold 25px Arial Black,Arial';c.textAlign='center';c.textBaseline='middle';c.lineJoin='round';
-      c.lineWidth=5;c.strokeStyle='#ffffff';c.strokeText('BUDMAXMETAL',cx,cy+1);c.fillStyle='#d8141c';c.fillText('BUDMAXMETAL',cx,cy+1);});
+      {const szer=w-40,m=c.measureText('BUDMAXMETAL').width;if(m>szer){c.save();c.translate(cx,cy+1);c.scale(szer/m,1);c.lineWidth=5;c.strokeStyle='#ffffff';c.strokeText('BUDMAXMETAL',0,0);c.fillStyle='#d8141c';c.fillText('BUDMAXMETAL',0,0);c.restore();}
+       else{c.lineWidth=5;c.strokeStyle='#ffffff';c.strokeText('BUDMAXMETAL',cx,cy+1);c.fillStyle='#d8141c';c.fillText('BUDMAXMETAL',cx,cy+1);}}});   /* napis ściśnięty do szerokości pasa – mieści się cały */
     naMaske(owal,.62,.34,-1.4);
     // czarny skorpion Abarth (pionowy, ogon zawinięty u góry, szczypce na dole) na tylnym błotniku za drzwiami, wg zdjęć
     const skorp=plotno(96,128,(c,w,h)=>{c.fillStyle=c.strokeStyle='#101010';c.lineCap='round';c.lineJoin='round';
