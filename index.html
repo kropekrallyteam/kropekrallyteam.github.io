@@ -122,7 +122,7 @@
   #menu .start{display:inline-block;margin-top:24px;font-size:28px;color:#101018;background:#ffd21f;padding:18px 34px;border:6px solid #101018;box-shadow:6px 6px 0 #000;cursor:pointer}
   #dotyk{position:absolute;left:0;top:0;width:1600px;height:900px;display:none}
   #dotyk div{position:absolute;bottom:40px;width:190px;height:190px;border:6px solid rgba(255,255,255,.6);border-radius:50%;background:rgba(16,16,24,.35);color:#fff;font-size:40px;display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none;-webkit-user-select:none}
-  /* telefon: obrotomierz i km/h nad przyciskami, napisy z lewego dołu nad joystickiem */
+  /* telefon: obrotomierz i km/h nad przyciskami, napisy z lewego dołu nad strzałkami */
   .dotykowy #obrotomierz{right:14px;bottom:420px}
   .dotykowy #kmh{right:290px;bottom:520px}
   .dotykowy #dzwiek{bottom:300px!important}
@@ -133,10 +133,9 @@
   #dotyk #tH{font-size:22px;transition:none}
   #dotyk.jazda #tH{right:40px;bottom:260px;width:150px;height:150px;font-size:18px}
   #dotyk.start #tH{left:40px;bottom:40px;width:190px;height:190px}
-  #dotyk #tJoy{left:40px;bottom:60px;width:580px;height:150px;border-radius:75px;background:rgba(16,16,24,.35);border-color:rgba(255,255,255,.6)}
-  #dotyk.start #tJoy{display:none}
-  #dotyk #tJoy .galka{position:absolute;left:50%;top:50%;width:120px;height:120px;margin:-60px 0 0 -60px;border:none;border-radius:50%;background:rgba(255,210,31,.85);box-shadow:0 0 0 6px rgba(16,16,24,.5);font-size:0;bottom:auto}
-  #dotyk #tJoy .os{position:absolute;left:30px;right:30px;top:50%;height:6px;margin-top:-3px;border:none;border-radius:0;width:auto;background:rgba(255,255,255,.35);bottom:auto}
+  #dotyk #tL{left:40px;font-size:64px}
+  #dotyk #tP{left:270px;font-size:64px}
+  #dotyk.start #tL,#dotyk.start #tP{display:none}   /* przed startem w tym miejscu jest RĘCZNY */
 </style>
 </head>
 <body>
@@ -155,9 +154,9 @@
 <div class="hud" id="pasek"><i style="left:0;background:#7ff3ff"></i><i style="left:0;background:#ffd21f"></i></div>
 <div class="hud" id="swiatla" style="display:none"><b></b><b></b><b></b><b></b><b></b></div>
 <div class="hud" id="komunikat"></div>
-<div id="dotyk" class="start"><div id="tJoy"><div class="os"></div><div class="galka" id="tJoyGalka"></div></div><div id="tH">RĘCZNY</div><div id="tB">HAMULEC</div><div id="tG">GAZ</div></div>
+<div id="dotyk" class="start"><div id="tL">◀</div><div id="tP">▶</div><div id="tH">RĘCZNY</div><div id="tB">HAMULEC</div><div id="tG">GAZ</div></div>
 <div id="kontoOkno"><div class="ramka"><div class="ekran" data-e="wybor"><h3>WITAJ KIEROWCO!</h3><p>CZY GRAŁEŚ JUŻ W KROPEK RALLY TEAM TIME ATTACK?</p><div class="wybor"><div class="start" id="kNowy">NIE GRAŁEM JESZCZE</div><div class="start drugi" id="kMam">GRAŁEM JUŻ</div></div></div><div class="ekran" data-e="login"><h3>ZALOGUJ SIĘ</h3><p>PODAJ SWÓJ NICK I KLUCZ (6 ZNAKÓW), KTÓRY DOSTAŁEŚ PRZY ZAKŁADANIU KONTA.</p><div class="etyk">NICK</div><input id="lNick" maxlength="16" autocomplete="off" spellcheck="false"><div class="etyk">KLUCZ</div><input id="lKlucz" maxlength="7" autocomplete="off" spellcheck="false"><div class="blad" id="lBlad"></div><div class="start" id="lOk">ZALOGUJ (ENTER)</div><span class="link" id="lWroc">POWRÓT (ESC)</span></div><div class="ekran" data-e="klucz"><h3>TWÓJ KLUCZ</h3><p>ZAPISZ GO! RAZEM Z NICKIEM POZWOLI ZAGRAĆ NA INNYM KOMPUTERZE LUB TELEFONIE (TEN SAM WYNIK W RANKINGU).</p><div class="klucz" id="kKluczDuzy">------</div><div class="start" id="kKluczOk">ZAPISAŁEM (ENTER)</div></div><div class="ekran" data-e="konto"><h3>TWOJE KONTO</h3><div class="dane">NICK: <b id="kNick">—</b><br>KLUCZ: <b id="kKlucz">—</b></div><div class="przyc"><div class="start" id="kZmien">ZMIEŃ NICK</div><div class="start drugi" id="kWyloguj">WYLOGUJ</div></div><div style="margin-top:18px"><span class="link" id="kZamknij">ZAMKNIJ (ESC)</span></div></div><div class="ekran" data-e="przenies"><h3>KONTO Z POPRZEDNIEGO ADRESU</h3><p>W TEJ PRZEGLĄDARCE GRAŁEŚ NA STARYM ADRESIE GRY JAKO:</p><div class="klucz" id="pNick" style="font-size:30px;letter-spacing:4px">—</div><p id="pTeraz"></p><div class="przyc"><div class="start" id="pTak">PRZEŁĄCZ NA TO KONTO</div><div class="start drugi" id="pNie">ZOSTAW OBECNE</div></div></div><div class="ekran" data-e="wyloguj"><h3>WYLOGOWAĆ?</h3><p>ŻEBY WRÓCIĆ NA TO KONTO, BĘDZIESZ POTRZEBOWAĆ NICKU I KLUCZA:</p><div class="klucz" id="kKluczWyl">------</div><div class="przyc"><div class="start" id="kWylTak">WYLOGUJ</div><div class="start drugi" id="kWylNie">ANULUJ (ESC)</div></div></div></div></div>
-<div id="zasady"><h1>ZASADY <span class="emoji">📕</span></h1><div class="kol"><div class="blok"><h3>START</h3><ul><li>PRZYTRZYMAJ RĘCZNY (SPACJA) – ZAPALA SIĘ 5 CZERWONYCH ŚWIATEŁ, CO SEKUNDĘ JEDNO.</li><li>GDY WSZYSTKIE ZMIENIĄ SIĘ NA ZIELONE, PUŚĆ RĘCZNY I JEDŹ. GAZ MOŻESZ TRZYMAĆ WCZEŚNIEJ.</li><li>CZAS LICZY SIĘ OD ZAPALENIA ZIELONEGO – TAKŻE GDY JESZCZE TRZYMASZ RĘCZNY.</li></ul><h3>KARY</h3><ul><li><span class="kara">FALSTART +10 S</span> – PUSZCZENIE RĘCZNEGO Z GAZEM PRZED ZIELONYM. ZEGAR RUSZA OD RAZU.</li><li><span class="kara">SZYKANA +5 S</span> – ZA KAŻDĄ TRĄCONĄ BRAMKĘ Z OPON W SZYKANIE.</li></ul></div><div class="blok"><h3>TRASA</h3><ul><li>WYJAZD NA POBOCZE I TRAWĘ, UDERZENIE W OPONY, SEPARATORY I BANDY – BEZ KARY CZASOWEJ, ALE MOCNO SPOWALNIA.</li><li>NA MOSTKU JEST HOPA – PRZY DUŻEJ PRĘDKOŚCI AUTO SIĘ WYBIJA. JEZDNIA NA MOSTKU JEST WĘŻSZA.</li><li>ŻÓŁTA TABLICA 50 M PRZED METĄ ZAPOWIADA METĘ LOTNĄ. CZAS STAJE NA CZERWONEJ TABLICY METY.</li></ul><h3>RANKING</h3><ul><li>LICZY SIĘ TWÓJ NAJLEPSZY CZAS (Z KARAMI). WYNIK WYSYŁA SIĘ SAM PO MECIE.</li><li>KAŻDY PRZEJAZD JEST SPRAWDZANY NA SERWERZE. PODEJRZANE WYNIKI CZEKAJĄ NA WERYFIKACJĘ.</li><li class="klaw">STEROWANIE: STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU.</li><li class="dotyk">TELEFON: JOYSTICK PO LEWEJ – SKRĘT · ZIELONY – GAZ · CZERWONY – HAMULEC · RĘCZNY PRZED STARTEM PO LEWEJ, W JEŹDZIE NAD GAZEM.</li></ul></div></div><div class="start" id="zPowrot">POWRÓT (ESC)</div></div>
+<div id="zasady"><h1>ZASADY <span class="emoji">📕</span></h1><div class="kol"><div class="blok"><h3>START</h3><ul><li>PRZYTRZYMAJ RĘCZNY (SPACJA) – ZAPALA SIĘ 5 CZERWONYCH ŚWIATEŁ, CO SEKUNDĘ JEDNO.</li><li>GDY WSZYSTKIE ZMIENIĄ SIĘ NA ZIELONE, PUŚĆ RĘCZNY I JEDŹ. GAZ MOŻESZ TRZYMAĆ WCZEŚNIEJ.</li><li>CZAS LICZY SIĘ OD ZAPALENIA ZIELONEGO – TAKŻE GDY JESZCZE TRZYMASZ RĘCZNY.</li></ul><h3>KARY</h3><ul><li><span class="kara">FALSTART +10 S</span> – PUSZCZENIE RĘCZNEGO Z GAZEM PRZED ZIELONYM. ZEGAR RUSZA OD RAZU.</li><li><span class="kara">SZYKANA +5 S</span> – ZA KAŻDĄ TRĄCONĄ BRAMKĘ Z OPON W SZYKANIE.</li></ul></div><div class="blok"><h3>TRASA</h3><ul><li>WYJAZD NA POBOCZE I TRAWĘ, UDERZENIE W OPONY, SEPARATORY I BANDY – BEZ KARY CZASOWEJ, ALE MOCNO SPOWALNIA.</li><li>NA MOSTKU JEST HOPA – PRZY DUŻEJ PRĘDKOŚCI AUTO SIĘ WYBIJA. JEZDNIA NA MOSTKU JEST WĘŻSZA.</li><li>ŻÓŁTA TABLICA 50 M PRZED METĄ ZAPOWIADA METĘ LOTNĄ. CZAS STAJE NA CZERWONEJ TABLICY METY.</li></ul><h3>RANKING</h3><ul><li>LICZY SIĘ TWÓJ NAJLEPSZY CZAS (Z KARAMI). WYNIK WYSYŁA SIĘ SAM PO MECIE.</li><li>KAŻDY PRZEJAZD JEST SPRAWDZANY NA SERWERZE. PODEJRZANE WYNIKI CZEKAJĄ NA WERYFIKACJĘ.</li><li class="klaw">STEROWANIE: STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU.</li><li class="dotyk">TELEFON: STRZAŁKI PO LEWEJ – SKRĘT · ZIELONY – GAZ · CZERWONY – HAMULEC · RĘCZNY PRZED STARTEM PO LEWEJ, W JEŹDZIE NAD GAZEM.</li></ul></div></div><div class="start" id="zPowrot">POWRÓT (ESC)</div></div>
 <div id="ranking"><h1>RANKING <span class="emoji">🏆</span></h1><h2>PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY</h2><table id="rTab"></table><div id="rInfo"></div><div id="rWyslij"></div><div class="start" id="rPowrot">POWRÓT (ESC)</div><div id="rAkt"></div></div>
 <div id="menu">
   <h1>Kropek Rally Team<br>Time Attack <span class="flaga">🏁</span></h1>
@@ -895,25 +894,14 @@ const K={};addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT
   if(zasadyOtwarte()){if(e.code==='Escape'||e.code==='Enter')zamknijZasady();return;}
   if(e.code==='Escape')pokazMenu();if(e.code==='Enter'&&stan==='menu')startGry();});
 addEventListener('keyup',e=>{K[e.code]=false;});
-const DOT={};['tH','tG','tB'].forEach(id=>{const el=document.getElementById(id);const on=e=>{e.preventDefault();DOT[id]=true;},off=e=>{e.preventDefault();DOT[id]=false;};
+const DOT={};['tL','tP','tH','tG','tB'].forEach(id=>{const el=document.getElementById(id);const on=e=>{e.preventDefault();DOT[id]=true;},off=e=>{e.preventDefault();DOT[id]=false;};
   el.addEventListener('touchstart',on,{passive:false});el.addEventListener('touchend',off,{passive:false});el.addEventListener('touchcancel',off,{passive:false});});
-// joystick lewo–prawo: płynny skręt zależny od wychylenia gałki (palec może jechać poza pasek), puszczenie = środek
-const JOY={el:document.getElementById('tJoy'),galka:document.getElementById('tJoyGalka'),id:null,wart:0};
-function joyUstaw(clientX){const r=JOY.el.getBoundingClientRect(),pol=r.width/2-r.height/2;let d=(clientX-(r.left+r.width/2))/Math.max(1,pol);d=Math.max(-1,Math.min(1,d));
-  // 8 stopni w każdą stronę + histereza: płynnie dla gracza, a powtórka nie rośnie od drgań palca (krótka, mieści się w limicie serwera)
-  /* krzywa: delikatnie przy środku, pełny skręt dopiero przy końcu paska (mniejsza czułość) */
-  const m=Math.max(0,(Math.abs(d)-0.1)/0.9),cel=m===0?0:-Math.sign(d)*Math.pow(m,1.7);if(cel===0)JOY.wart=0;else if(Math.abs(cel*8-JOY.wart*8)>0.6)JOY.wart=Math.max(-1,Math.min(1,Math.round(cel*8)/8));
-  JOY.galka.style.transform=`translateX(${(d*pol/(r.width/580)).toFixed(1)}px)`;}
-function joyPusc(){JOY.id=null;JOY.wart=0;JOY.galka.style.transform='';}
-JOY.el.addEventListener('touchstart',e=>{e.preventDefault();const t=e.changedTouches[0];JOY.id=t.identifier;joyUstaw(t.clientX);},{passive:false});
-addEventListener('touchmove',e=>{if(JOY.id===null)return;for(const t of e.changedTouches)if(t.identifier===JOY.id){e.preventDefault();joyUstaw(t.clientX);}},{passive:false});
-const joyKoniec=e=>{for(const t of e.changedTouches)if(t.identifier===JOY.id)joyPusc();};addEventListener('touchend',joyKoniec);addEventListener('touchcancel',joyKoniec);
-// układ przycisków: przed startem RĘCZNY po lewej (zamiast joysticka), po ruszeniu RĘCZNY nad GAZEM
-let DOTYK_TRYB='start';function dotykTryb(){const t=(stan==='odliczanie'||(stan==='jazda'&&START.trzymaj))?'start':'jazda';if(t!==DOTYK_TRYB){DOTYK_TRYB=t;document.getElementById('dotyk').className=t;if(t==='start')joyPusc();}}
+// układ przycisków: przed startem RĘCZNY po lewej (zamiast strzałek), po ruszeniu strzałki po lewej i RĘCZNY nad GAZEM
+let DOTYK_TRYB='start';function dotykTryb(){const t=(stan==='odliczanie'||(stan==='jazda'&&START.trzymaj))?'start':'jazda';if(t!==DOTYK_TRYB){DOTYK_TRYB=t;document.getElementById('dotyk').className=t;if(t==='start'){DOT.tL=false;DOT.tP=false;}}}
 if('ontouchstart' in window||QS.get('dotyk')){document.getElementById('dotyk').style.display='block';document.getElementById('ekran').classList.add('dotykowy');}
 let wejscie=function(){const gp=(navigator.getGamepads&&navigator.getGamepads()[0])||null;
-  let gaz=K.ArrowUp||K.KeyW||DOT.tG,ham=K.ArrowDown||K.KeyS||DOT.tB,lewo=K.ArrowLeft||K.KeyA,prawo=K.ArrowRight||K.KeyD,reczny=K.Space||DOT.tH;
-  let skret=(lewo?1:0)-(prawo?1:0);if(!lewo&&!prawo&&JOY.wart)skret=JOY.wart;   // joystick dotykowy (płynnie)
+  let gaz=K.ArrowUp||K.KeyW||DOT.tG,ham=K.ArrowDown||K.KeyS||DOT.tB,lewo=K.ArrowLeft||K.KeyA||DOT.tL,prawo=K.ArrowRight||K.KeyD||DOT.tP,reczny=K.Space||DOT.tH;
+  let skret=(lewo?1:0)-(prawo?1:0);
   if(gp){const ax=gp.axes[0]||0;if(Math.abs(ax)>.15)skret=-ax;gaz=gaz||gp.buttons[7]?.value>.2||gp.buttons[0]?.pressed;ham=ham||gp.buttons[6]?.value>.2||gp.buttons[1]?.pressed;reczny=reczny||gp.buttons[2]?.pressed;}
   return {gaz:!!gaz,ham:!!ham,skret:Math.round(Math.max(-1,Math.min(1,skret))*32)/32,reczny:!!reczny};}
 // powtórka: wejście czytane RAZ na krok fizyki (WE) i zapisywane jako zmiany [nr kroku, bity gaz/ham/ręczny, skręt]
