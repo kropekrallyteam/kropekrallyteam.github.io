@@ -925,7 +925,7 @@ let stan='menu',czas=0,meta=false,kara=0;   // kara: +5 s za bramkę szykany, +1
 // Puszczenie ręcznego z wciśniętym gazem przed zielonym = falstart (+10 s, zegar rusza od razu).
 // fizyka i procedura startu liczone we wspólnym module (makieta/fizyka.js) – tym samym, którym pośrednik sprawdza powtórki
 const SIM=KRT_SYMULACJA(TRASA_BRZYSKA_2026,{uderzenie:s=>dzwiekUderzenie(s),szykana:()=>pokazKomunikat('<span style="color:#ff5a4a">SZYKANA +5 S</span>'),
-  falstart:()=>{czasyIdx=[];pokazKomunikat('<span style="color:#ff5a4a">FALSTART +10 S</span>');},zielone:()=>{czasyIdx=[];},meta:()=>{zSIM();koniec();}});
+  falstart:()=>{czasyIdx=[];dzwiekStartu('falstart');pokazKomunikat('<span style="color:#ff5a4a">FALSTART +10 S</span>');},zielone:()=>{czasyIdx=[];dzwiekStartu('zielone');},meta:()=>{zSIM();koniec();}});
 const START=SIM.START;
 function doSIM(){SIM.stan=stan;SIM.czas=czas;SIM.kara=kara;SIM.meta=meta;}   // stan gry → moduł
 function zSIM(){stan=SIM.stan;czas=SIM.czas;kara=SIM.kara;meta=SIM.meta;}    // moduł → stan gry
@@ -1116,7 +1116,7 @@ function efektyKroku(){const o=SIM.ost,v=o.v,fx=o.fx,fz=o.fz,rx=o.rx,rz=o.rz,we=
       _m.compose(_p.set(tx-A.vx/v*dl/2,A.y+0.06,tz-A.vz/v*dl/2),_q.setFromEuler(_e.set(0,Math.atan2(A.vx,A.vz),0)),_s.set(1,1,(dl+0.12)/0.8));SLADY.setMatrixAt(sladIdx,_m);sladIdx=(sladIdx+1)%900;SLADY.count=Math.min(900,SLADY.count+1);}
     SLADY.instanceMatrix.needsUpdate=true;
     if(Math.random()<.6){const k=kurz[kurzIdx];kurzIdx=(kurzIdx+1)%80;k.x=A.x-fx*2;k.z=A.z-fz*2;k.y=A.y+.3;k.vx=-fx*2+(Math.random()-.5)*2;k.vz=-fz*2+(Math.random()-.5)*2;k.vy=1+Math.random();k.t=1;}}}
-function koniec(){stan='meta';const t=czas+kara;const b=najlepszy();const rekord=!b||t<b;if(!window.PAUZA)wyslijPrzejazd(t);setTimeout(()=>{if(stan==='meta'&&!window.PAUZA)pokazRanking(t);},3000);   /* ranking po przejechaniu odcinka */
+function koniec(){stan='meta';const t=czas+kara;const b=najlepszy();const rekord=!b||t<b;if(!window.PAUZA)wyslijPrzejazd(t);if(rekord&&!window.PAUZA){dzwiekStartu('fanfary');konfetti();}   /* nowy rekord: fanfary + konfetti */setTimeout(()=>{if(stan==='meta'&&!window.PAUZA)pokazRanking(t);},3000);   /* ranking po przejechaniu odcinka */
   const km=document.getElementById('komunikat');km.style.display='block';
   km.innerHTML=`META!<br><span style="font-size:56px;color:#fff">${fmt(t)}</span><br><span style="font-size:22px;color:${rekord?'#3cff6a':'#fff'}">${rekord?'NOWY REKORD!':'NAJLEPSZY: '+fmt(b)}</span>${kara?`<br><span style="font-size:18px;color:#ff5a4a">W TYM KARA ZA SZYKANĘ: +${kara} S</span>`:""}<br><span style="font-size:18px;color:#ccc">KROPEK Z RAJDU: ${fmt(CZAS_RAJDU)} · R – JESZCZE RAZ</span>`;
   if(rekord){const c=[];let k=0;for(let i=START_I;i<=META_I;i+=20){while(k<czasyIdx.length&&czasyIdx[k][0]<i)k++;c.push(k<czasyIdx.length?czasyIdx[k][1]:t);}
@@ -1310,6 +1310,41 @@ document.fonts.ready.then(()=>setTimeout(()=>{dzwiekStart();if(DZW.ok&&!MUZ.stan
 /* przeglądarki nie pozwalają stronie zagrać dźwięku przed pierwszym kliknięciem / dotknięciem / klawiszem – gdy blokują, pokazujemy podpowiedź; znika, gdy dźwięk ruszy */
 const DZW_INFO=document.createElement('div');DZW_INFO.id='dzwInfo';DZW_INFO.innerHTML='<span class="emoji">🔇</span> KLIKNIJ LUB DOTKNIJ, ABY WŁĄCZYĆ DŹWIĘK';(document.getElementById('ekran')||document.body).appendChild(DZW_INFO);   /* w obszarze gry – skaluje się razem z nią (telefon) */
 function dzwInfo(){DZW_INFO.style.display=(DZW.ctx&&DZW.ctx.state!=='running')?'block':'none';}   /* silnik i muzyka wczytują się i dekodują od razu po starcie gry (w tle, po załadowaniu reszty) – po pierwszej interakcji grają natychmiast */
+// ===================== DŹWIĘK STARTU (styl arcade) =====================
+// syntezowany na żywo (0 KB): każda z 5 czerwonych lamp = krótkie niskie „pi” (D4), zielone = długie „PIII!” (D5 + kwinta, lekkie vibrato), falstart = chrapliwy buzzer.
+// Wywoływany tylko po stronie gry (zdarzenia startu) – fizyka i sprawdzanie powtórek bez zmian.
+const DST={fale:null};
+function dzwiekStartu(co){if(!DZW.ok||DZW.wycisz)return;const ctx=DZW.ctx,T0=ctx.currentTime+0.005;
+  if(!DST.fale){const fala=c=>{const re=new Float32Array(48),im=new Float32Array(48);for(let i=1;i<48;i++)im[i]=2*Math.sin(Math.PI*i*c)/(Math.PI*i);return ctx.createPeriodicWave(re,im);};DST.fale={50:fala(.5),25:fala(.25)};}
+  const ton=(f,dl,glos,duty,zan,vib,p=0)=>{const t0=T0+p;const o=ctx.createOscillator(),g=ctx.createGain();o.setPeriodicWave(DST.fale[duty]);o.frequency.value=f;
+    if(vib){const l=ctx.createOscillator(),lg=ctx.createGain();l.frequency.value=6;lg.gain.setValueAtTime(0,t0);lg.gain.linearRampToValueAtTime(f*vib,t0+0.15);l.connect(lg);lg.connect(o.frequency);l.start(t0);l.stop(t0+dl+0.05);}
+    g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(glos,t0+0.002);g.gain.setTargetAtTime(0,t0+0.002,1/zan);g.gain.setValueAtTime(glos*Math.exp(-zan*(dl-0.02)),t0+dl-0.02);g.gain.linearRampToValueAtTime(0,t0+dl);
+    o.connect(g);g.connect(DZW.master);o.start(t0);o.stop(t0+dl+0.02);};
+  if(co==='lampa')ton(293.66,0.17,0.3,50,6,0);
+  else if(co==='zielone'){ton(587.33,0.75,0.3,50,1.2,0.012);ton(880.99,0.75,0.11,25,1.2,0.012);}
+  else if(co==='falstart'){const t0=T0;const fl=ctx.createBiquadFilter();fl.type='lowpass';fl.frequency.value=2500;const g=ctx.createGain();g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(0.3,t0+0.005);g.gain.setValueAtTime(0.3,t0+0.49);g.gain.linearRampToValueAtTime(0,t0+0.55);fl.connect(g);g.connect(DZW.master);
+    [98,104].forEach(f=>{const o=ctx.createOscillator();o.type='square';o.frequency.value=f;const og=ctx.createGain();og.gain.value=0.5;o.connect(og);og.connect(fl);o.start(t0);o.stop(t0+0.57);});}
+  else if(co==='fanfary'){   /* nowy rekord: krótka fanfara D-dur w stylu konsoli (melodia + harmonia + bas), muzyka na chwilę się wycisza */
+    MUZ.ciszaDo=performance.now()+2300;
+    const D5=587.33,FIS5=739.99,A5=880,D6=1174.66,FIS4=369.99,A4=440,D3=146.83;
+    [[0,D5,.1],[.1,FIS5,.1],[.2,A5,.1],[.3,D6,.22],[.55,A5,.1]].forEach(([p,f,dl])=>ton(f,dl,0.26,50,4,0,p));
+    ton(A5,.22,.1,25,4,0,.3);ton(FIS5,.1,.1,25,4,0,.55);
+    ton(D6,1.05,.27,50,1.4,.012,.65);ton(A5,1.05,.11,25,1.4,.012,.65);ton(FIS5,1.05,.08,25,1.4,.012,.65);
+    ton(D3,.22,.16,50,3,0,.3);ton(D3*2,.1,.12,50,3,0,.55);ton(D3,1.05,.16,50,1.4,0,.65);}}
+// ===================== KONFETTI (nowy rekord) =====================
+// dwa „działka” z dolnych rogów + deszcz z góry, ok. 5 s, własna pętla rysowania – nie obciąża fizyki ani zapisu powtórki
+function konfetti(){const ek=document.getElementById('ekran');if(!ek)return;const c=document.createElement('canvas');c.width=1600;c.height=900;
+  c.style.cssText='position:absolute;left:0;top:0;width:1600px;height:900px;pointer-events:none;z-index:70';ek.appendChild(c);const g=c.getContext('2d');
+  const KOL=['#ffd21f','#e8302a','#ffffff','#29e04a','#3a7bff','#ff8a1f'],P=[],L=(a,b)=>a+Math.random()*(b-a);
+  for(let i=0;i<110;i++){const lewa=i%2===0;P.push({x:lewa?L(-20,60):L(1540,1620),y:L(880,940),vx:(lewa?1:-1)*L(180,620),vy:-L(650,1050),d:L(0,.25)});}
+  for(let i=0;i<120;i++)P.push({x:L(0,1600),y:L(-500,-20),vx:L(-40,40),vy:L(60,160),d:L(.3,1.4)});
+  P.forEach(p=>{p.k=KOL[(Math.random()*KOL.length)|0];p.w=L(9,15);p.h=L(14,22);p.r=L(0,6.3);p.vr=L(-9,9);p.f=L(0,6.3);});
+  let t0=performance.now(),tp=t0;
+  (function kl(){const now=performance.now(),dt=Math.min(0.05,(now-tp)/1000),T=(now-t0)/1000;tp=now;g.clearRect(0,0,1600,900);
+    g.globalAlpha=T>4?Math.max(0,1-(T-4)):1;
+    for(const p of P){if(T<p.d)continue;p.vy+=520*dt;p.vx*=1-1.6*dt;p.vy=Math.min(p.vy,220+60*Math.sin(p.f));p.f+=dt*5;p.x+=(p.vx+Math.sin(p.f)*40)*dt;p.y+=p.vy*dt;p.r+=p.vr*dt;
+      g.save();g.translate(p.x,p.y);g.rotate(p.r);g.scale(Math.cos(p.f*1.7),1);g.fillStyle=p.k;g.fillRect(-p.w/2,-p.h/2,p.w,p.h);g.restore();}
+    if(T<5)requestAnimationFrame(kl);else c.remove();})();}
 // ===================== MUZYKA MENU =====================
 // muzyka wczytywana od razu po starcie (dzwiekStart po załadowaniu gry); pełny „Neon Rally Loop” przycięty do 104 taktów (170,88 s, 146 BPM), Opus 16 kb/s w Ogg (~340 KB); starsze Safari bez Opusa dostają krótką pętlę 32 taktów w AAC (~220 KB) – nie spowalnia startu.
 // Gra w menu, rankingu i zasadach, cichnie przy starcie odcinka, wraca po mecie; klawisz M wycisza też muzykę.
@@ -1322,7 +1357,7 @@ async function muzykaWczytaj(){MUZ.stan='laduje';try{const ctx=DZW.ctx;
     const g=ctx.createGain();g.gain.value=0;src.connect(g);g.connect(DZW.master);src.start(0,src.loopStart);MUZ.src=src;MUZ.g=g;MUZ.cel=-1;MUZ.stan='gra';}
   catch(e){MUZ.stan='blad';}}
 function muzykaKrok(){if(!DZW.ok)return;if(!MUZ.stan){muzykaWczytaj();return;}if(!MUZ.g)return;
-  const cel=(stan==='odliczanie'||stan==='jazda'||DZW.wycisz)?0:MUZ.GLOS;   /* w trakcie odcinka cisza – słychać silnik */
+  const cel=(stan==='odliczanie'||stan==='jazda'||DZW.wycisz||performance.now()<(MUZ.ciszaDo||0))?0:MUZ.GLOS;   /* w trakcie odcinka cisza – słychać silnik */
   if(cel!==MUZ.cel){MUZ.cel=cel;MUZ.g.gain.setTargetAtTime(cel,DZW.ctx.currentTime,cel?0.7:0.3);}}
 
 // płomień z wydechu przy strzale (mała pomarańczowa plama za autem)
@@ -1338,7 +1373,7 @@ function dzwiekUderzenie(sila){if(!DZW.ok||DZW.wycisz||sila<1.2)return;const ctx
 // pętla: fizyka w stałym kroku 60 Hz, rysowanie co klatkę ekranu (max 60 kl./s)
 let ostT=performance.now(),akum=0,klatka=0,ostRys=0;const POP={x:0,z:0,y:0,h:0};
 // procedura startu (wywoływana co klatkę): czeka na ręczny → 5 czerwonych co 1 s → zielone po 6 s
-function startKrok(dt){doSIM();SIM.startKrok(WE);zSIM();}   // procedura startu w module fizyki (stały krok)
+function startKrok(dt){const n0=START.faza==='swiatla'?Math.floor(START.t):0;doSIM();SIM.startKrok(WE);zSIM();const n1=(START.faza==='swiatla'&&stan==='odliczanie')?Math.floor(START.t):0;if(n1>n0&&n1>=1&&n1<=5)dzwiekStartu('lampa');}   // procedura startu w module fizyki (stały krok)
 function petla(t){requestAnimationFrame(petla);if(window.PAUZA)return;   // PAUZA – zatrzymanie do zrzutów testowych
   if(t-ostRys<1000/78)return;   /* obraz w rytmie odświeżania ekranu (60 Hz = każda klatka, 120/144 Hz = co druga) – równe odstępy klatek, bez szarpania; fizyka 60 Hz w stałym kroku z interpolacją */const dt=Math.min(0.1,(t-ostRys)/1000);ostRys=t;
   silnikKrok(dt);muzykaKrok();rysujObrotomierz();plomienRysuj();
