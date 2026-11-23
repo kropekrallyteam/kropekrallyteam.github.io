@@ -137,10 +137,17 @@
   #dotyk #tP{left:270px;font-size:64px}
   #dotyk.start #tL,#dotyk.start #tP{display:none}   /* przed startem w tym miejscu jest RĘCZNY */
 #dzwInfo{display:none;position:absolute;top:22px;left:0;right:0;margin:0 auto;width:max-content;max-width:calc(100% - 40px);box-sizing:border-box;z-index:60;pointer-events:none;background:rgba(0,0,0,.78);color:#ffd21f;border:3px solid #ffd21f;padding:10px 22px;font:inherit;font-size:24px;letter-spacing:1px;text-align:center;animation:dzwPuls 1.6s ease-in-out infinite}@keyframes dzwPuls{50%{opacity:.55}}
+#okladka{position:absolute;inset:0;z-index:80;background:#0b0f2a url(okladka.webp) center/cover no-repeat;cursor:pointer;transition:opacity .35s}
+#okladka.znika{opacity:0}
+#okladka .napis{position:absolute;left:0;width:748px;top:520px;text-align:center;font-family:'Press Start 2P',monospace;font-size:38px;line-height:1.55;color:#ffd21f;letter-spacing:2px;
+  text-shadow:4px 0 0 #000,-4px 0 0 #000,0 4px 0 #000,0 -4px 0 #000,4px 4px 0 #000,-4px 4px 0 #000,4px -4px 0 #000,-4px -4px 0 #000,7px 7px 0 #b3121a;animation:oklMiga 1.1s steps(1) infinite}
+#okladka .dot{display:none}.dotykowy #okladka .dot{display:inline}.dotykowy #okladka .klaw{display:none}
+@keyframes oklMiga{50%{visibility:hidden}}
 </style>
 </head>
 <body>
 <div id="ekran">
+  <div id="okladka"><div class="napis"><span class="klaw">NACIŚNIJ<br>DOWOLNY<br>PRZYCISK</span><span class="dot">DOTKNIJ<br>EKRANU</span></div></div>
 <div class="hud" id="ps">PS1 BRZYSKA<small>JESIEN</small></div>
 <div class="hud" id="notka"></div>
 <div class="hud" id="czasL">CZAS</div>
@@ -1293,6 +1300,12 @@ function dzwiekStrzal(){if(!DZW.ok||DZW.wycisz)return;const ctx=DZW.ctx,t0=ctx.c
 setInterval(()=>{if(DZW.ok)dzwiekAktualizuj(SIL.gazPrzed);},40);   /* dźwięk niezależny od klatek obrazu (nie przerywa się przy spadkach płynności) */
 addEventListener('keydown',e=>{if(e.code==='KeyM'){DZW.wycisz=!DZW.wycisz;pokazKomunikat(DZW.wycisz?'DŹWIĘK WYŁĄCZONY':'DŹWIĘK WŁĄCZONY');}});
 ['keydown','touchstart','touchend','mousedown','click'].forEach(ev=>addEventListener(ev,()=>{dzwiekStart();},{passive:true,capture:true}));   /* przeglądarki pozwalają grać dopiero po pierwszym kliknięciu / dotknięciu / klawiszu; capture – działa też przy pisaniu nicku i klucza w oknie logowania */
+/* EKRAN TYTUŁOWY z okładką: „NACIŚNIJ DOWOLNY PRZYCISK” (na dotyku „DOTKNIJ EKRANU”). Pierwsze naciśnięcie tylko go zamyka (nie startuje gry, nie klika w menu)
+   i przy okazji odblokowuje dźwięk – muzyka gra od wejścia do menu. Zarejestrowane po nasłuchu dźwięku, więc dźwięk rusza, a reszta gry tego naciśnięcia nie widzi. */
+const OKLADKA=document.getElementById('okladka');
+function zamknijOkladke(e){if(!OKLADKA||OKLADKA.classList.contains('znika'))return;e.stopImmediatePropagation();if(e.cancelable&&e.type!=='touchstart')e.preventDefault();
+  OKLADKA.classList.add('znika');setTimeout(()=>{OKLADKA.style.display='none';},400);}
+['keydown','mousedown','touchstart','click'].forEach(ev=>addEventListener(ev,zamknijOkladke,{capture:true}));
 document.fonts.ready.then(()=>setTimeout(()=>{dzwiekStart();if(DZW.ok&&!MUZ.stan)muzykaWczytaj();if(DZW.ctx){DZW.ctx.onstatechange=dzwInfo;dzwInfo();}},400));
 /* przeglądarki nie pozwalają stronie zagrać dźwięku przed pierwszym kliknięciem / dotknięciem / klawiszem – gdy blokują, pokazujemy podpowiedź; znika, gdy dźwięk ruszy */
 const DZW_INFO=document.createElement('div');DZW_INFO.id='dzwInfo';DZW_INFO.innerHTML='<span class="emoji">🔇</span> KLIKNIJ LUB DOTKNIJ, ABY WŁĄCZYĆ DŹWIĘK';(document.getElementById('ekran')||document.body).appendChild(DZW_INFO);   /* w obszarze gry – skaluje się razem z nią (telefon) */
