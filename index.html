@@ -961,7 +961,7 @@ function rysujTabele(){const tab=document.getElementById('rTab'),akt=document.ge
   let h=W.slice(0,RANK.ile).map(wiersz).join('');
   if(moje>=RANK.ile)h+='<tr class="kropki"><td colspan="3">...</td></tr>'+wiersz(W[moje],moje);
   tab.innerHTML=h;
-  if(moje===0&&!RANK.konf){RANK.konf=true;konfetti();}   /* jesteś na 1. miejscu – konfetti przy każdym otwarciu rankingu */
+  if(moje>=0&&moje<3&&!RANK.konf){RANK.konf=true;konfetti();}   /* jesteś w TOP 3 – konfetti i stroboskopy przy każdym otwarciu rankingu */
   if(RANK.akt){const t=new Date(RANK.akt);if(!isNaN(t))akt.textContent='RANKING AKTUALIZOWANY AUTOMATYCZNIE · OSTATNIO: '+t.toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}}
 function zamknijRanking(){RANK.el.style.display='none';pokazMenu();}
 // najlepszy czas gracza: z pliku rankingu (uznany przez pośrednika), a tuż po mecie – z odpowiedzi pośrednika, jeśli właśnie poprawił rekord; nie z pamięci przeglądarki
