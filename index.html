@@ -944,7 +944,7 @@ function pokazMenu(){stan='menu';document.getElementById('menu').style.display='
 const RANK={el:document.getElementById('ranking'),plik:'wyniki/brzyska_2026.json',ile:10};
 function rankingOtwarty(){return RANK.el.style.display==='block';}
 function htmlTekst(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-async function pokazRanking(mojCzas){RANK.poMecie=mojCzas!=null;RANK.zaladowany=false;RANK.W=null;RANK.akt=null;odswiezWysylke();document.getElementById('menu').style.display='none';document.getElementById('komunikat').style.display='none';RANK.el.style.display='block';
+async function pokazRanking(mojCzas){RANK.poMecie=mojCzas!=null;RANK.konf=false;RANK.zaladowany=false;RANK.W=null;RANK.akt=null;odswiezWysylke();document.getElementById('menu').style.display='none';document.getElementById('komunikat').style.display='none';RANK.el.style.display='block';
   document.getElementById('rTab').innerHTML='<tr><td colspan="3" style="color:#888;border:none">WCZYTUJĘ...</td></tr>';document.getElementById('rAkt').textContent='';
   RANK.mojCzas=mojCzas;RANK.najlPlik=null;odswiezInfo();
   let d=null;try{const o=await fetch(RANK.plik+'?t='+Date.now(),{cache:'no-store'});if(o.ok)d=await o.json();}catch(e){}
@@ -961,6 +961,7 @@ function rysujTabele(){const tab=document.getElementById('rTab'),akt=document.ge
   let h=W.slice(0,RANK.ile).map(wiersz).join('');
   if(moje>=RANK.ile)h+='<tr class="kropki"><td colspan="3">...</td></tr>'+wiersz(W[moje],moje);
   tab.innerHTML=h;
+  if(moje===0&&!RANK.konf){RANK.konf=true;konfetti();}   /* jesteś na 1. miejscu – konfetti przy każdym otwarciu rankingu */
   if(RANK.akt){const t=new Date(RANK.akt);if(!isNaN(t))akt.textContent='RANKING AKTUALIZOWANY AUTOMATYCZNIE · OSTATNIO: '+t.toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}}
 function zamknijRanking(){RANK.el.style.display='none';pokazMenu();}
 // najlepszy czas gracza: z pliku rankingu (uznany przez pośrednika), a tuż po mecie – z odpowiedzi pośrednika, jeśli właśnie poprawił rekord; nie z pamięci przeglądarki
@@ -1333,7 +1334,7 @@ function dzwiekStartu(co){if(!DZW.ok||DZW.wycisz)return;const ctx=DZW.ctx,T0=ctx
     ton(D3,.22,.16,50,3,0,.3);ton(D3*2,.1,.12,50,3,0,.55);ton(D3,1.05,.16,50,1.4,0,.65);}}
 // ===================== KONFETTI (nowy rekord) =====================
 // dwa „działka” z dolnych rogów + deszcz z góry, ok. 5 s, własna pętla rysowania – nie obciąża fizyki ani zapisu powtórki
-function konfetti(){const ek=document.getElementById('ekran');if(!ek)return;const c=document.createElement('canvas');c.width=1600;c.height=900;
+function konfetti(){const ek=document.getElementById('ekran');if(!ek||ek.querySelector('canvas.konfetti'))return;const c=document.createElement('canvas');c.className='konfetti';c.width=1600;c.height=900;
   c.style.cssText='position:absolute;left:0;top:0;width:1600px;height:900px;pointer-events:none;z-index:70';ek.appendChild(c);const g=c.getContext('2d');
   const KOL=['#ffd21f','#e8302a','#ffffff','#29e04a','#3a7bff','#ff8a1f'],P=[],L=(a,b)=>a+Math.random()*(b-a);
   for(let i=0;i<110;i++){const lewa=i%2===0;P.push({x:lewa?L(-20,60):L(1540,1620),y:L(880,940),vx:(lewa?1:-1)*L(180,620),vy:-L(650,1050),d:L(0,.25)});}
