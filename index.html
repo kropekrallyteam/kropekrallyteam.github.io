@@ -136,6 +136,7 @@
   #dotyk #tL{left:40px;font-size:64px}
   #dotyk #tP{left:270px;font-size:64px}
   #dotyk.start #tL,#dotyk.start #tP{display:none}   /* przed startem w tym miejscu jest RĘCZNY */
+#dzwInfo{display:none;position:absolute;top:22px;left:0;right:0;margin:0 auto;width:max-content;max-width:calc(100% - 40px);box-sizing:border-box;z-index:60;pointer-events:none;background:rgba(0,0,0,.78);color:#ffd21f;border:3px solid #ffd21f;padding:10px 22px;font:inherit;font-size:24px;letter-spacing:1px;text-align:center;animation:dzwPuls 1.6s ease-in-out infinite}@keyframes dzwPuls{50%{opacity:.55}}
 </style>
 </head>
 <body>
@@ -1292,11 +1293,14 @@ function dzwiekStrzal(){if(!DZW.ok||DZW.wycisz)return;const ctx=DZW.ctx,t0=ctx.c
 setInterval(()=>{if(DZW.ok)dzwiekAktualizuj(SIL.gazPrzed);},40);   /* dźwięk niezależny od klatek obrazu (nie przerywa się przy spadkach płynności) */
 addEventListener('keydown',e=>{if(e.code==='KeyM'){DZW.wycisz=!DZW.wycisz;pokazKomunikat(DZW.wycisz?'DŹWIĘK WYŁĄCZONY':'DŹWIĘK WŁĄCZONY');}});
 ['keydown','touchstart','touchend','mousedown','click'].forEach(ev=>addEventListener(ev,()=>{dzwiekStart();},{passive:true,capture:true}));   /* przeglądarki pozwalają grać dopiero po pierwszym kliknięciu / dotknięciu / klawiszu; capture – działa też przy pisaniu nicku i klucza w oknie logowania */
-document.fonts.ready.then(()=>setTimeout(()=>{dzwiekStart();if(DZW.ok&&!MUZ.stan)muzykaWczytaj();},400));   /* silnik i muzyka wczytują się i dekodują od razu po starcie gry (w tle, po załadowaniu reszty) – po pierwszej interakcji grają natychmiast */
+document.fonts.ready.then(()=>setTimeout(()=>{dzwiekStart();if(DZW.ok&&!MUZ.stan)muzykaWczytaj();if(DZW.ctx){DZW.ctx.onstatechange=dzwInfo;dzwInfo();}},400));
+/* przeglądarki nie pozwalają stronie zagrać dźwięku przed pierwszym kliknięciem / dotknięciem / klawiszem – gdy blokują, pokazujemy podpowiedź; znika, gdy dźwięk ruszy */
+const DZW_INFO=document.createElement('div');DZW_INFO.id='dzwInfo';DZW_INFO.innerHTML='<span class="emoji">🔇</span> KLIKNIJ LUB DOTKNIJ, ABY WŁĄCZYĆ DŹWIĘK';(document.getElementById('ekran')||document.body).appendChild(DZW_INFO);   /* w obszarze gry – skaluje się razem z nią (telefon) */
+function dzwInfo(){DZW_INFO.style.display=(DZW.ctx&&DZW.ctx.state!=='running')?'block':'none';}   /* silnik i muzyka wczytują się i dekodują od razu po starcie gry (w tle, po załadowaniu reszty) – po pierwszej interakcji grają natychmiast */
 // ===================== MUZYKA MENU =====================
 // muzyka wczytywana od razu po starcie (dzwiekStart po załadowaniu gry); pełny „Neon Rally Loop” przycięty do 104 taktów (170,88 s, 146 BPM), Opus 16 kb/s w Ogg (~340 KB); starsze Safari bez Opusa dostają krótką pętlę 32 taktów w AAC (~220 KB) – nie spowalnia startu.
 // Gra w menu, rankingu i zasadach, cichnie przy starcie odcinka, wraca po mecie; klawisz M wycisza też muzykę.
-const MUZ={stan:'',src:null,g:null,cel:-1,GLOS:0.38};
+const MUZ={stan:'',src:null,g:null,cel:-1,GLOS:0.8};   /* głośność muzyki (×0,7 głośności ogólnej); wcześniej 0,38 */
 async function muzykaWczytaj(){MUZ.stan='laduje';try{const ctx=DZW.ctx;
     const opus=new Audio().canPlayType('audio/ogg; codecs="opus"'),url=opus?'dzwieki/muzyka_menu.ogg':'dzwieki/muzyka_menu.m4a',DL=opus?8202455/48000:2523955/48000;
     const ab=await (await fetch(url)).arrayBuffer();const buf=await new Promise((ok,bl)=>ctx.decodeAudioData(ab,ok,bl));
