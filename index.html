@@ -1291,7 +1291,22 @@ function dzwiekStrzal(){if(!DZW.ok||DZW.wycisz)return;const ctx=DZW.ctx,t0=ctx.c
   const o=ctx.createOscillator();o.type='triangle';o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(48,t+0.07);const go=ctx.createGain();go.gain.setValueAtTime(1.4*moc,t);go.gain.exponentialRampToValueAtTime(0.0001,t+0.09);o.connect(go);go.connect(DZW.master);o.start(t);o.stop(t+0.11);}}
 setInterval(()=>{if(DZW.ok)dzwiekAktualizuj(SIL.gazPrzed);},40);   /* dźwięk niezależny od klatek obrazu (nie przerywa się przy spadkach płynności) */
 addEventListener('keydown',e=>{if(e.code==='KeyM'){DZW.wycisz=!DZW.wycisz;pokazKomunikat(DZW.wycisz?'DŹWIĘK WYŁĄCZONY':'DŹWIĘK WŁĄCZONY');}});
-['keydown','touchstart','mousedown'].forEach(ev=>addEventListener(ev,()=>{if(stan!=='menu'||ev!=='keydown')dzwiekStart();},{passive:true}));
+['keydown','touchstart','touchend','mousedown','click'].forEach(ev=>addEventListener(ev,()=>{dzwiekStart();},{passive:true,capture:true}));   /* przeglądarki pozwalają grać dopiero po pierwszym kliknięciu / dotknięciu / klawiszu; capture – działa też przy pisaniu nicku i klucza w oknie logowania */
+document.fonts.ready.then(()=>setTimeout(()=>{dzwiekStart();if(DZW.ok&&!MUZ.stan)muzykaWczytaj();},400));   /* silnik i muzyka wczytują się i dekodują od razu po starcie gry (w tle, po załadowaniu reszty) – po pierwszej interakcji grają natychmiast */
+// ===================== MUZYKA MENU =====================
+// muzyka wczytywana od razu po starcie (dzwiekStart po załadowaniu gry); pełny „Neon Rally Loop” przycięty do 104 taktów (170,88 s, 146 BPM), Opus 16 kb/s w Ogg (~340 KB); starsze Safari bez Opusa dostają krótką pętlę 32 taktów w AAC (~220 KB) – nie spowalnia startu.
+// Gra w menu, rankingu i zasadach, cichnie przy starcie odcinka, wraca po mecie; klawisz M wycisza też muzykę.
+const MUZ={stan:'',src:null,g:null,cel:-1,GLOS:0.38};
+async function muzykaWczytaj(){MUZ.stan='laduje';try{const ctx=DZW.ctx;
+    const opus=new Audio().canPlayType('audio/ogg; codecs="opus"'),url=opus?'dzwieki/muzyka_menu.ogg':'dzwieki/muzyka_menu.m4a',DL=opus?8202455/48000:2523955/48000;
+    const ab=await (await fetch(url)).arrayBuffer();const buf=await new Promise((ok,bl)=>ctx.decodeAudioData(ab,ok,bl));
+    const d=buf.getChannelData(0);let lead=0;while(lead<d.length&&lead<buf.sampleRate*0.2&&Math.abs(d[lead])<1e-4)lead++;   /* dopełnienie dekodera MP3 na początku – pomijane, pętla bez przerwy */
+    const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;src.loopStart=lead/buf.sampleRate;src.loopEnd=Math.min(buf.duration,src.loopStart+DL);
+    const g=ctx.createGain();g.gain.value=0;src.connect(g);g.connect(DZW.master);src.start(0,src.loopStart);MUZ.src=src;MUZ.g=g;MUZ.cel=-1;MUZ.stan='gra';}
+  catch(e){MUZ.stan='blad';}}
+function muzykaKrok(){if(!DZW.ok)return;if(!MUZ.stan){muzykaWczytaj();return;}if(!MUZ.g)return;
+  const cel=(stan==='odliczanie'||stan==='jazda'||DZW.wycisz)?0:MUZ.GLOS;   /* w trakcie odcinka cisza – słychać silnik */
+  if(cel!==MUZ.cel){MUZ.cel=cel;MUZ.g.gain.setTargetAtTime(cel,DZW.ctx.currentTime,cel?0.7:0.3);}}
 
 // płomień z wydechu przy strzale (mała pomarańczowa plama za autem)
 const PLOMIEN=new THREE.Mesh(new THREE.SphereGeometry(.22,6,4),new THREE.MeshBasicMaterial({color:0xffa21c}));PLOMIEN.visible=false;scene.add(PLOMIEN);
@@ -1309,7 +1324,7 @@ let ostT=performance.now(),akum=0,klatka=0,ostRys=0;const POP={x:0,z:0,y:0,h:0};
 function startKrok(dt){doSIM();SIM.startKrok(WE);zSIM();}   // procedura startu w module fizyki (stały krok)
 function petla(t){requestAnimationFrame(petla);if(window.PAUZA)return;   // PAUZA – zatrzymanie do zrzutów testowych
   if(t-ostRys<1000/78)return;   /* obraz w rytmie odświeżania ekranu (60 Hz = każda klatka, 120/144 Hz = co druga) – równe odstępy klatek, bez szarpania; fizyka 60 Hz w stałym kroku z interpolacją */const dt=Math.min(0.1,(t-ostRys)/1000);ostRys=t;
-  silnikKrok(dt);rysujObrotomierz();plomienRysuj();
+  silnikKrok(dt);muzykaKrok();rysujObrotomierz();plomienRysuj();
   if(stan!=='menu'){akum+=dt;while(akum>=DT){POP.x=A.x;POP.z=A.z;POP.y=A.y;POP.h=A.h;if(stan==='odliczanie'||stan==='jazda'){WE=wejscie();zapiszWE();}startKrok(DT);krok();akum-=DT;if(stan==='jazda'&&(czasyIdx.length===0||czasyIdx[czasyIdx.length-1][0]<A.idx))czasyIdx.push([A.idx,czas+kara]);}}
   // auto
   {const u=Math.min(1,akum/DT);let dh=A.h-POP.h;if(dh>Math.PI)dh-=2*Math.PI;if(dh<-Math.PI)dh+=2*Math.PI;   /* płynny ruch auta między krokami fizyki (60 Hz) przy 40 kl./s */
