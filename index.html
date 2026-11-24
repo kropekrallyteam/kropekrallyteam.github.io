@@ -1177,12 +1177,11 @@ function hud(klatka){
   const tc=A.idx/N;
   el.pasek[1].style.left=(Math.max(0,Math.min(1,(A.idx-START_I)/(META_I-START_I)))*506)+'px';
   if(klatka%4===0){
-    const doMostu=(IB-A.idx)*DS,doSzyk=(CH_I-A.idx)*DS-SZ_ODST*DS;let h='';
+    const NOTKA_POZ='translate(800px,100px) translate(-50%,-50%)';const doMostu=(IB-A.idx)*DS,doSzyk=(CH_I-A.idx)*DS-SZ_ODST*DS;let h='';
     if(doMostu>3&&doMostu<110)h=HOPA;else if(doSzyk>-5&&doSzyk<110)h=SZYK;else{const zz=zakretyPrzed(A.idx);if(zz[0])h=piktogram(zz[0].z,132);if(zz[1])h+=piktogram(zz[1].z,72);}
     if(stan==='odliczanie')h='';   // w czasie odliczania tylko lampy
     if(HUDP.rozgrzewka>0)HUDP.rozgrzewka--;else if(h!==ostNotka){if(ostNotka===null){el.notka.style.flexWrap='';el.notka.style.width='';el.notka.style.opacity='';}el.notka.innerHTML=h;ostNotka=h;}
-    camera.updateMatrixWorld();const tg=curve.getTangentAt(tc,HUDP.t);const p=HUDP.p.set(A.x,A.y,A.z).add(HUDP.q.set(tg.x*7.5,0,tg.z*7.5)).project(camera);
-    el.notka.style.transform=`translate(${((p.x+1)/2*1600+190).toFixed(1)}px,${Math.max(120,Math.min(700,(1-p.y)/2*900)).toFixed(1)}px) translate(-50%,-50%)`;}   /* przesunięcie warstwy zamiast left/top – bez przeliczania układu strony */
+    if(el.notka.style.transform!==NOTKA_POZ)el.notka.style.transform=NOTKA_POZ;}   /* strzałki zakrętów, hopa i szykana zawsze w jednym miejscu: środek u góry ekranu */
   // światła startowe
   // 5 lamp od lewej zapala się na czerwono co sekundę, start = wszystkie zielone
   const sw=el.sw.children;
