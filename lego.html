@@ -51,6 +51,9 @@
   v.play().catch(()=>{});   /* wyciszony film może ruszyć sam */
   /* otwarte z gry: przycisk wraca do karty z grą i zamyka tę kartę (bez drugiej kopii gry); otwarte z linku (np. Facebook): zwykłe przejście do gry */
   const g=document.getElementById('doGry');let gra=null;try{if(window.opener&&!window.opener.closed&&window.opener.location.host===location.host)gra=window.opener;}catch(e){}
-  if(gra){g.textContent='WRÓĆ DO GRY ✕';g.addEventListener('click',e=>{e.preventDefault();try{gra.focus();}catch(x){}window.close();setTimeout(()=>{location.href='./';},300);});}
+  const wroc=(okno)=>{g.textContent='WRÓĆ DO GRY ✕';g.addEventListener('click',e=>{e.preventDefault();try{if(okno)okno.focus();}catch(x){}window.close();setTimeout(()=>{g.textContent='GRA JEST OTWARTA W INNEJ KARCIE';g.style.fontSize='12px';},300);});};
+  if(gra)wroc(gra);
+  /* wejście np. z regulaminu (bez okna gry): gdy gra działa w innej karcie, też przycisk powrotu zamiast drugiej kopii gry */
+  else if('BroadcastChannel' in window){const k=new BroadcastChannel('krt_gra');let jest=false;k.onmessage=e=>{if(!jest&&e.data&&e.data.t==='jestem'){jest=true;wroc(null);}};k.postMessage({t:'kto',id:'film'});}
 </script>
 </body></html>
