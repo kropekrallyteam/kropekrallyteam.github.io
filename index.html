@@ -200,9 +200,16 @@
 #rTab.zaw6{width:1160px;font-size:19px}#rTab.zaw6 td.m{width:60px}#rTab.zaw6 td.ps{width:150px;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums;font-size:16px;color:#ddd}
 #rTab.zaw6 td.c{width:230px;white-space:nowrap}#rTab.zaw6 tr.nag td{font-size:12px;color:#888;border-bottom:3px solid #3a3a5c;padding-top:2px;padding-bottom:6px}
 #rTab.zaw6 td.ps.dnf,#rTab.zaw6 tr.p1 td.ps.dnf{color:#ff3b30}#rTab.zaw6 .kr{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff3b30;margin-left:7px;vertical-align:middle}#rTab.zaw6 tr.leg td{border:none;text-align:left;color:#ff3b30;font-size:14px;padding-top:12px}#rTab.zaw6 tr.leg .kr{width:12px;height:12px;margin:0 8px 0 0}#rTab.zaw6 td.n{white-space:nowrap}#rTab.zaw6 td.ps small{margin-top:2px}#rTab.zaw6 tr.p1 td.ps{color:#ffe98a}#rTab.zaw6 tr.dsq td{color:#ff5a4a}
+/* telefon trzymany pionowo: gra jest pozioma – prośba o obrót (znika sama po obróceniu albo po dotknięciu) */
+#obroc{display:none;position:fixed;inset:0;z-index:999;background:#0b0f2a;color:#fff;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:'Press Start 2P',monospace;padding:24px;box-sizing:border-box}
+#obroc .tel{width:56px;height:96px;border:6px solid #ffd21f;border-radius:10px;margin-bottom:34px;animation:obrocTel 2s ease-in-out infinite}
+#obroc b{font-size:18px;line-height:1.7;color:#ffd21f;font-weight:normal}#obroc small{font-size:10px;line-height:1.8;color:#aaa;margin-top:22px}
+@keyframes obrocTel{0%,20%{transform:rotate(0)}50%,80%{transform:rotate(-90deg)}100%{transform:rotate(0)}}
+@media (orientation:portrait) and (pointer:coarse){#obroc:not(.zamkniete){display:flex}}
 </style>
 </head>
 <body>
+<div id="obroc" onclick="this.classList.add('zamkniete')"><div class="tel"></div><b>OBRÓĆ TELEFON<br>POZIOMO</b><small>GRA JEST POZIOMA – TAK ZOBACZYSZ<br>CAŁĄ TRASĘ I PRZYCISKI<br><br>(DOTKNIJ, ŻEBY ZAMKNĄĆ)</small></div>
 <div id="ekran">
   <div id="okladka"><div class="napis"><span class="klaw">NACIŚNIJ<br>DOWOLNY<br>PRZYCISK</span><span class="dot">DOTKNIJ<br>EKRANU</span></div><div class="ladNapis">ŁADOWANIE<br>KOLEJNEJ<br>TRASY…</div></div>
   <script>/* od razu: ekran dopasowany do okna (zanim wczyta się trasa), a po zmianie odcinka bez okładki – bez przesuniętego obrazu przy ładowaniu */
@@ -1236,17 +1243,18 @@ const odcGodz=t=>odcData(t)+' '+new Date(t).toLocaleTimeString('pl-PL',{hour:'2-
 const kartaZawodow=()=>TRASY[ODC].tryb==='zawody';
 const zawKoniec=t=>t.do&&Date.now()>Date.parse(t.do);
 async function zawodyOdswiez(){if(!kartaZawodow()||!POSREDNIK_URL||!GRACZ.kod)return;ZAW.laduje=true;
-  try{const o=await posrednik({akcja:'zawody_stan',kod:GRACZ.kod});if(o&&o.ok)ZAW.stan=o;}catch(e){}ZAW.laduje=false;pokazOdcinek();}
+  try{const o=await posrednik({akcja:'zawody_stan',kod:GRACZ.kod});if(o&&o.ok){ZAW.stan=o;try{localStorage.setItem('krt_zaw_zgl',o.zarejestrowany?GRACZ.kod:'');}catch(e){}}}catch(e){}ZAW.laduje=false;ZAW.sprawdzone=true;pokazOdcinek();}   /* zapamiętane zgłoszenie – link EDYTUJ od razu, bez czekania na serwer */
 function zawodyKarta(t){const inf=document.getElementById('zawInfo'),sb=document.getElementById('startBtn'),rb=document.getElementById('rankingBtn');inf.innerHTML='';
   if(PODGLAD&&t.tryb!=='ea'){inf.innerHTML='<span class="blad">PODGLĄD TESTOWY – JAZDA BEZ LIMITU, WYNIKI NIE SĄ WYSYŁANE</span>';return;}
   if(t.tryb!=='zawody')return;const st=ZAW.stan,op=document.getElementById('odcOpis');
-  const regLink=st&&st.poza?' · ORGANIZATOR – POZA KONKURSEM':' · <span class="link" id="zRejLink">'+(st&&st.zarejestrowany?'EDYTUJ ZGŁOSZENIE':'ZAREJESTRUJ SIĘ')+'</span>';
+  let zglZapam=false;try{zglZapam=!!GRACZ.kod&&localStorage.getItem('krt_zaw_zgl')===GRACZ.kod;}catch(e){}
+  const regLink=st&&st.poza?' · ORGANIZATOR – POZA KONKURSEM':!st&&!zglZapam&&(ZAW.laduje||!ZAW.sprawdzone)?' · <span style="color:#888">SPRAWDZAM ZGŁOSZENIE…</span>':' · <span class="link" id="zRejLink">'+((st?st.zarejestrowany:zglZapam)?'EDYTUJ ZGŁOSZENIE':'ZAREJESTRUJ SIĘ')+'</span>';
   const info='START W ZAWODACH OZNACZA AKCEPTACJĘ <a href="regulamin_brzyska_2026.pdf" target="_blank" rel="noopener">REGULAMINU</a> I ZASAD RODO'+(GRACZ.nick?regLink:'');
   if(zawKoniec(t)){sb.textContent='ZAWODY ZAKOŃCZONE';sb.classList.add('nieaktywny');rb.classList.remove('nieaktywny');op.textContent=t.opis+' · WYNIKI';return;}
   inf.innerHTML=(ZAW.blad?'<span class="blad">'+ZAW.blad+'</span><br>':'')+info;
   const zl=document.getElementById('zRejLink');if(zl)zl.onclick=otworzZawOkno;
   /* zapoznanie jest teraz głównym przyciskiem (przed PS1) */
-  if(przedStartem(t)){op.textContent=t.opis+' · START '+odcGodz(t.od);if(t===TRASA&&GRACZ.nick&&st&&!st.zarejestrowany&&!st.poza){sb.textContent='ZAREJESTRUJ SIĘ';return;}sb.textContent='START '+odcGodz(t.od);sb.classList.add('nieaktywny');return;}
+  if(przedStartem(t)){op.textContent=t.opis+' · START '+odcGodz(t.od);if(t===TRASA&&GRACZ.nick&&!st&&!zglZapam&&(ZAW.laduje||!ZAW.sprawdzone)){sb.textContent='SPRAWDZAM…';sb.classList.add('nieaktywny');return;}if(t===TRASA&&GRACZ.nick&&st&&!st.zarejestrowany&&!st.poza){sb.textContent='ZAREJESTRUJ SIĘ';return;}sb.textContent='START '+odcGodz(t.od);sb.classList.add('nieaktywny');return;}
   if(t.wkrotce||!GRACZ.nick||t!==TRASA)return;
   if(!st){sb.textContent=ZAW.laduje?'SPRAWDZAM…':'START (ENTER)';return;}
   if(!st.zarejestrowany){sb.textContent='ZAREJESTRUJ SIĘ';return;}
@@ -1653,7 +1661,7 @@ addEventListener('keydown',e=>{if(e.code==='KeyM'){DZW.wycisz=!DZW.wycisz;pokazK
 /* EKRAN TYTUŁOWY z okładką: „NACIŚNIJ DOWOLNY PRZYCISK” (na dotyku „DOTKNIJ EKRANU”). Pierwsze naciśnięcie tylko go zamyka (nie startuje gry, nie klika w menu)
    i przy okazji odblokowuje dźwięk – muzyka gra od wejścia do menu. Zarejestrowane po nasłuchu dźwięku, więc dźwięk rusza, a reszta gry tego naciśnięcia nie widzi. */
 const OKLADKA=document.getElementById('okladka');try{if(sessionStorage.getItem('krt_bez_okladki')){sessionStorage.removeItem('krt_bez_okladki');OKLADKA.classList.add('znika');setTimeout(()=>{OKLADKA.style.display='none';OKLADKA.classList.remove('laduje');},400);}}catch(e){}   /* po zmianie odcinka bez ekranu tytułowego */
-function zamknijOkladke(e){if(!OKLADKA||OKLADKA.classList.contains('znika')||OKLADKA.classList.contains('laduje'))return;e.stopImmediatePropagation();if(e.cancelable&&e.type!=='touchstart')e.preventDefault();
+function zamknijOkladke(e){if(e.target&&e.target.closest&&e.target.closest('#obroc'))return;if(!OKLADKA||OKLADKA.classList.contains('znika')||OKLADKA.classList.contains('laduje'))return;e.stopImmediatePropagation();if(e.cancelable&&e.type!=='touchstart')e.preventDefault();
   OKLADKA.classList.add('znika');setTimeout(()=>{OKLADKA.style.display='none';},400);}
 ['keydown','mousedown','touchstart','click'].forEach(ev=>addEventListener(ev,zamknijOkladke,{capture:true}));
 document.fonts.ready.then(()=>setTimeout(()=>{dzwiekStart();if(DZW.ok&&!MUZ.stan)muzykaWczytaj();if(DZW.ctx){DZW.ctx.onstatechange=dzwInfo;dzwInfo();}},400));
