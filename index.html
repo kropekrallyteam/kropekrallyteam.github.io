@@ -141,7 +141,7 @@
   #dotyk.start #tL,#dotyk.start #tP{display:none}   /* przed startem w tym miejscu jest RĘCZNY */
 #dzwInfo{display:none;position:absolute;top:22px;left:0;right:0;margin:0 auto;width:max-content;max-width:calc(100% - 40px);box-sizing:border-box;z-index:60;pointer-events:none;background:rgba(0,0,0,.78);color:#ffd21f;border:3px solid #ffd21f;padding:10px 22px;font:inherit;font-size:24px;letter-spacing:1px;text-align:center;animation:dzwPuls 1.6s ease-in-out infinite}@keyframes dzwPuls{50%{opacity:.55}}
 #okladka{position:absolute;inset:0;z-index:80;background:#0b0f2a url(okladka.webp) center/cover no-repeat;cursor:pointer;transition:opacity .35s}
-#okladka.znika{opacity:0}
+#okladka.znika{opacity:0}#okladka.laduje{cursor:default}#okladka.laduje .napis{display:none}   /* przeładowanie przy zmianie rajdu: sama grafika, bez „naciśnij przycisk” */
 #okladka .napis{position:absolute;left:0;width:748px;top:520px;text-align:center;font-family:'Press Start 2P',monospace;font-size:38px;line-height:1.55;color:#ffd21f;letter-spacing:2px;
   text-shadow:4px 0 0 #000,-4px 0 0 #000,0 4px 0 #000,0 -4px 0 #000,4px 4px 0 #000,-4px 4px 0 #000,4px -4px 0 #000,-4px -4px 0 #000,7px 7px 0 #b3121a;animation:oklMiga 1.1s steps(1) infinite}
 #okladka .dot{display:none}.dotykowy #okladka .dot{display:inline}.dotykowy #okladka .klaw{display:none}
@@ -149,7 +149,7 @@
 #menu .odcStrz{position:absolute;top:330px;width:92px;height:150px;line-height:150px;font-size:58px;color:#ffd21f;background:#101018;border:6px solid #ffd21f;box-shadow:6px 6px 0 #000;cursor:pointer;user-select:none}
 #odcL{left:36px}#odcP{right:36px}#menu .odcStrz:hover{background:#ffd21f;color:#101018}
 #odcTryb{display:inline-block;font-size:16px;padding:6px 12px;margin-right:16px;border:4px solid #101018;vertical-align:3px;color:#fff;box-shadow:4px 4px 0 #000}
-#menu h2{position:relative}#odcNagroda{position:absolute;left:0;right:0;top:100%;margin-top:14px;font-size:15px;color:#ffd21f;text-shadow:3px 3px 0 #000}
+#menu h2{position:relative}#odcNagroda a{color:#ffd21f;text-decoration:underline;text-underline-offset:4px}#odcNagroda a:hover{color:#fff}#odcNagroda{position:absolute;left:0;right:0;top:100%;margin-top:14px;font-size:15px;color:#ffd21f;text-shadow:3px 3px 0 #000}
 #odcTryb.ea{background:#3a7bff}#odcTryb.zawody{background:#e8302a}#odcTryb.ta{background:#1f9a46}
 #menu .start.nieaktywny{opacity:.45;cursor:default;pointer-events:none}
 #zawOkno,#pauza{position:absolute;left:0;top:0;width:1600px;height:900px;background:rgba(5,5,12,.88);display:none;z-index:7;text-align:center;color:#fff}
@@ -192,7 +192,7 @@
   <div id="okladka"><div class="napis"><span class="klaw">NACIŚNIJ<br>DOWOLNY<br>PRZYCISK</span><span class="dot">DOTKNIJ<br>EKRANU</span></div></div>
   <script>/* od razu: ekran dopasowany do okna (zanim wczyta się trasa), a po zmianie odcinka bez okładki – bez przesuniętego obrazu przy ładowaniu */
   (function(){var e=document.getElementById('ekran'),s=Math.min(innerWidth/1600,innerHeight/900);e.style.transformOrigin='50% 50%';e.style.transform='translate(-50%,-50%) scale('+s+')';
-  try{if(sessionStorage.getItem('krt_bez_okladki'))document.getElementById('okladka').style.display='none';}catch(x){}})();</script>
+  try{if(sessionStorage.getItem('krt_bez_okladki'))document.getElementById('okladka').classList.add('laduje');}catch(x){}})();</script>
 <div class="hud" id="ps">PS1 BRZYSKA<small>JESIEN</small></div>
 <div class="hud" id="notka"></div>
 <div class="hud" id="czasL">CZAS</div>
@@ -226,7 +226,7 @@
 <div id="menu">
   <h1>Kropek Rally Team<br>Time Attack <span class="flaga">🏁</span></h1>
   <h2><span id="odcTryb"></span><span id="odcOpis">PS1 · ODCINEK TESTOWY · BRZYSKA</span><span id="odcNagroda"></span></h2>
-  <div class="odcStrz" id="odcL" title="POPRZEDNI ODCINEK">◀</div><div class="odcStrz" id="odcP" title="NASTĘPNY ODCINEK">▶</div>
+  <div class="odcStrz" id="odcL" title="POPRZEDNI ODCINEK" style="display:none">◀</div><div class="odcStrz" id="odcP" title="NASTĘPNY ODCINEK" style="display:none">▶</div>
   <div class="auta">
     <div class="auto wyb" data-auto="janusz"><b>KROPEK JANUSZA</b><span>Smoła / Prokop<br>KGR 11761 · IRBUD</span></div>
     <div class="auto" data-auto="andrzej"><b>KROPEK ANDRZEJA</b><span>Wieczorek / Duda<br>SH 5583F · BUDMAX METAL</span></div>
@@ -251,7 +251,7 @@ const STYL_ZAW={prostych:0.10,szer:[0.8,0.5],separatory:[[895,1],[1068,1],[1170,
 const TRASY=[
   {id:'brzyska_2026_v1',tryb:'ea',nazwa:'PS1 BRZYSKA',pora:'JESIEN',opis:'PS1 · ODCINEK TESTOWY · BRZYSKA',rankTytul:'PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY',
    pliki:['makieta/trasa_ps1.js','makieta/trasa_brzyska_2026_fizyka.js?v=1'],tr:'PS1_BRZYSKA',fiz:'TRASA_BRZYSKA_2026',ranking:'wyniki/brzyska_2026.json',pref:''},
-  {id:'brzyska_2026_zawody',tryb:'zawody',nazwa:'BRZYSKA',pora:'JESIEN',opis:'25. RAJD NIEPODLEGŁOŚCI · BRZYSKA',nagroda:'DO WYGRANIA: LEGO SPEED CHAMPIONS 77256',rankTytul:'ZAWODY · BRZYSKA · SUMA 3 PRZEJAZDÓW',
+  {id:'brzyska_2026_zawody',tryb:'zawody',nazwa:'BRZYSKA',pora:'JESIEN',opis:'25. RAJD NIEPODLEGŁOŚCI · BRZYSKA',nagroda:'LEGO SPEED CHAMPIONS 77256 WEHIKUŁ CZASU',nagrodaWideo:'https://www.lego.com/cdn/cs/set/assets/blt187f95f6a2a5896f/77256_BttF_Reveal_16x9.mp4',rankTytul:'ZAWODY · BRZYSKA · SUMA 3 PRZEJAZDÓW',
    pliki:PLIKI_ZAW,tr:'PS3_BRZYSKA',otoczenie:'OTOCZENIE_BRZYSKA_ZAWODY',fiz:'TRASA_BRZYSKA_ZAWODY',ranking:'wyniki/brzyska_zawody.json',pref:'zaw_',
    styl:STYL_ZAW,km:1.85,od:'2026-11-28T08:00:00+01:00',do:'2026-12-05T23:59:59+01:00'},
   {id:'brzyska_2026_ta',tryb:'ta',nazwa:'BRZYSKA',pora:'JESIEN',opis:'25. RAJD NIEPODLEGŁOŚCI · BRZYSKA',rankTytul:'BRZYSKA · TIME ATTACK · NAJLEPSZY CZAS KAŻDEGO KIEROWCY',
@@ -1279,12 +1279,12 @@ document.getElementById('zZapisz').onclick=zapiszRejestracje;document.getElement
 // ODC = karta oglądana w menu; TRASA_NR = trasa wczytana. Przejście na inną grywalną trasę przeładowuje stronę (bez ekranu tytułowego).
 let ODC=TRASA_NR;
 const odcData=t=>new Date(t).toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'});
-function pokazOdcinek(){const t=TRASY[ODC],b=document.getElementById('odcTryb');document.getElementById('odcNagroda').textContent=t.nagroda&&!zawKoniec(t)?'🏆 '+t.nagroda:'';   /* nagroda pod nazwą rajdu – znika po zakończeniu zawodów */document.getElementById('odcL').style.display=ODC>0?'':'none';document.getElementById('odcP').style.display=ODC<TRASY.length-1?'':'none';   /* strzałka znika, gdy nie ma starszego / nowszego rajdu */document.getElementById('duchTik').style.visibility=t.tryb==='zawody'?'hidden':'';b.textContent=TRYBY[t.tryb];b.className=t.tryb;
+function pokazOdcinek(){const t=TRASY[ODC],b=document.getElementById('odcTryb');document.getElementById('odcNagroda').innerHTML=t.nagroda&&!zawKoniec(t)?'🏆 DO WYGRANIA: '+(t.nagrodaWideo?'<a href="'+t.nagrodaWideo+'" target="_blank" rel="noopener" title="FILM Z PREZENTACJĄ ZESTAWU">'+t.nagroda+' ▶</a>':t.nagroda):'';   /* nagroda pod nazwą rajdu – znika po zakończeniu zawodów */document.getElementById('odcL').style.display=ODC>0?'':'none';document.getElementById('odcP').style.display=ODC<TRASY.length-1?'':'none';   /* strzałka znika, gdy nie ma starszego / nowszego rajdu */document.getElementById('duchTik').style.visibility=t.tryb==='zawody'?'hidden':'';b.textContent=TRYBY[t.tryb];b.className=t.tryb;
   document.getElementById('odcOpis').textContent=t.wkrotce?`${t.opis} · START ${odcData(t.od)}`:t.opis;
   const s=document.getElementById('startBtn'),rb=document.getElementById('rankingBtn');s.classList.toggle('nieaktywny',!!t.wkrotce);rb.classList.toggle('nieaktywny',!!t.wkrotce);
   s.textContent=t.wkrotce?'START '+odcData(t.od):'START (ENTER)';zawodyKarta(t);}
 function zmienOdcinek(k){const n=ODC+k;if(n<0||n>=TRASY.length)return;ODC=n;const t=TRASY[ODC];   /* bez zapętlenia: ◀ starszy rajd, ▶ nowszy */
-  if(!t.wkrotce&&ODC!==TRASA_NR){try{sessionStorage.setItem('krt_bez_okladki','1');}catch(e){}const U=new URLSearchParams(location.search);if(ODC===0)U.delete('trasa');else U.set('trasa',t.id);const q=U.toString();location.href=location.pathname+(q?'?'+q:'');return;}   /* wczytanie wybranej trasy */
+  if(!t.wkrotce&&ODC!==TRASA_NR){try{sessionStorage.setItem('krt_bez_okladki','1');}catch(e){}OKLADKA.classList.remove('znika');OKLADKA.classList.add('laduje');OKLADKA.style.display='block';const U=new URLSearchParams(location.search);if(ODC===0)U.delete('trasa');else U.set('trasa',t.id);const q=U.toString();location.href=location.pathname+(q?'?'+q:'');return;}   /* wczytanie wybranej trasy */
   pokazOdcinek();zawodyOdswiez();}
 document.getElementById('odcL').onclick=()=>zmienOdcinek(-1);document.getElementById('odcP').onclick=()=>zmienOdcinek(1);
 setTimeout(()=>{pokazOdcinek();zawodyOdswiez();},0);   /* po wczytaniu całego skryptu (GRACZ jest niżej) */ustawKarty();
@@ -1629,8 +1629,8 @@ addEventListener('keydown',e=>{if(e.code==='KeyM'){DZW.wycisz=!DZW.wycisz;pokazK
 ['keydown','touchstart','touchend','mousedown','click'].forEach(ev=>addEventListener(ev,()=>{dzwiekStart();},{passive:true,capture:true}));   /* przeglądarki pozwalają grać dopiero po pierwszym kliknięciu / dotknięciu / klawiszu; capture – działa też przy pisaniu nicku i klucza w oknie logowania */
 /* EKRAN TYTUŁOWY z okładką: „NACIŚNIJ DOWOLNY PRZYCISK” (na dotyku „DOTKNIJ EKRANU”). Pierwsze naciśnięcie tylko go zamyka (nie startuje gry, nie klika w menu)
    i przy okazji odblokowuje dźwięk – muzyka gra od wejścia do menu. Zarejestrowane po nasłuchu dźwięku, więc dźwięk rusza, a reszta gry tego naciśnięcia nie widzi. */
-const OKLADKA=document.getElementById('okladka');try{if(sessionStorage.getItem('krt_bez_okladki')){sessionStorage.removeItem('krt_bez_okladki');OKLADKA.classList.add('znika');OKLADKA.style.display='none';}}catch(e){}   /* po zmianie odcinka bez ekranu tytułowego */
-function zamknijOkladke(e){if(!OKLADKA||OKLADKA.classList.contains('znika'))return;e.stopImmediatePropagation();if(e.cancelable&&e.type!=='touchstart')e.preventDefault();
+const OKLADKA=document.getElementById('okladka');try{if(sessionStorage.getItem('krt_bez_okladki')){sessionStorage.removeItem('krt_bez_okladki');OKLADKA.classList.add('znika');setTimeout(()=>{OKLADKA.style.display='none';OKLADKA.classList.remove('laduje');},400);}}catch(e){}   /* po zmianie odcinka bez ekranu tytułowego */
+function zamknijOkladke(e){if(!OKLADKA||OKLADKA.classList.contains('znika')||OKLADKA.classList.contains('laduje'))return;e.stopImmediatePropagation();if(e.cancelable&&e.type!=='touchstart')e.preventDefault();
   OKLADKA.classList.add('znika');setTimeout(()=>{OKLADKA.style.display='none';},400);}
 ['keydown','mousedown','touchstart','click'].forEach(ev=>addEventListener(ev,zamknijOkladke,{capture:true}));
 document.fonts.ready.then(()=>setTimeout(()=>{dzwiekStart();if(DZW.ok&&!MUZ.stan)muzykaWczytaj();if(DZW.ctx){DZW.ctx.onstatechange=dzwInfo;dzwInfo();}},400));
