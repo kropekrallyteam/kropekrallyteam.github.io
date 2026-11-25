@@ -1499,8 +1499,8 @@ function efektyKroku(){const o=SIM.ost,v=o.v,fx=o.fx,fz=o.fz,rx=o.rx,rz=o.rz,we=
     if(Math.random()<.6){const k=kurz[kurzIdx];kurzIdx=(kurzIdx+1)%80;k.x=A.x-fx*2;k.z=A.z-fz*2;k.y=A.y+.3;k.vx=-fx*2+(Math.random()-.5)*2;k.vz=-fz*2+(Math.random()-.5)*2;k.vy=1+Math.random();k.t=1;}}}
 function koniec(){stan='meta';const t=czas+kara;const b=najlepszy();const rekord=!ZAW.zapoz&&(!b||t<b);   /* zapoznanie (50 km/h) nie jest rekordem */if(!window.PAUZA)wyslijPrzejazd(t);if(rekord&&!window.PAUZA){dzwiekStartu('fanfary');konfetti();}   /* nowy rekord: fanfary + konfetti */{const t0=Date.now();(function rk(){if(stan!=='meta'||window.PAUZA)return;const v=Math.hypot(A.vx,A.vz),dt0=Date.now()-t0;if(v<0.3&&dt0>2000)setTimeout(()=>{if(stan==='meta'&&!window.PAUZA)pokazRanking(t);},900);else if(dt0>10000)pokazRanking(t);else setTimeout(rk,200);})();}   /* ranking, gdy auto stanie przy mecie STOP (najpóźniej po 10 s) */
   const km=document.getElementById('komunikat');km.style.display='block';
-  const zawLinia=ZAW.zapoz?'<br><span style="font-size:20px;color:#7ff3ff">ZAPOZNANIE ZAKOŃCZONE – CZAS NIE LICZY SIĘ DO WYNIKÓW</span>':czyZawody()?`<br><span style="font-size:20px;color:#ffd21f">ZAWODY · PS${ZAW.nr} (${ZAW.nr}/3)</span>`:'';
-  km.innerHTML=`META!${zawLinia}<br><span style="font-size:56px;color:#fff">${fmt(t)}</span><br>${ZAW.zapoz?'':`<span style="font-size:22px;color:${rekord?'#3cff6a':'#fff'}">${rekord?'NOWY REKORD!':'NAJLEPSZY: '+fmt(b)}</span>`}${kara&&!ZAW.zapoz?`<br><span style="font-size:18px;color:#ff5a4a">W TYM KARA ZA SZYKANĘ: +${kara} S</span>`:""}<br><span style="font-size:18px;color:#ccc">KROPEK Z RAJDU: ${fmt(CZAS_RAJDU)} · ${czyZawody()?'R / ESC – MENU':'R – JESZCZE RAZ'}</span>`;
+  const zawLinia=ZAW.zapoz?'<br><span style="font-size:26px;color:#7ff3ff">ZAPOZNANIE ZAKOŃCZONE</span><br><span style="font-size:20px;color:#ffd21f">TERAZ START DO PS1</span>':czyZawody()?`<br><span style="font-size:20px;color:#ffd21f">ZAWODY · PS${ZAW.nr} (${ZAW.nr}/3)</span>`:'';
+  km.innerHTML=`META!${zawLinia}${ZAW.zapoz?'':`<br><span style="font-size:56px;color:#fff">${fmt(t)}</span>`}<br>${ZAW.zapoz?'':`<span style="font-size:22px;color:${rekord?'#3cff6a':'#fff'}">${rekord?'NOWY REKORD!':'NAJLEPSZY: '+fmt(b)}</span>`}${kara&&!ZAW.zapoz?`<br><span style="font-size:18px;color:#ff5a4a">W TYM KARA ZA SZYKANĘ: +${kara} S</span>`:""}<br><span style="font-size:18px;color:#ccc">${ZAW.zapoz?'':'KROPEK Z RAJDU: '+fmt(CZAS_RAJDU)+' · '}${czyZawody()?'R / ESC – MENU':'R – JESZCZE RAZ'}</span>`;
   if(rekord){const c=[];let k=0;for(let i=START_I;i<=META_I;i+=20){while(k<czasyIdx.length&&czasyIdx[k][0]<i)k++;c.push(k<czasyIdx.length?czasyIdx[k][1]:t);}
     try{localStorage.setItem('krt_best_'+TRASA.pref+AUTO,t.toFixed(3));localStorage.setItem('krt_duch_'+TRASA.pref+AUTO,JSON.stringify({p:zapis,c}));}catch(e){}}}
 let czasyIdx=[];
@@ -1567,12 +1567,12 @@ let ostNotka='';const HUDP={kmh:-1,rozgrzewka:0,p:new THREE.Vector3(),q:new THRE
 const FPS={k:0,t:performance.now(),v:0,pokaz:false};addEventListener('keydown',e=>{if(e.code==='KeyF'){FPS.pokaz=!FPS.pokaz;document.getElementById('fps').textContent='';}});
 function hud(klatka){
   dotykTryb();
-  el.czas.textContent=fmt(czas+kara);
+  {const zt=ZAW.zapoz?'ZAPOZNANIE':fmt(czas+kara);if(el.czas.textContent!==zt)el.czas.textContent=zt;}   /* zapoznanie: bez licznika czasu */
   {const n=performance.now();FPS.k++;if(n-FPS.t>1000){FPS.v=Math.round(FPS.k*1000/(n-FPS.t));FPS.k=0;FPS.t=n;if(FPS.pokaz)document.getElementById('fps').textContent=FPS.v+' KL/S';}}
   if(klatka%15===0){const ed=document.getElementById('dzwiek');ed.textContent=!DZW.ok?'DŹWIĘK: KLIKNIJ EKRAN':DZW.wycisz?'DŹWIĘK: WYCISZONY (M)':DZW.ctx.state!=='running'?'DŹWIĘK: ZABLOKOWANY – KLIKNIJ':'DŹWIĘK: WŁ.';}   /* stan dźwięku na ekranie */
   const v=Math.hypot(A.vx,A.vz);{const kv=Math.round(v*3.6);if(kv!==HUDP.kmh){HUDP.kmh=kv;el.kmhW.textContent=kv;}}   /* tylko przy zmianie – mniej przeliczeń strony */
   // różnica do ducha: własny najlepszy przejazd albo tempo Kropka z rajdu
-  if(stan==='jazda'&&A.idx>START_I){const dist=(A.idx-START_I)*DS;let tD;
+  if(stan==='jazda'&&A.idx>START_I&&!ZAW.zapoz){const dist=(A.idx-START_I)*DS;let tD;
     if(duchCzasy){const j=Math.min(duchCzasy.length-1,Math.floor((A.idx-START_I)/20));tD=duchCzasy[j];}else tD=CZAS_RAJDU*dist/DLUGOSC;
     const d=czas+kara-tD;{const kd=d<=0?'#3cff6a':'#ff5a4a';if(kd!==HUDP.kolorDelta){HUDP.kolorDelta=kd;el.delta.style.color=kd;}}el.delta.textContent=(duchCzasy?'REKORD ':'KROPEK ')+(d<=0?'-':'+')+fmt(Math.abs(d)).replace(/^0'/,'');}
   else el.delta.textContent='';
