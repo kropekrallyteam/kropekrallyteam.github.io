@@ -856,13 +856,13 @@ if(!MAPA){
  // META STOP: 100 m za metą lotną (po prawej) – tablica STOP, samochód sędziów i sędzia z kartą czasu; po mecie auto samo tu dojeżdża i staje
  window.STOP_I=Math.min(N-12,META_I+Math.round(100/DS));   /* globalnie – używa go dojazd po mecie w _gra */
  {const s=samples[STOP_I],n=nrm(s),w=wDrogi(META_I),ry=Math.atan2(-s.d.x,-s.d.z);
-  /* znaki końca OS-u wg regulaminu: okrągłe tarcze z białą obwódką, postawione na ziemi po prawej (żółta 100 m przed metą, czerwona na linii mety lotnej, czerwona STOP, beżowa 25 m za STOP) */
+  /* znaki końca OS-u wg regulaminu: okrągłe tarcze na kwadratowych białych tablicach stojących na ziemi po prawej (żółta 100 m przed metą, czerwona na linii mety lotnej, czerwona STOP, beżowa 25 m za STOP) */
   const flaga=(c)=>{c.save();c.translate(64,64);c.rotate(-.35);c.fillStyle='#222';c.fillRect(-26,-30,4,62);for(let a=0;a<6;a++)for(let b=0;b<4;b++){c.fillStyle=(a+b)%2?'#111':'#fff';c.fillRect(-22+a*8,-30+b*8,8,8);}c.restore();};
-  const tarcza=(kol,rys)=>{const cv=document.createElement('canvas');cv.width=cv.height=128;const c=cv.getContext('2d');c.clearRect(0,0,128,128);c.beginPath();c.arc(64,64,62,0,7);c.fillStyle='#fff';c.fill();
+  const tarcza=(kol,rys)=>{const cv=document.createElement('canvas');cv.width=cv.height=128;const c=cv.getContext('2d');c.fillStyle='#f6f6f4';c.fillRect(0,0,128,128);c.strokeStyle='#9a9ea4';c.lineWidth=4;c.strokeRect(2,2,124,124);   /* kwadratowa biała tablica z szarą obwódką */c.beginPath();c.arc(64,64,58,0,7);c.fillStyle='#141414';c.fill();
     c.beginPath();c.arc(64,64,55,0,7);c.fillStyle=kol;c.fill();c.save();c.beginPath();c.arc(64,64,55,0,7);c.clip();rys(c);c.restore();return new THREE.CanvasTexture(cv);};
   const postawZnak=(i,tx)=>{const q=samples[Math.max(0,Math.min(N,i))],nq=nrm(q),wq=wDrogi(Math.min(i,META_I));const g=new THREE.Group();
-    const d=new THREE.Mesh(new THREE.CircleGeometry(.7,28),new THREE.MeshLambertMaterial({map:tx,transparent:true,side:THREE.DoubleSide}));d.position.set(0,.78,0);d.rotation.x=-.75;g.add(d);
-    for(const k of [-.35,.35]){const nz=new THREE.Mesh(new THREE.BoxGeometry(.05,.75,.05),M(0x555555));nz.position.set(k,.3,-.3);nz.rotation.x=.55;g.add(nz);}
+    const mt=new THREE.MeshLambertMaterial({map:tx});const d=new THREE.Mesh(new THREE.BoxGeometry(1.1,1.1,.04),[M(0xdddddd),M(0xdddddd),M(0xdddddd),M(0xdddddd),mt,mt]);d.position.set(0,.62,0);d.rotation.x=-.3;d.castShadow=true;g.add(d);   /* tarcza na kwadratowej tablicy stojącej na ziemi */
+    for(const k of [-.42,.42]){const nz=new THREE.Mesh(new THREE.BoxGeometry(.04,1.05,.04),M(0x6e7278));nz.position.set(k,.5,-.3);nz.rotation.x=.45;g.add(nz);}
     g.position.set(q.p.x+nq.x*(wq/2+1.3),0,q.p.z+nq.z*(wq/2+1.3));g.rotation.y=Math.atan2(-q.d.x,-q.d.z);scene.add(g);};
   postawZnak(META_I-Math.round(100/DS),tarcza('#f4d21a',flaga));
   postawZnak(META_I+2,tarcza('#d42020',flaga));
