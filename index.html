@@ -255,7 +255,7 @@
 <div id="ranking"><h1>RANKING <span class="emoji">🏆</span></h1><div id="rKarty" style="display:none"></div><h2>PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY</h2><table id="rTab"></table><div id="rInfo"></div><div id="rWyslij"></div><div class="start" id="rPowrot">POWRÓT (ESC)</div><div id="rAkt"></div></div>
 <div id="menu">
   <h1>Kropek Rally Team<br>Time Attack <span class="flaga">🏁</span></h1>
-  <h2><span id="odcTryb"></span><span id="odcOpis">PS1 · ODCINEK TESTOWY · BRZYSKA</span><span id="odcNagroda"></span></h2>
+  <h2><span id="odcTryb"></span><span id="odcOpis"></span><span id="odcNagroda"></span></h2>
   <div class="odcStrz" id="odcL" title="POPRZEDNI ODCINEK" style="display:none">◀</div><div class="odcStrz" id="odcP" title="NASTĘPNY ODCINEK" style="display:none">▶</div>
   <div class="auta">
     <div class="auto wyb" data-auto="janusz"><b>KROPEK JANUSZA</b><span>Smoła / Prokop<br>KGR 11761 · IRBUD</span></div>
@@ -266,7 +266,7 @@
   <p>STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU</p>
   <div id="kontoBtn" title="KONTO"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="5" y="1" width="6" height="6" fill="#ffd21f"/><rect x="4" y="2" width="8" height="4" fill="#ffd21f"/><rect x="2" y="9" width="12" height="6" fill="#ffd21f"/><rect x="3" y="8" width="10" height="2" fill="#ffd21f"/></svg><span id="nickPokaz">—</span></div>
   <div id="zawInfo"></div>
-  <div class="przyciski"><div class="start" id="startBtn">START (ENTER)</div><div class="start drugi" id="rankingBtn">RANKING <span class="emoji">🏆</span></div><div class="start drugi" id="zasadyBtn">ZASADY <span class="emoji">📕</span></div></div>
+  <div class="przyciski"><div class="start" id="startBtn">…</div><div class="start drugi" id="rankingBtn">RANKING <span class="emoji">🏆</span></div><div class="start drugi" id="zasadyBtn">ZASADY <span class="emoji">📕</span></div></div>
   <p class="f11">F11 – OTWARCIE / ZAMKNIĘCIE TRYBU PEŁNOEKRANOWEGO</p>
   <div id="nickOkno"><div class="ramka"><h3>PODAJ NICK KIEROWCY</h3><p>NICK BĘDZIE WIDOCZNY W RANKINGU.<br>LITERY, CYFRY, SPACJA, _ - . (3–16)</p><input id="nickPole" maxlength="16" autocomplete="off" spellcheck="false"><div id="nickBlad"></div><div class="start" id="nickOk">ZAPISZ (ENTER)</div><span id="nickAnuluj">ANULUJ (ESC)</span></div></div>
 </div>
@@ -1252,7 +1252,8 @@ const odcGodz=t=>odcData(t)+' '+new Date(t).toLocaleTimeString('pl-PL',{hour:'2-
 const kartaZawodow=()=>TRASY[ODC].tryb==='zawody';
 const zawKoniec=t=>t.do&&Date.now()>Date.parse(t.do);
 async function zawodyOdswiez(){if(!kartaZawodow()||!POSREDNIK_URL||!GRACZ.kod)return;ZAW.laduje=true;
-  try{const o=await posrednik({akcja:'zawody_stan',kod:GRACZ.kod});if(o&&o.ok){ZAW.stan=o;try{localStorage.setItem('krt_zaw_zgl',o.zarejestrowany?GRACZ.kod:'');}catch(e){}}}catch(e){}ZAW.laduje=false;ZAW.sprawdzone=true;pokazOdcinek();}   /* zapamiętane zgłoszenie – link EDYTUJ od razu, bez czekania na serwer */
+  if(!ZAW.stan){try{const c=JSON.parse(localStorage.getItem('krt_zaw_stan')||'null');if(c&&c.kod===GRACZ.kod&&c.trasa===TRASA.id&&Date.now()-c.t<6*864e5){ZAW.stan=c.stan;ZAW.sprawdzone=true;pokazOdcinek();}}catch(e){}}   /* ostatni znany stan od razu (serwer odpowiada 2–4 s), potem potwierdzenie z serwera */
+  try{const o=await posrednik({akcja:'zawody_stan',kod:GRACZ.kod});if(o&&o.ok){ZAW.stan=o;try{localStorage.setItem('krt_zaw_zgl',o.zarejestrowany?GRACZ.kod:'');localStorage.setItem('krt_zaw_stan',JSON.stringify({kod:GRACZ.kod,trasa:TRASA.id,t:Date.now(),stan:o}));}catch(e){}}}catch(e){}ZAW.laduje=false;ZAW.sprawdzone=true;pokazOdcinek();}   /* zapamiętane zgłoszenie – link EDYTUJ od razu, bez czekania na serwer */
 function zawodyKarta(t){const inf=document.getElementById('zawInfo'),sb=document.getElementById('startBtn'),rb=document.getElementById('rankingBtn');inf.innerHTML='';
   if(PODGLAD&&t.tryb!=='ea'){inf.innerHTML='<span class="blad">PODGLĄD TESTOWY – JAZDA BEZ LIMITU, WYNIKI NIE SĄ WYSYŁANE</span>';return;}
   if(t.tryb!=='zawody')return;const st=ZAW.stan,op=document.getElementById('odcOpis');
@@ -1327,7 +1328,7 @@ function zmienOdcinek(k){const n=ODC+k;if(n<0||n>=TRASY.length)return;ODC=n;cons
   if(!t.wkrotce&&ODC!==TRASA_NR){try{sessionStorage.setItem('krt_bez_okladki','1');}catch(e){}OKLADKA.classList.remove('znika');OKLADKA.classList.add('laduje');OKLADKA.style.display='block';const U=new URLSearchParams(location.search);if(ODC===TRASA_DOM)U.delete('trasa');else U.set('trasa',t.id);const q=U.toString();location.href=location.pathname+(q?'?'+q:'');return;}   /* wczytanie wybranej trasy */
   pokazOdcinek();zawodyOdswiez();}
 document.getElementById('odcL').onclick=()=>zmienOdcinek(-1);document.getElementById('odcP').onclick=()=>zmienOdcinek(1);
-setTimeout(()=>{pokazOdcinek();zawodyOdswiez();},0);   /* po wczytaniu całego skryptu (GRACZ jest niżej) */ustawKarty();
+setTimeout(()=>{try{pokazOdcinek();zawodyOdswiez();}finally{if(window.LADOWANIE_PRZELACZ)schowajLadowanie();}},0);   /* po wczytaniu całego skryptu (GRACZ jest niżej) */ustawKarty();
 // przełącznik ducha (przejazd najlepszego czasu) – zapamiętany w przeglądarce, domyślnie włączony
 let DUCH_WL=true;try{DUCH_WL=localStorage.getItem('krt_duch_wl')!=='0';}catch(e){}
 function pokazTikDucha(){document.getElementById('duchTik').classList.toggle('wl',DUCH_WL);}
@@ -1679,7 +1680,10 @@ addEventListener('keydown',e=>{if(e.code==='KeyM'){DZW.wycisz=!DZW.wycisz;pokazK
 ['keydown','touchstart','touchend','mousedown','click'].forEach(ev=>addEventListener(ev,()=>{dzwiekStart();},{passive:true,capture:true}));   /* przeglądarki pozwalają grać dopiero po pierwszym kliknięciu / dotknięciu / klawiszu; capture – działa też przy pisaniu nicku i klucza w oknie logowania */
 /* EKRAN TYTUŁOWY z okładką: „NACIŚNIJ DOWOLNY PRZYCISK” (na dotyku „DOTKNIJ EKRANU”). Pierwsze naciśnięcie tylko go zamyka (nie startuje gry, nie klika w menu)
    i przy okazji odblokowuje dźwięk – muzyka gra od wejścia do menu. Zarejestrowane po nasłuchu dźwięku, więc dźwięk rusza, a reszta gry tego naciśnięcia nie widzi. */
-const OKLADKA=document.getElementById('okladka');try{if(sessionStorage.getItem('krt_bez_okladki')){sessionStorage.removeItem('krt_bez_okladki');OKLADKA.classList.add('znika');setTimeout(()=>{OKLADKA.style.display='none';OKLADKA.classList.remove('laduje');},400);}}catch(e){}   /* po zmianie odcinka bez ekranu tytułowego */
+const OKLADKA=document.getElementById('okladka');try{if(sessionStorage.getItem('krt_bez_okladki')){sessionStorage.removeItem('krt_bez_okladki');window.LADOWANIE_PRZELACZ=true;}}catch(e){}
+/* grafika ładowania znika dopiero, gdy menu ma już napisy nowej trasy i scena narysowała pierwsze klatki – wcześniej znikała w trakcie przygotowania trasy i na wolniejszym komputerze było widać stare napisy */
+setTimeout(()=>{if(window.LADOWANIE_PRZELACZ)schowajLadowanie();},8000);   /* awaryjnie */
+function schowajLadowanie(){window.LADOWANIE_PRZELACZ=false;requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>{OKLADKA.classList.add('znika');setTimeout(()=>{OKLADKA.style.display='none';OKLADKA.classList.remove('laduje');},400);},120)));}   /* po zmianie odcinka bez ekranu tytułowego */
 function zamknijOkladke(e){if(e.target&&e.target.closest&&e.target.closest('#obroc'))return;if(!OKLADKA||OKLADKA.classList.contains('znika')||OKLADKA.classList.contains('laduje'))return;e.stopImmediatePropagation();if(e.cancelable&&e.type!=='touchstart')e.preventDefault();
   OKLADKA.classList.add('znika');setTimeout(()=>{OKLADKA.style.display='none';},400);}
 ['keydown','mousedown','touchstart','click'].forEach(ev=>addEventListener(ev,zamknijOkladke,{capture:true}));
