@@ -399,7 +399,7 @@ function stylizuj(P,tol){
   if(TRASA.styl&&TRASA.styl.wierny){   /* tryb wierny (zawody): droga prosto po śladzie GPS co 10 m, tylko lekko odszumiona (średnia z 3 punktów) – bez upraszczania i łuków */
     const S0=P.map((p,i)=>{let sx=0,sz=0,c=0;for(let k=-1;k<=1;k++){const q=P[i+k];if(q){sx+=q[0];sz+=q[1];c++;}}return [sx/c,sz/c];});const S=TRASA.styl.prostych?rozciagnij(S0,TRASA.styl.prostych):S0;
     const ext=(a,b,L)=>{const dx=a[0]-b[0],dz=a[1]-b[1],l=Math.hypot(dx,dz)||1;const o=[];for(let k=6;k>=1;k--)o.push([a[0]+dx/l*L*k/6,a[1]+dz/l*L*k/6]);return o;};
-    return {pts:[...ext(S[0],S[3],ZAPAS),...S,...ext(S[S.length-1],S[S.length-4],ZAPAS_META).reverse()],wierzcholki:dp(P,Math.max(tol,12))};}   /* wierzchołki tylko do strzałek zakrętów – grubsze uproszczenie, żeby zakręt liczył się w całości */const V=scalKrotkie((QS.get("schodki")==="0"||(TRASA.styl&&TRASA.styl.schodki===0))?dp(P,tol):manhattan(dp(P,tol),+(QS.get("jog")||20)),28);const out=[V[0]];
+    return {pts:[...ext(S[0],S[3],ZAPAS),...S,...ext(S[S.length-1],S[S.length-4],ZAPAS_META).reverse()],wierzcholki:dp(S,Math.max(tol,12))};}   /* wierzchołki z drogi PO wydłużeniu prostych (wcześniej z surowego GPS – strzałki wyprzedzały zakręty o 50–145 m) */   /* wierzchołki tylko do strzałek zakrętów – grubsze uproszczenie, żeby zakręt liczył się w całości */const V=scalKrotkie((QS.get("schodki")==="0"||(TRASA.styl&&TRASA.styl.schodki===0))?dp(P,tol):manhattan(dp(P,tol),+(QS.get("jog")||20)),28);const out=[V[0]];
   for(let i=1;i<V.length-1;i++){const [px,pz]=V[i-1],[cx,cz]=V[i],[nx,nz]=V[i+1];
     let ax=px-cx,az=pz-cz,bx=nx-cx,bz=nz-cz;const la=Math.hypot(ax,az),lb=Math.hypot(bx,bz);ax/=la;az/=la;bx/=lb;bz/=lb;
     const skret=Math.PI-Math.acos(Math.max(-1,Math.min(1,ax*bx+az*bz)));          // kąt skrętu 0..π
@@ -1491,12 +1491,20 @@ function kamera(dt){cienAuta();const v=Math.hypot(A.vx,A.vz);const lead=4+Math.m
 const el={czas:document.getElementById('czas'),delta:document.getElementById('delta'),kmh:document.getElementById('kmh'),kmhW:document.getElementById('kmhW'),notka:document.getElementById('notka'),pasek:document.querySelectorAll('#pasek i'),sw:document.getElementById('swiatla'),km:document.getElementById('komunikat')};
 document.querySelector('#ps').firstChild.textContent=TRASA.nazwa;document.querySelector('#ps small').textContent=TRASA.pora+' - '+(TRASA.km||Math.min(DLUGOSC/1000,TRASA.kmMax||99)).toFixed(2).replace('.',',')+' KM';
 function zakret(t0,t1){const a=curve.getTangentAt(Math.min(t0,1)),b=curve.getTangentAt(Math.min(t1,1));return {lewy:(-a.x*b.z+a.z*b.x)>0,ang:Math.acos(Math.max(-1,Math.min(1,a.x*b.x+a.z*b.z)))};}
-function piktogram(z,size){const PR=TRASA.styl?[0.3,0.6]:[0.5,1.1];   /* progi kolorów: trasa wierna GPS ma łagodniejsze kąty – zielona < ~17°, żółta < ~34°, czerwona dalej */
+function piktogram(z,size){const PR=TRASA.styl?[0.45,0.9]:[0.5,1.1];   /* progi kolorów: trasa zawodów (kąty z krzywizny drogi) – zielona < ~26°, żółta < ~52°, czerwona dalej */
   const kol=z.prosto?'#3cd65a':z.ang<PR[0]?'#3cd65a':z.ang<PR[1]?'#ffd21f':'#e8302a';let sciezka=z.prosto?'M12.5 31.5 V12 H4 L16.5 2 L29 12 H20.5 V31.5 Z':z.ang<2.0?'M29 31.5 V11 H14 V4 L3 13.5 L14 23 V18 H21.5 V31.5 Z':'M29.5 31.5 V8.5 Q29.5 2 23 2 H10.5 Q4 2 4 8.5 V15 H2.5 L10 25 L17.5 15 H11.5 V9.5 H22 V31.5 Z';   /* strzałki na cały kwadracik */let odb=(!z.lewy&&!z.prosto)?' transform="translate(33,0) scale(-1,1)"':'';
   if(!z.prosto&&z.ang<0.9){sciezka='M12.5 31.5 V12 H4 L16.5 2 L29 12 H20.5 V31.5 Z';odb=' transform="translate(16.5 17) rotate('+(z.lewy?-1:1)*(z.ang<PR[0]?22:45)+') scale(.86) translate(-16.5 -16.5)"';}   /* zakręt do ok. 50°: strzałka po skosie (najłagodniejsze zielone); strzałka prosto tylko na długiej prostej */return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 33 33" shape-rendering="crispEdges"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><path d="'+sciezka+'"'+odb+' fill="'+kol+'" stroke="#101018" stroke-width="1.4" stroke-linejoin="round"/></svg>';}
 // lista zakrętów z wierzchołków stylizowanej trasy: kąt skrętu w każdym wierzchołku, wierzchołki bliżej niż 40 m
 // i skręcające w tę samą stronę łączone w jeden zakręt (np. dwa skosy 45° = zakręt 90°); przeciwne kierunki = osobne (esy)
-const ZAKRETY=(()=>{const V=STYL.wierzcholki,lista=[];
+/* trasa wierna GPS (zawody): zakręty liczone z krzywizny drogi – początek, wierzchołek (najciaśniej), koniec i prawdziwy kąt łuku */
+function zakretyZKrzywizny(){const P=i=>samples[Math.max(0,Math.min(N,i))].p,kurs=i=>{const a=P(i-7),b=P(i+7);return Math.atan2(b.x-a.x,-(b.z-a.z));};
+  const krok=4,lista=[];let seg=null;
+  for(let i=START_I-40;i<=META_I;i+=krok){let d=kurs(i+krok)-kurs(i);d=Math.atan2(Math.sin(d),Math.cos(d));const st=d/(krok*DS)*10;   /* rad na 10 m */
+    if(Math.abs(st)>0.038){if(!seg||Math.sign(st)!==seg.s){if(seg)lista.push(seg);seg={a:i,b:i,s:Math.sign(st),kat:0,mx:0,szczyt:i};}seg.b=i;seg.kat+=st*krok*DS/10;if(Math.abs(st)>seg.mx){seg.mx=Math.abs(st);seg.szczyt=i;}}
+    else if(seg&&i-seg.b>krok*3){lista.push(seg);seg=null;}}
+  if(seg)lista.push(seg);
+  return lista.filter(z=>Math.abs(z.kat)>=0.14&&z.szczyt>START_I-20&&z.szczyt<META_I+10).map(z=>({idx:z.szczyt,koniec:z.b,z:{lewy:z.s<0,ang:Math.abs(z.kat)}}));}
+const ZAKRETY=(TRASA.styl&&TRASA.styl.wierny)?zakretyZKrzywizny():(()=>{const V=STYL.wierzcholki,lista=[];
   const idxNa=(p)=>{let b=0,bd=1e9;for(let i=0;i<=N;i+=2){const s=samples[i].p;const d=(s.x-p[0])**2+(s.z-p[1])**2;if(d<bd){bd=d;b=i;}}return b;};
   for(let i=1;i<V.length-1;i++){const ax=V[i][0]-V[i-1][0],az=V[i][1]-V[i-1][1],bx=V[i+1][0]-V[i][0],bz=V[i+1][1]-V[i][1];
     const la=Math.hypot(ax,az),lb=Math.hypot(bx,bz);const cr=(-ax*bz+az*bx)/(la*lb),dt=(ax*bx+az*bz)/(la*lb);const kat=Math.atan2(cr,dt);
@@ -1513,7 +1521,7 @@ const mini=html=>html.replace('width="132" height="132"','width="72" height="72"
 const HAMULEC='<svg width="72" height="72" viewBox="0 0 33 33"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><circle cx="16.5" cy="16.5" r="8.5" fill="#e8302a" stroke="#101018" stroke-width="1.2"/><path d="M7 9.5 Q3.2 16.5 7 23.5 M26 9.5 Q29.8 16.5 26 23.5" fill="none" stroke="#ffd21f" stroke-width="2.4" stroke-linecap="round"/><rect x="15.2" y="10.8" width="2.6" height="7.6" fill="#fff"/><rect x="15.2" y="20" width="2.6" height="2.6" fill="#fff"/></svg>';   /* kontrolka hamulca – HAMUJ przed szykaną i mostkiem */
 const ELEMENTY=(()=>{const L=ZAKRETY.filter(z=>z.z.ang>=0.26).map(z=>({i:z.idx,k:z.koniec,zas:135,z:z.z}));   /* łuki poniżej ok. 15° pomijane – tam strzałka prosto */L.push({i:IB,k:IB,zas:110,hop:1,ham:1});if(typeof IB2!=='undefined'&&IB2>=0)L.push({i:IB2,k:IB2,zas:110,hop:1});
   L.push({i:CH_I-SZ_ODST,k:CH_I-SZ_ODST,zas:110,szyk:1,ham:1});return L.sort((a,b)=>a.i-b.i);})();
-const minal=(e,i)=>e.hop?(e.i-i)*DS<=3:e.szyk?(e.i-i)*DS<=-5:e.k+8<=i;
+const minal=(e,i)=>e.hop?(e.i-i)*DS<=3:e.szyk?i>CH_I+SZ_ODST:e.k+8<=i;   /* szykana: znak do jej końca */
 const znakEl=(e,duzy)=>{const h=e.hop?HOPA:e.szyk?SZYK:piktogram(e.z,132);return duzy?h:mini(h);};
 function strzalkiHUD(i){const ham=ELEMENTY.some(e=>e.ham&&(e.i-i)*DS>0&&(e.i-i)*DS<120)?HAMULEC:'';return strzalkiZnaki(i)+ham;}   /* 120 m przed mostkiem i szykaną: symbol hamulca po prawej, obok małych znaków */
 function strzalkiZnaki(i){let n=0;while(n<ELEMENTY.length&&minal(ELEMENTY[n],i))n++;const f=ELEMENTY[n];if(!f)return PROSTO;
