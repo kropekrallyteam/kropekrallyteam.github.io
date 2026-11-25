@@ -1506,7 +1506,7 @@ function hud(klatka){
   if(klatka%4===0){
     const NOTKA_POZ='translate(800px,100px) translate(-50%,-50%)';const doMostu=(IB-A.idx)*DS,doSzyk=(CH_I-A.idx)*DS-SZ_ODST*DS;let h='';
     void doMostu;void doSzyk;h=strzalkiHUD(A.idx);   /* duży znak bieżącego elementu + mały znak następnego */
-    if(stan==='odliczanie')h='';   // w czasie odliczania tylko lampy
+    if(stan==='odliczanie'||stan==='menu')h='';   // w czasie odliczania tylko lampy; w menu bez strzałek zakrętów
     if(HUDP.rozgrzewka>0)HUDP.rozgrzewka--;else if(h!==ostNotka){if(ostNotka===null){el.notka.style.flexWrap='';el.notka.style.width='';el.notka.style.opacity='';}el.notka.innerHTML=h;ostNotka=h;}
     if(el.notka.style.transform!==NOTKA_POZ)el.notka.style.transform=NOTKA_POZ;}   /* strzałki zakrętów, hopa i szykana zawsze w jednym miejscu: środek u góry ekranu */
   // światła startowe
