@@ -209,6 +209,10 @@
 #rTab.zaw6 td.c{width:230px;white-space:nowrap}#rTab.zaw6 tr.nag td{font-size:12px;color:#888;border-bottom:3px solid #3a3a5c;padding-top:2px;padding-bottom:6px}
 #rTab.zaw6 td.ps.dnf,#rTab.zaw6 tr.p1 td.ps.dnf{color:#ff3b30}#rTab.zaw6 .kr{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff3b30;margin-left:7px;vertical-align:middle}#rTab.zaw6 tr.leg td{border:none;text-align:left;color:#ff3b30;font-size:14px;padding-top:12px}#rTab.zaw6 tr.leg .kr{width:12px;height:12px;margin:0 8px 0 0}#rTab.zaw6 td.n{white-space:nowrap}#rTab.zaw6 td.ps small{margin-top:2px}#rTab.zaw6 tr.p1 td.ps{color:#ffe98a}#rTab.zaw6 tr.dsq td{color:#ff5a4a}
 /* telefon trzymany pionowo: gra jest pozioma – prośba o obrót (znika sama po obróceniu albo po dotknięciu) */
+#innaKarta{display:none;position:fixed;inset:0;z-index:998;background:rgba(5,5,12,.94);align-items:center;justify-content:center;text-align:center;color:#fff;font-family:'Press Start 2P',monospace;padding:16px}
+#innaKarta .ramka{max-width:640px;background:#1a1a28;border:6px solid #ffd21f;box-shadow:8px 8px 0 #000;padding:28px 26px}#innaKarta h3{font-size:18px;color:#ffd21f;margin:0 0 18px;line-height:1.6;font-weight:normal}
+#innaKarta p{font-size:12px;line-height:2;color:#ddd;margin:0 0 22px}#innaKarta .start{display:inline-block;font-size:15px;color:#101018;background:#ffd21f;padding:12px 22px;border:5px solid #101018;box-shadow:5px 5px 0 #000;cursor:pointer}
+#innaKarta small{display:block;font-size:9px;color:#888;margin-top:16px}
 #obroc{display:none;position:fixed;inset:0;z-index:999;background:#0b0f2a;color:#fff;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:'Press Start 2P',monospace;padding:24px;box-sizing:border-box}
 #obroc .tel{width:56px;height:96px;border:6px solid #ffd21f;border-radius:10px;margin-bottom:34px;animation:obrocTel 2s ease-in-out infinite}
 #obroc b{font-size:18px;line-height:1.7;color:#ffd21f;font-weight:normal}#obroc small{font-size:10px;line-height:1.8;color:#aaa;margin-top:22px}
@@ -217,6 +221,7 @@
 </style>
 </head>
 <body>
+<div id="innaKarta"><div class="ramka"><h3>GRA JEST OTWARTA GDZIE INDZIEJ</h3><p id="ikTekst"></p><div class="start" id="ikTutaj">GRAJ TUTAJ</div><small>W TAMTEJ KARCIE GRA ZOSTANIE WSTRZYMANA</small></div></div>
 <div id="obroc" onclick="this.classList.add('zamkniete')"><div class="tel"></div><b>OBRÓĆ TELEFON<br>POZIOMO</b><small>GRA JEST POZIOMA – TAK ZOBACZYSZ<br>CAŁĄ TRASĘ I PRZYCISKI<br><br>(DOTKNIJ, ŻEBY ZAMKNĄĆ)</small></div>
 <div id="ekran">
   <div id="okladka"><div class="napis"><span class="klaw">NACIŚNIJ<br>DOWOLNY<br>PRZYCISK</span><span class="dot">DOTKNIJ<br>EKRANU</span></div><div class="ladNapis">ŁADOWANIE<br>KOLEJNEJ<br>TRASY…</div></div>
@@ -1106,7 +1111,7 @@ const P_DOMYSLNE=KRT_P;   // ustawienia fizyki – jedno źródło: makieta/fizy
 const P=KRT_P;try{localStorage.removeItem('krt_fizyka');}catch(e){}
 
 // ===================== STEROWANIE =====================
-const K={};addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT')return;   /* wpisywanie nicku: bez sterowania autem */
+const K={};addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT')return;if(window.KARTA_ZABLOK){e.preventDefault();return;}   /* wpisywanie nicku: bez sterowania autem */
   if(nickOtwarte())return;if(zawOtwarte()){if(e.code==='Escape')zamknijZawOkno();else if(e.code==='Enter')zapiszRejestracje();return;}
   if(GRA_PAUZA){if(e.code==='Escape'||e.code==='Enter'||e.code==='KeyP')wznow();return;}
   if(kontoOtwarte()){if(e.code==='Escape')kontoEsc();else if(e.code==='Enter')kontoEnter();return;}K[e.code]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
@@ -1319,7 +1324,7 @@ document.getElementById('zZapisz').onclick=zapiszRejestracje;document.getElement
 // ODC = karta oglądana w menu; TRASA_NR = trasa wczytana. Przejście na inną grywalną trasę przeładowuje stronę (bez ekranu tytułowego).
 let ODC=TRASA_NR;
 const odcData=t=>new Date(t).toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'});
-function pokazOdcinek(){const t=TRASY[ODC],b=document.getElementById('odcTryb');document.getElementById('zasRegl').style.display=t.tryb==='ea'?'none':'';   /* link do regulaminu zawodów w ZASADACH tylko na karcie zawodów */document.getElementById('odcNagroda').innerHTML=t.nagroda&&!zawKoniec(t)?'🏆 DO WYGRANIA: '+(t.nagrodaWideo?'<a href="'+t.nagrodaWideo+'" target="_blank" rel="noopener" title="FILM Z PREZENTACJĄ ZESTAWU">'+t.nagroda+' ▶</a>':t.nagroda):'';   /* nagroda pod nazwą rajdu – znika po zakończeniu zawodów */document.getElementById('odcL').style.display=ODC>0?'':'none';document.getElementById('odcP').style.display=ODC<TRASY.length-1?'':'none';{const dym=(k,el)=>{const s=TRASY[ODC+k];el.innerHTML=k<0?'◀':'▶';if(!s)return;const d=document.createElement('div');d.className='dymek';d.innerHTML='<small>'+(k<0?'POPRZEDNI RAJD':'NASTĘPNY RAJD')+'</small><span class="tr '+s.tryb+'">'+TRYBY[s.tryb]+'</span><br>'+s.opis+(s.nagroda&&!zawKoniec(s)?'<br><span style="color:#ffd21f">🏆 '+s.nagroda+'</span>':'')+(s.wkrotce&&s.od?'<br><span style="color:#ffd21f">START '+odcData(s.od)+'</span>':'');el.appendChild(d);};dym(-1,document.getElementById('odcL'));dym(1,document.getElementById('odcP'));}   /* dymek z nazwą sąsiedniego rajdu */   /* strzałka znika, gdy nie ma starszego / nowszego rajdu */document.getElementById('duchTik').style.visibility=t.tryb==='zawody'?'hidden':'';b.textContent=TRYBY[t.tryb];b.className=t.tryb;
+function pokazOdcinek(){const t=TRASY[ODC],b=document.getElementById('odcTryb');document.getElementById('zasRegl').style.display=t.tryb==='ea'?'none':'';   /* link do regulaminu zawodów w ZASADACH tylko na karcie zawodów */document.getElementById('odcNagroda').innerHTML=t.nagroda&&!zawKoniec(t)?'🏆 DO WYGRANIA: '+(t.nagrodaWideo?'<a href="'+t.nagrodaWideo+'" target="krt_lego" title="FILM Z PREZENTACJĄ ZESTAWU">'+t.nagroda+' ▶</a>':t.nagroda):'';   /* nagroda pod nazwą rajdu – znika po zakończeniu zawodów */document.getElementById('odcL').style.display=ODC>0?'':'none';document.getElementById('odcP').style.display=ODC<TRASY.length-1?'':'none';{const dym=(k,el)=>{const s=TRASY[ODC+k];el.innerHTML=k<0?'◀':'▶';if(!s)return;const d=document.createElement('div');d.className='dymek';d.innerHTML='<small>'+(k<0?'POPRZEDNI RAJD':'NASTĘPNY RAJD')+'</small><span class="tr '+s.tryb+'">'+TRYBY[s.tryb]+'</span><br>'+s.opis+(s.nagroda&&!zawKoniec(s)?'<br><span style="color:#ffd21f">🏆 '+s.nagroda+'</span>':'')+(s.wkrotce&&s.od?'<br><span style="color:#ffd21f">START '+odcData(s.od)+'</span>':'');el.appendChild(d);};dym(-1,document.getElementById('odcL'));dym(1,document.getElementById('odcP'));}   /* dymek z nazwą sąsiedniego rajdu */   /* strzałka znika, gdy nie ma starszego / nowszego rajdu */document.getElementById('duchTik').style.visibility=t.tryb==='zawody'?'hidden':'';b.textContent=TRYBY[t.tryb];b.className=t.tryb;
   document.getElementById('odcOpis').textContent=t.wkrotce?`${t.opis} · START ${odcData(t.od)}`:t.opis;
   const s=document.getElementById('startBtn'),rb=document.getElementById('rankingBtn');s.classList.toggle('nieaktywny',!!t.wkrotce);rb.classList.toggle('nieaktywny',!!t.wkrotce);
   s.textContent=t.wkrotce?'START '+odcData(t.od):'START (ENTER)';zawodyKarta(t);}
@@ -1413,6 +1418,25 @@ document.getElementById('kKluczOk').onclick=kluczZapisany;
 document.getElementById('kZmien').onclick=()=>{zamknijKonto();otworzNick(false,false);};
 document.getElementById('kWyloguj').onclick=()=>otworzKonto('wyloguj');document.getElementById('kWylTak').onclick=wyloguj;document.getElementById('kWylNie').onclick=()=>otworzKonto('konto');
 document.getElementById('kZamknij').onclick=zamknijKonto;
+// ===================== JEDNA KARTA Z GRĄ =====================
+// gra otwarta w kilku kartach: nowa karta jest wstrzymana, dopóki tamta działa (albo gracz przejmie grę tutaj – nie w trakcie przejazdu tam)
+window.KARTA_ZABLOK=false;
+(()=>{if(!('BroadcastChannel' in window))return;let czeka=false;const kan=new BroadcastChannel('krt_gra'),id=Math.random().toString(36).slice(2),el=document.getElementById('innaKarta');
+  const jedzie=()=>stan==='jazda'||stan==='odliczanie';
+  const pokaz=(tryb)=>{window.KARTA_ZABLOK=!!tryb;el.style.display=tryb?'flex':'none';try{if(DZW.master)DZW.master.gain.value=tryb?0:0.7;}catch(e){}
+    if(!tryb)return;document.getElementById('ikTekst').innerHTML=tryb==='przejeta'?'GRA ZOSTAŁA OTWARTA W INNEJ KARCIE.<br>TA KARTA JEST WSTRZYMANA.':tryb==='jazda'?'GRA JEST OTWARTA W INNEJ KARCIE<br>I TRWA TAM PRZEJAZD.<br>DOKOŃCZ GO ALBO ZAMKNIJ TAMTĄ KARTĘ.':'GRA JEST JUŻ OTWARTA W INNEJ KARCIE.<br>ZAMKNIJ TAMTĄ KARTĘ, ŻEBY GRAĆ TUTAJ.';
+    document.getElementById('ikTutaj').style.display=tryb==='jazda'?'none':'';};
+  kan.onmessage=e=>{const m=e.data||{};if(m.id===id)return;
+    if(m.t==='kto'){if(!window.KARTA_ZABLOK)kan.postMessage({t:'jestem',id,jazda:jedzie()});}
+    else if(m.t==='jestem'){czeka=false;pokaz(m.jazda?'jazda':(window.KARTA_ZABLOK&&document.getElementById('ikTekst').textContent.includes('WSTRZYMANA')?'przejeta':'inna'));}
+    else if(m.t==='zamknieta'){if(window.KARTA_ZABLOK){pokaz(false);kan.postMessage({t:'kto',id});}}
+    else if(m.t==='przejmuje'){if(window.KARTA_ZABLOK)return;if(jedzie()){kan.postMessage({t:'jestem',id,jazda:true});return;}
+      if(GRA_PAUZA)wznow();if(stan!=='menu')pokazMenu();pokaz('przejeta');}};
+  document.getElementById('ikTutaj').onclick=()=>{pokaz(false);kan.postMessage({t:'przejmuje',id});};
+  addEventListener('pagehide',()=>{if(!window.KARTA_ZABLOK)kan.postMessage({t:'zamknieta',id});});
+  /* wstrzymana karta co 2 s sprawdza, czy tamta jeszcze jest (wiadomość przy zamykaniu karty nie zawsze dochodzi) – brak odpowiedzi = odblokowanie */
+  setInterval(()=>{if(!window.KARTA_ZABLOK)return;czeka=true;kan.postMessage({t:'kto',id});setTimeout(()=>{if(czeka&&window.KARTA_ZABLOK)pokaz(false);},900);},2000);
+  kan.postMessage({t:'kto',id});})();
 // ===================== KONTAKT W RAZIE WYGRANEJ (panel gracza, nieobowiązkowy) =====================
 const KT_POLA={telefon:'ktTel',fb:'ktFb',ig:'ktIg',tt:'ktTt',email:'ktEmail'};
 async function otworzKontakt(){otworzKonto('kontakt');const b=document.getElementById('ktBlad');Object.values(KT_POLA).forEach(id=>document.getElementById(id).value='');

@@ -39,7 +39,7 @@
   <button class="dzwiek" id="dzwiek" type="button">🔇 WŁĄCZ DŹWIĘK</button>
 </div>
 <div class="dol">
-  <a class="start" href="./">ZAGRAJ W ZAWODY ▶</a>
+  <a class="start" id="doGry" href="./">ZAGRAJ W ZAWODY ▶</a>
   <div class="male">BRZYSKA · NAGRODA ZA 1. MIEJSCE<br>
     <a href="regulamin_brzyska_2026.pdf" target="_blank" rel="noopener">REGULAMIN ZAWODÓW (PDF)</a> · FILM: LEGO®</div>
 </div>
@@ -49,5 +49,8 @@
   b.addEventListener('click',()=>{v.muted=!v.muted;if(!v.muted)v.play().catch(()=>{});opis();});
   v.addEventListener('volumechange',opis);
   v.play().catch(()=>{});   /* wyciszony film może ruszyć sam */
+  /* otwarte z gry: przycisk wraca do karty z grą i zamyka tę kartę (bez drugiej kopii gry); otwarte z linku (np. Facebook): zwykłe przejście do gry */
+  const g=document.getElementById('doGry');let gra=null;try{if(window.opener&&!window.opener.closed&&window.opener.location.host===location.host)gra=window.opener;}catch(e){}
+  if(gra){g.textContent='WRÓĆ DO GRY ✕';g.addEventListener('click',e=>{e.preventDefault();try{gra.focus();}catch(x){}window.close();setTimeout(()=>{location.href='./';},300);});}
 </script>
 </body></html>
