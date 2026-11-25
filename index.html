@@ -1275,11 +1275,11 @@ document.getElementById('zZapisz').onclick=zapiszRejestracje;document.getElement
 // ODC = karta oglądana w menu; TRASA_NR = trasa wczytana. Przejście na inną grywalną trasę przeładowuje stronę (bez ekranu tytułowego).
 let ODC=TRASA_NR;
 const odcData=t=>new Date(t).toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'});
-function pokazOdcinek(){const t=TRASY[ODC],b=document.getElementById('odcTryb');document.getElementById('duchTik').style.visibility=t.tryb==='zawody'?'hidden':'';b.textContent=TRYBY[t.tryb];b.className=t.tryb;
+function pokazOdcinek(){const t=TRASY[ODC],b=document.getElementById('odcTryb');document.getElementById('odcL').style.display=ODC>0?'':'none';document.getElementById('odcP').style.display=ODC<TRASY.length-1?'':'none';   /* strzałka znika, gdy nie ma starszego / nowszego rajdu */document.getElementById('duchTik').style.visibility=t.tryb==='zawody'?'hidden':'';b.textContent=TRYBY[t.tryb];b.className=t.tryb;
   document.getElementById('odcOpis').textContent=t.wkrotce?`${t.opis} · START ${odcData(t.od)}`:t.opis;
   const s=document.getElementById('startBtn'),rb=document.getElementById('rankingBtn');s.classList.toggle('nieaktywny',!!t.wkrotce);rb.classList.toggle('nieaktywny',!!t.wkrotce);
   s.textContent=t.wkrotce?'START '+odcData(t.od):'START (ENTER)';zawodyKarta(t);}
-function zmienOdcinek(k){ODC=(ODC+k+TRASY.length)%TRASY.length;const t=TRASY[ODC];
+function zmienOdcinek(k){const n=ODC+k;if(n<0||n>=TRASY.length)return;ODC=n;const t=TRASY[ODC];   /* bez zapętlenia: ◀ starszy rajd, ▶ nowszy */
   if(!t.wkrotce&&ODC!==TRASA_NR){try{sessionStorage.setItem('krt_bez_okladki','1');}catch(e){}const U=new URLSearchParams(location.search);if(ODC===0)U.delete('trasa');else U.set('trasa',t.id);location.search=U.toString();return;}   /* wczytanie wybranej trasy */
   pokazOdcinek();zawodyOdswiez();}
 document.getElementById('odcL').onclick=()=>zmienOdcinek(-1);document.getElementById('odcP').onclick=()=>zmienOdcinek(1);
