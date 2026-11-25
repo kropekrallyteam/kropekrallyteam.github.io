@@ -149,6 +149,7 @@
 #menu .odcStrz{position:absolute;top:330px;width:92px;height:150px;line-height:150px;font-size:58px;color:#ffd21f;background:#101018;border:6px solid #ffd21f;box-shadow:6px 6px 0 #000;cursor:pointer;user-select:none}
 #odcL{left:36px}#odcP{right:36px}#menu .odcStrz:hover{background:#ffd21f;color:#101018}
 #odcTryb{display:inline-block;font-size:16px;padding:6px 12px;margin-right:16px;border:4px solid #101018;vertical-align:3px;color:#fff;box-shadow:4px 4px 0 #000}
+#menu h2{position:relative}#odcNagroda{position:absolute;left:0;right:0;top:100%;margin-top:14px;font-size:15px;color:#ffd21f;text-shadow:3px 3px 0 #000}
 #odcTryb.ea{background:#3a7bff}#odcTryb.zawody{background:#e8302a}#odcTryb.ta{background:#1f9a46}
 #menu .start.nieaktywny{opacity:.45;cursor:default;pointer-events:none}
 #zawOkno,#pauza{position:absolute;left:0;top:0;width:1600px;height:900px;background:rgba(5,5,12,.88);display:none;z-index:7;text-align:center;color:#fff}
@@ -189,6 +190,9 @@
 <body>
 <div id="ekran">
   <div id="okladka"><div class="napis"><span class="klaw">NACIŚNIJ<br>DOWOLNY<br>PRZYCISK</span><span class="dot">DOTKNIJ<br>EKRANU</span></div></div>
+  <script>/* od razu: ekran dopasowany do okna (zanim wczyta się trasa), a po zmianie odcinka bez okładki – bez przesuniętego obrazu przy ładowaniu */
+  (function(){var e=document.getElementById('ekran'),s=Math.min(innerWidth/1600,innerHeight/900);e.style.transformOrigin='50% 50%';e.style.transform='translate(-50%,-50%) scale('+s+')';
+  try{if(sessionStorage.getItem('krt_bez_okladki'))document.getElementById('okladka').style.display='none';}catch(x){}})();</script>
 <div class="hud" id="ps">PS1 BRZYSKA<small>JESIEN</small></div>
 <div class="hud" id="notka"></div>
 <div class="hud" id="czasL">CZAS</div>
@@ -221,7 +225,7 @@
 <div id="ranking"><h1>RANKING <span class="emoji">🏆</span></h1><div id="rKarty" style="display:none"></div><h2>PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY</h2><table id="rTab"></table><div id="rInfo"></div><div id="rWyslij"></div><div class="start" id="rPowrot">POWRÓT (ESC)</div><div id="rAkt"></div></div>
 <div id="menu">
   <h1>Kropek Rally Team<br>Time Attack <span class="flaga">🏁</span></h1>
-  <h2><span id="odcTryb"></span><span id="odcOpis">PS1 · 25 RAJD NIEPODLEGŁOŚCI · BRZYSKA</span></h2>
+  <h2><span id="odcTryb"></span><span id="odcOpis">PS1 · ODCINEK TESTOWY · BRZYSKA</span><span id="odcNagroda"></span></h2>
   <div class="odcStrz" id="odcL" title="POPRZEDNI ODCINEK">◀</div><div class="odcStrz" id="odcP" title="NASTĘPNY ODCINEK">▶</div>
   <div class="auta">
     <div class="auto wyb" data-auto="janusz"><b>KROPEK JANUSZA</b><span>Smoła / Prokop<br>KGR 11761 · IRBUD</span></div>
@@ -245,12 +249,12 @@
 const PLIKI_ZAW=['makieta/trasa_ps3_brzyska.js?v=1','makieta/trasa_brzyska_zawody_fizyka.js?v=9','makieta/otoczenie_brzyska_zawody.js?v=1'];
 const STYL_ZAW={prostych:0.10,szer:[0.8,0.5],separatory:[[895,1],[1068,1],[1170,-1],[1718,1]],schodki:0,tol:4,wierny:true,most:501,hopka:170,podbicia:[250,310,1570],kibice:[[150,-1,1,3],[490,1,2,3,1],[580,1,10,14],[625,1,3,22],[715,-1,2,24],[880,-1,4,26],[905,-1,1,8],[1012,1,4,5],[1065,-1,1,3,1],[1092,-1,1,6],[1395,-1,3,4],[1418,-1,4,3],[1515,1,15,16],[1770,1,4,10]],dlugosc:1864,szykanaOdwr:true,szykana:1395,syf:[[353,428,0],[760,840,0],[1132,1197,0],[1300,1365,-1],[1471,1538,0],[1682,1747,0]]};
 const TRASY=[
-  {id:'brzyska_2026_v1',tryb:'ea',nazwa:'PS1 BRZYSKA',pora:'JESIEN',opis:'PS1 · 25 RAJD NIEPODLEGŁOŚCI · BRZYSKA',rankTytul:'PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY',
+  {id:'brzyska_2026_v1',tryb:'ea',nazwa:'PS1 BRZYSKA',pora:'JESIEN',opis:'PS1 · ODCINEK TESTOWY · BRZYSKA',rankTytul:'PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY',
    pliki:['makieta/trasa_ps1.js','makieta/trasa_brzyska_2026_fizyka.js?v=1'],tr:'PS1_BRZYSKA',fiz:'TRASA_BRZYSKA_2026',ranking:'wyniki/brzyska_2026.json',pref:''},
-  {id:'brzyska_2026_zawody',tryb:'zawody',nazwa:'BRZYSKA',pora:'JESIEN',opis:'BRZYSKA · DO WYGRANIA: LEGO SPEED CHAMPIONS',rankTytul:'ZAWODY · BRZYSKA · SUMA 3 PRZEJAZDÓW',
+  {id:'brzyska_2026_zawody',tryb:'zawody',nazwa:'BRZYSKA',pora:'JESIEN',opis:'25. RAJD NIEPODLEGŁOŚCI · BRZYSKA',nagroda:'DO WYGRANIA: LEGO SPEED CHAMPIONS 77256',rankTytul:'ZAWODY · BRZYSKA · SUMA 3 PRZEJAZDÓW',
    pliki:PLIKI_ZAW,tr:'PS3_BRZYSKA',otoczenie:'OTOCZENIE_BRZYSKA_ZAWODY',fiz:'TRASA_BRZYSKA_ZAWODY',ranking:'wyniki/brzyska_zawody.json',pref:'zaw_',
    styl:STYL_ZAW,km:1.85,od:'2026-11-28T08:00:00+01:00',do:'2026-12-05T23:59:59+01:00'},
-  {id:'brzyska_2026_ta',tryb:'ta',nazwa:'BRZYSKA',pora:'JESIEN',opis:'BRZYSKA · TIME ATTACK · NAJLEPSZY CZAS',rankTytul:'BRZYSKA · TIME ATTACK · NAJLEPSZY CZAS KAŻDEGO KIEROWCY',
+  {id:'brzyska_2026_ta',tryb:'ta',nazwa:'BRZYSKA',pora:'JESIEN',opis:'25. RAJD NIEPODLEGŁOŚCI · BRZYSKA',rankTytul:'BRZYSKA · TIME ATTACK · NAJLEPSZY CZAS KAŻDEGO KIEROWCY',
    pliki:PLIKI_ZAW,tr:'PS3_BRZYSKA',fiz:'TRASA_BRZYSKA_ZAWODY',otoczenie:'OTOCZENIE_BRZYSKA_ZAWODY',ranking:'wyniki/brzyska_2026_ta.json',pref:'ta_',styl:STYL_ZAW,km:1.85,od:'2026-12-06T00:00:00+01:00'}
 ];
 const TRYBY={ea:'WCZESNY DOSTĘP',zawody:'ZAWODY',ta:'TIME ATTACK'};
@@ -1275,12 +1279,12 @@ document.getElementById('zZapisz').onclick=zapiszRejestracje;document.getElement
 // ODC = karta oglądana w menu; TRASA_NR = trasa wczytana. Przejście na inną grywalną trasę przeładowuje stronę (bez ekranu tytułowego).
 let ODC=TRASA_NR;
 const odcData=t=>new Date(t).toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'});
-function pokazOdcinek(){const t=TRASY[ODC],b=document.getElementById('odcTryb');document.getElementById('odcL').style.display=ODC>0?'':'none';document.getElementById('odcP').style.display=ODC<TRASY.length-1?'':'none';   /* strzałka znika, gdy nie ma starszego / nowszego rajdu */document.getElementById('duchTik').style.visibility=t.tryb==='zawody'?'hidden':'';b.textContent=TRYBY[t.tryb];b.className=t.tryb;
+function pokazOdcinek(){const t=TRASY[ODC],b=document.getElementById('odcTryb');document.getElementById('odcNagroda').textContent=t.nagroda&&!zawKoniec(t)?'🏆 '+t.nagroda:'';   /* nagroda pod nazwą rajdu – znika po zakończeniu zawodów */document.getElementById('odcL').style.display=ODC>0?'':'none';document.getElementById('odcP').style.display=ODC<TRASY.length-1?'':'none';   /* strzałka znika, gdy nie ma starszego / nowszego rajdu */document.getElementById('duchTik').style.visibility=t.tryb==='zawody'?'hidden':'';b.textContent=TRYBY[t.tryb];b.className=t.tryb;
   document.getElementById('odcOpis').textContent=t.wkrotce?`${t.opis} · START ${odcData(t.od)}`:t.opis;
   const s=document.getElementById('startBtn'),rb=document.getElementById('rankingBtn');s.classList.toggle('nieaktywny',!!t.wkrotce);rb.classList.toggle('nieaktywny',!!t.wkrotce);
   s.textContent=t.wkrotce?'START '+odcData(t.od):'START (ENTER)';zawodyKarta(t);}
 function zmienOdcinek(k){const n=ODC+k;if(n<0||n>=TRASY.length)return;ODC=n;const t=TRASY[ODC];   /* bez zapętlenia: ◀ starszy rajd, ▶ nowszy */
-  if(!t.wkrotce&&ODC!==TRASA_NR){try{sessionStorage.setItem('krt_bez_okladki','1');}catch(e){}const U=new URLSearchParams(location.search);if(ODC===0)U.delete('trasa');else U.set('trasa',t.id);location.search=U.toString();return;}   /* wczytanie wybranej trasy */
+  if(!t.wkrotce&&ODC!==TRASA_NR){try{sessionStorage.setItem('krt_bez_okladki','1');}catch(e){}const U=new URLSearchParams(location.search);if(ODC===0)U.delete('trasa');else U.set('trasa',t.id);const q=U.toString();location.href=location.pathname+(q?'?'+q:'');return;}   /* wczytanie wybranej trasy */
   pokazOdcinek();zawodyOdswiez();}
 document.getElementById('odcL').onclick=()=>zmienOdcinek(-1);document.getElementById('odcP').onclick=()=>zmienOdcinek(1);
 setTimeout(()=>{pokazOdcinek();zawodyOdswiez();},0);   /* po wczytaniu całego skryptu (GRACZ jest niżej) */ustawKarty();
