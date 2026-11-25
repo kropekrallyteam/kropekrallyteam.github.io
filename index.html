@@ -249,12 +249,12 @@ const TRASY=[
    pliki:['makieta/trasa_ps1.js','makieta/trasa_brzyska_2026_fizyka.js?v=1'],tr:'PS1_BRZYSKA',fiz:'TRASA_BRZYSKA_2026',ranking:'wyniki/brzyska_2026.json',pref:''},
   {id:'brzyska_2026_zawody',tryb:'zawody',nazwa:'BRZYSKA',pora:'JESIEN',opis:'BRZYSKA · DO WYGRANIA: LEGO SPEED CHAMPIONS',rankTytul:'ZAWODY · BRZYSKA · SUMA 3 PRZEJAZDÓW',
    pliki:PLIKI_ZAW,tr:'PS3_BRZYSKA',otoczenie:'OTOCZENIE_BRZYSKA_ZAWODY',fiz:'TRASA_BRZYSKA_ZAWODY',ranking:'wyniki/brzyska_zawody.json',pref:'zaw_',
-   styl:STYL_ZAW,km:1.85,od:'2026-11-28T10:00:00+01:00',do:'2026-12-05T23:59:59+01:00'},
+   styl:STYL_ZAW,km:1.85,od:'2026-11-28T08:00:00+01:00',do:'2026-12-05T23:59:59+01:00'},
   {id:'brzyska_2026_ta',tryb:'ta',nazwa:'BRZYSKA',pora:'JESIEN',opis:'BRZYSKA · TIME ATTACK PO ZAWODACH',rankTytul:'BRZYSKA · TIME ATTACK · NAJLEPSZY CZAS KAŻDEGO KIEROWCY',
    pliki:PLIKI_ZAW,tr:'PS3_BRZYSKA',fiz:'TRASA_BRZYSKA_ZAWODY',otoczenie:'OTOCZENIE_BRZYSKA_ZAWODY',ranking:'wyniki/brzyska_2026_ta.json',pref:'ta_',styl:STYL_ZAW,km:1.85,od:'2026-12-06T00:00:00+01:00'}
 ];
 const TRYBY={ea:'WCZESNY DOSTĘP',zawody:'ZAWODY',ta:'TIME ATTACK'};
-TRASY.forEach(t=>{if(t.od&&Date.now()<Date.parse(t.od))t.wkrotce=true;});   /* zawody grywalne dopiero od daty startu */
+TRASY.forEach(t=>{if(t.od&&Date.now()<Date.parse(t.od)&&t.tryb!=='zawody')t.wkrotce=true;});   /* trasy przed datą zablokowane; zawody wczytują się wcześniej (regulamin, rejestracja), start dopiero od daty – przedStartem() */
 let TRASA_NR=0;try{const U=new URLSearchParams(location.search);if(U.get('podglad')==='1'&&/^(localhost|127\.0\.0\.1)$/.test(location.hostname))TRASY.forEach(t=>t.wkrotce=false);   /* podgląd tylko lokalnie – na stronie nikt nie potrenuje przed startem */   /* ?podglad=1 – podgląd przed startem (tylko do testów) */
   const q=U.get('trasa');   /* strona zawsze otwiera się na wczesnym dostępie; inną trasę wczytuje dopiero strzałka */const i=TRASY.findIndex(t=>t.id===q&&!t.wkrotce);if(i>=0)TRASA_NR=i;}catch(e){}
 const TRASA=TRASY[TRASA_NR];
@@ -1202,6 +1202,10 @@ document.getElementById('rankingBtn').onclick=()=>{if(!TRASY[ODC].wkrotce)pokazR
 const ZAW={stan:null,token:null,nr:0,laduje:false,blad:'',zapoz:false};let GRA_PAUZA=false;
 const PODGLAD=new URLSearchParams(location.search).get('podglad')==='1'&&/^(localhost|127\.0\.0\.1)$/.test(location.hostname);   /* ?podglad=1 – jazda testowa przed startem: bez serwera, bez limitu 3 przejazdów, wyniki nie są wysyłane */
 const czyZawody=()=>!PODGLAD&&TRASA.tryb==='zawody'&&TRASY[ODC]===TRASA;
+/* przed startem zawodów: ekran zawodów działa (regulamin, rejestracja, ranking), ale bez jazdy – także bez zapoznania */
+const przedStartem=t=>!PODGLAD&&t.tryb==='zawody'&&!!t.od&&Date.now()<Date.parse(t.od);
+const odcGodz=t=>odcData(t)+' '+new Date(t).toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'});
+{const z=TRASY.find(t=>t.tryb==='zawody'),ms=z&&z.od?Date.parse(z.od)-Date.now():-1;if(ms>0&&ms<864e5)setTimeout(()=>{if(stan==='menu')pokazOdcinek();},ms+1500);}   /* strona otwarta w chwili startu – przycisk odblokuje się sam */
 const kartaZawodow=()=>TRASY[ODC].tryb==='zawody';
 const zawKoniec=t=>t.do&&Date.now()>Date.parse(t.do);
 async function zawodyOdswiez(){if(!kartaZawodow()||!POSREDNIK_URL||!GRACZ.kod)return;ZAW.laduje=true;
@@ -1215,6 +1219,7 @@ function zawodyKarta(t){const inf=document.getElementById('zawInfo'),sb=document
   inf.innerHTML=(ZAW.blad?'<span class="blad">'+ZAW.blad+'</span><br>':'')+info;
   const zl=document.getElementById('zRejLink');if(zl)zl.onclick=otworzZawOkno;
   /* zapoznanie jest teraz głównym przyciskiem (przed PS1) */
+  if(przedStartem(t)){op.textContent=t.opis+' · START '+odcGodz(t.od);if(t===TRASA&&GRACZ.nick&&st&&!st.zarejestrowany&&!st.poza){sb.textContent='ZAREJESTRUJ SIĘ';return;}sb.textContent='START '+odcGodz(t.od);sb.classList.add('nieaktywny');return;}
   if(t.wkrotce||!GRACZ.nick||t!==TRASA)return;
   if(!st){sb.textContent=ZAW.laduje?'SPRAWDZAM…':'START (ENTER)';return;}
   if(!st.zarejestrowany){sb.textContent='ZAREJESTRUJ SIĘ';return;}
@@ -1223,7 +1228,7 @@ function zawodyKarta(t){const inf=document.getElementById('zawInfo'),sb=document
   if(st.zostalo<=0){sb.textContent='UKOŃCZONO 3/3';sb.classList.add('nieaktywny');op.textContent=t.opis+(st.suma!=null?' · SUMA '+fmt(st.suma):st.moderacja?' · WYNIK W WERYFIKACJI':'');return;}
   if(!st.zapoznanie&&st.zostalo===3){sb.textContent='ZAPOZNANIE (MAX 50 KM/H)';return;}   /* obowiązkowe zapoznanie przed PS1 */
   sb.textContent='START DO PS'+(4-st.zostalo);}
-async function zawodyStart(){const st=ZAW.stan;ZAW.blad='';if(!st){zawodyOdswiez();return;}if(!st.zarejestrowany){otworzZawOkno();return;}if(st.dnf||st.zostalo<=0)return;if(!st.zapoznanie){zawodyZapoznanie();return;}
+async function zawodyStart(){const st=ZAW.stan;ZAW.blad='';if(!st){zawodyOdswiez();return;}if(!st.zarejestrowany){otworzZawOkno();return;}if(przedStartem(TRASA)){pokazOdcinek();return;}if(st.dnf||st.zostalo<=0)return;if(!st.zapoznanie){zawodyZapoznanie();return;}
   const sb=document.getElementById('startBtn');sb.textContent='START…';
   try{const o=await posrednik({akcja:'zawody_start',kod:GRACZ.kod});if(!o||!o.ok){if(o&&o.stan)ZAW.stan=o.stan;ZAW.blad=(o&&o.blad)||'NIE UDAŁO SIĘ WYSTARTOWAĆ';pokazOdcinek();return;}
     ZAW.token=o.token;ZAW.nr=o.nr;ZAW.stan.zostalo=o.zostalo;}
