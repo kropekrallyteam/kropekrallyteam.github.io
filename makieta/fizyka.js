@@ -10,13 +10,16 @@ var KRT_P = Object.freeze({vmax:160,przysp:6.48,hamulec:19,skret:2.5,przyczep:7.
 function KRT_SYMULACJA(T, zd) {
   zd = zd || {};
   var P = KRT_P, DT = KRT_DT;
-  var N = T.N, DS = T.DS, START_I = T.START_I, META_I = T.META_I, IB = T.IB, CH_I = T.CH_I, SZ_ODST = T.SZ_ODST, SZ_GLEB = T.SZ_GLEB, RD0 = T.RD0, MOST_POL = T.MOST_POL, MOST_ZWEZ = T.MOST_ZWEZ;
+  var N = T.N, DS = T.DS, START_I = T.START_I, META_I = T.META_I, IB = T.IB, CH_I = T.CH_I, SZ_ODST = T.SZ_ODST, SZ_GLEB = T.SZ_GLEB, RD0 = T.RD0, MOST_POL = T.MOST_POL, MOST_ZWEZ = T.MOST_ZWEZ, IB2 = T.IB2 == null ? -1 : T.IB2, H2 = T.H2 || 0, TRAWA = T.trawa == null ? 0.7 : T.trawa, SYF = T.syf || [], SYF_G = T.syfG || 0.8, PODB = T.podbicia || [], SZ_ODWR = T.SZ_ODWR ? -1 : 1, SZ0 = T.szer ? T.szer[0] : 1, SZ1 = T.szer ? T.szer[1] : 0.5;   // SYF: [[od_i,do_i,strona]] żwir po wewnętrznej (przyczepność -10%); SZ_ODWR: szykana z pierwszymi oponami po prawej   // TRAWA: przyczepność boczna na trawie (domyślnie 0,7 jak na poboczu; zawody – ślisko)   // IB2/H2: opcjonalna druga, delikatna hopka (trasy bez niej – bez zmian)
   var PX = T.px, PZ = T.pz, DX = T.dx, DZ = T.dz;
   // normalne drogi liczone jak w grze (wektor (-dz,0,dx) znormalizowany)
   var NX = new Array(N + 1), NZ = new Array(N + 1);
   for (var i = 0; i <= N; i++) { var x = -DZ[i], z = DX[i]; var L = Math.sqrt(x * x + 0 * 0 + z * z) || 1; var k = 1 / L; NX[i] = x * k; NZ[i] = z * k; }
-  function wDrogi(i) { var t = Math.max(0, Math.min(1, (i - START_I) / (META_I - START_I))); return RD0 * (1 - 0.5 * t); }
-  function hy(i) { var d = (i - IB) * DS, H = 1.0; if (d <= -10 || d >= 8) return 0; return d < 0 ? H * (d + 10) / 10 : H * (1 - d / 8); }
+  function wDrogi(i) { var t = Math.max(0, Math.min(1, (i - START_I) / (META_I - START_I))); return RD0 * (SZ0 + (SZ1 - SZ0) * t); }   // szerokość: SZ0 na starcie, SZ1 na mecie (domyślnie 1 i 0,5)
+  function hy(i) { var d = (i - IB) * DS, H = 1.0, y = 0; if (d > -10 && d < 8) y = d < 0 ? H * (d + 10) / 10 : H * (1 - d / 8);
+    if (IB2 >= 0) { var e = (i - IB2) * DS; if (e > -12 && e < 9) y += e < 0 ? H2 * (e + 12) / 12 : H2 * (1 - e / 9); }
+    for (var b = 0; b < PODB.length; b++) { var f = (i - PODB[b]) * DS; if (f > -3 && f < 3) y += 0.15 * (1 - Math.abs(f) / 3); }   // krótkie podbicia 15 cm z akcelerometru GoPro
+    return y; }
   function ev(n, a) { if (zd[n]) zd[n](a); }
 
   var S = {
@@ -52,7 +55,8 @@ function KRT_SYMULACJA(T, zd) {
       if (S.stan === 'jazda') S.czas += DT;   // czas biegnie od zapalenia zielonego, także gdy kierowca jeszcze trzyma ręczny
       return;
     }
-    var we = S.stan === 'jazda' ? WE : {gaz:false, ham:true, skret:0, reczny:false}; A.we = we;
+    // po mecie sterowanie dalej z wejścia (gra podaje dojazd do mety STOP); wynik i powtórka kończą się na linii mety
+    var we = (S.stan === 'jazda' || S.stan === 'meta') ? WE : {gaz:false, ham:true, skret:0, reczny:false}; A.we = we;
     var vmax = P.vmax / 3.6;
     A.skretW += Math.max(-DT * 7, Math.min(DT * 7, we.skret - A.skretW));
     var fx = -Math.sin(A.h), fz = -Math.cos(A.h), rx = -fz, rz = fx;
@@ -72,7 +76,9 @@ function KRT_SYMULACJA(T, zd) {
       var g = we.reczny ? P.przyczepReczny : A.dryf ? P.przyczepDrift : P.przyczep;
       if (A.dryf && A.skretW * Math.sign(-vB) > 0.3) g *= 1.6;
       if (A.dryf && we.gaz) g *= 0.85;
-      if (poza) g *= 0.7;
+      if (poza) g *= trawa ? TRAWA : 0.7;
+      // żwir od pobocza: zewnętrzne ~60% wewnętrznej połowy drogi; przyczepność ×0,8 (−20%)
+      for (var q = 0; q < SYF.length; q++) { if (A.idx >= SYF[q][0] && A.idx <= SYF[q][1] && off * SYF[q][2] > wDrogi(A.idx) * 0.2) { g *= SYF_G; break; } }
       var vB2 = vB * Math.exp(-g * DT); var vPrzed = Math.hypot(vL, vB); vL += Math.sign(vL || 1) * Math.abs(vB - vB2) * P.odzysk; vB = vB2;
       var vPo = Math.hypot(vL, vB); if (vPo > vPrzed && vPo > 0.01) { var kk = vPrzed / vPo; vL *= kk; vB *= kk; }
       if (A.dryf || we.reczny) vL *= 1 - Math.min(0.6, Math.abs(A.poslizg)) * 0.45 * DT;
@@ -93,7 +99,7 @@ function KRT_SYMULACJA(T, zd) {
       if (dd < 1.15 && S.czas - sp.t > 0.5) { sp.t = S.czas; var nx = ddx / (dd || 1), nz = ddz / (dd || 1); var vv = Math.hypot(A.vx, A.vz);
         A.vx = A.vx * 0.88 + nx * Math.min(2.5, vv * 0.08); A.vz = A.vz * 0.88 + nz * Math.min(2.5, vv * 0.08); ev('uderzenie', Math.max(2, vv * 0.3)); } }
     // szykana: bramki z opon zajmujące pół drogi (+5 s za każdą trafioną)
-    for (var gk = -1; gk <= 1; gk++) { var gi = CH_I + gk * SZ_ODST; if (Math.abs(A.idx - gi) * DS > 1.3) continue; var sgs = gk === 0 ? 1 : -1; var o = (A.x - PX[gi]) * NX[gi] + (A.z - PZ[gi]) * NZ[gi]; var kraw = wDrogi(gi) / 2 - wDrogi(gi) * SZ_GLEB - 0.2 - 0.9;
+    for (var gk = -1; gk <= 1; gk++) { var gi = CH_I + gk * SZ_ODST; if (Math.abs(A.idx - gi) * DS > 1.3) continue; var sgs = (gk === 0 ? 1 : -1) * SZ_ODWR; var o = (A.x - PX[gi]) * NX[gi] + (A.z - PZ[gi]) * NZ[gi]; var kraw = wDrogi(gi) / 2 - wDrogi(gi) * SZ_GLEB - 0.2 - 0.9;
       if (o * sgs > kraw) { if (S.stan === 'jazda' && !S.trafione.has(gi)) { S.trafione.add(gi); S.kara += 5; ev('szykana'); } A.x -= NX[gi] * (o - sgs * kraw); A.z -= NZ[gi] * (o - sgs * kraw); var vns = A.vx * NX[gi] + A.vz * NZ[gi]; if (vns * sgs > 0) { ev('uderzenie', Math.abs(vns) + 3); A.vx -= NX[gi] * vns; A.vz -= NZ[gi] * vns; } A.vx *= 0.985; A.vz *= 0.985; } }
     // wysokość: garb mostka = hopa
     var s0 = A.idx, fIdx = A.idx + ((A.x - PX[s0]) * DX[s0] + (A.z - PZ[s0]) * DZ[s0]) / DS;

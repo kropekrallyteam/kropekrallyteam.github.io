@@ -118,6 +118,9 @@
   #kontoOkno .klucz{font-size:54px;letter-spacing:14px;color:#3cff6a;margin:10px 0 22px;text-shadow:4px 4px 0 #000}
   #kontoOkno .dane{font-size:16px;line-height:34px;margin:0 0 22px;color:#ccc}
   #kontoOkno .dane b{color:#ffd21f}
+  #kontoOkno .kpola{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;margin:0 0 4px}#kontoOkno .kpola .caly{grid-column:1/3}
+  #kontoOkno .kpola input{width:100%;box-sizing:border-box;font-size:17px;padding:9px 12px;text-transform:none;letter-spacing:0;margin:4px 0}
+  #kontoOkno .nieob{color:#3cff6a}
   #kontoOkno .przyc{display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
   #menu .start{display:inline-block;margin-top:24px;font-size:28px;color:#101018;background:#ffd21f;padding:18px 34px;border:6px solid #101018;box-shadow:6px 6px 0 #000;cursor:pointer}
   #dotyk{position:absolute;left:0;top:0;width:1600px;height:900px;display:none}
@@ -143,6 +146,44 @@
   text-shadow:4px 0 0 #000,-4px 0 0 #000,0 4px 0 #000,0 -4px 0 #000,4px 4px 0 #000,-4px 4px 0 #000,4px -4px 0 #000,-4px -4px 0 #000,7px 7px 0 #b3121a;animation:oklMiga 1.1s steps(1) infinite}
 #okladka .dot{display:none}.dotykowy #okladka .dot{display:inline}.dotykowy #okladka .klaw{display:none}
 @keyframes oklMiga{50%{visibility:hidden}}
+#menu .odcStrz{position:absolute;top:330px;width:92px;height:150px;line-height:150px;font-size:58px;color:#ffd21f;background:#101018;border:6px solid #ffd21f;box-shadow:6px 6px 0 #000;cursor:pointer;user-select:none}
+#odcL{left:36px}#odcP{right:36px}#menu .odcStrz:hover{background:#ffd21f;color:#101018}
+#odcTryb{display:inline-block;font-size:16px;padding:6px 12px;margin-right:16px;border:4px solid #101018;vertical-align:3px;color:#fff;box-shadow:4px 4px 0 #000}
+#odcTryb.ea{background:#3a7bff}#odcTryb.zawody{background:#e8302a}#odcTryb.ta{background:#1f9a46}
+#menu .start.nieaktywny{opacity:.45;cursor:default;pointer-events:none}
+#zawOkno,#pauza{position:absolute;left:0;top:0;width:1600px;height:900px;background:rgba(5,5,12,.88);display:none;z-index:7;text-align:center;color:#fff}
+#zawOkno .ramka,#pauza .ramka{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:860px;background:#1a1a28;border:6px solid #ffd21f;box-shadow:8px 8px 0 #000;padding:30px 40px 28px}
+#pauza .ramka{width:620px}
+#zawOkno h3,#pauza h3{font-size:26px;color:#ffd21f;margin:0 0 16px}
+#zawOkno p,#pauza p{font-size:13px;line-height:24px;color:#ccc;margin:0 0 14px}
+#zawOkno .dwa{display:flex;gap:20px;justify-content:center}
+#zawOkno input{width:380px;font-family:inherit;font-size:20px;padding:10px 14px;background:#0c0c14;color:#fff;border:5px solid #555;outline:none;text-align:center;margin:6px 0}
+#zawOkno #zKonto{width:780px}
+#zawOkno input:focus{border-color:#ffd21f}
+#zawOkno .etyk{font-size:12px;color:#aaa;margin-top:10px}
+#zawOkno .portale{display:flex;gap:12px;justify-content:center;margin:8px 0 4px}
+#zawOkno .portale div{font-size:15px;padding:10px 14px;border:4px solid #555;cursor:pointer;color:#ddd}
+#zawOkno .portale div.wyb{border-color:#ffd21f;color:#101018;background:#ffd21f}
+#zawOkno .kontakt{font-size:12px;line-height:20px;color:#ccc;margin:14px 0 0;padding:10px 14px;border:3px dashed #3a3a5c}#zawOkno .kontakt b{color:#ffd21f}#zawOkno .nieob{color:#3cff6a}#zawOkno #zTel{width:380px}
+#zawOkno .blad{min-height:22px;margin:10px 0 2px;font-size:12px;color:#ff5a4a}
+#zawOkno .przyc,#pauza .przyc{display:flex;gap:22px;justify-content:center;margin-top:10px}
+#zawOkno .start,#pauza .start{display:inline-block;font-size:20px;color:#101018;background:#ffd21f;padding:14px 28px;border:6px solid #101018;box-shadow:6px 6px 0 #000;cursor:pointer}
+#zawOkno .start.drugi,#pauza .start.drugi{background:#e8e4da}
+#pauza .start.dnf{background:#ff5a4a;color:#fff}
+#pauzaBtn{position:absolute;left:24px;top:84px;width:54px;height:54px;line-height:54px;font-size:22px;text-align:center;color:#ffd21f;background:rgba(16,16,24,.8);border:4px solid #ffd21f;cursor:pointer;display:none;z-index:4}
+#zawOkno .zgoda{display:inline-flex;align-items:center;gap:12px;margin:14px 0 0;font-size:13px;white-space:nowrap;color:#fff;cursor:pointer;user-select:none;text-align:left}#zawOkno .zgoda input{position:absolute;opacity:0;width:0;height:0}#zawOkno .zgoda a{color:#ffd21f}#zawOkno .zgoda .ptak{flex:none;width:26px;height:26px;border:4px solid #ffd21f;background:#0c0c14;position:relative}#zawOkno .zgoda input:checked+.ptak{background:#ffd21f}#zawOkno .zgoda input:checked+.ptak:after{content:"";position:absolute;left:7px;top:1px;width:7px;height:14px;border:solid #101018;border-width:0 4px 4px 0;transform:rotate(45deg)}#zawOkno .zgoda input:focus-visible+.ptak{outline:3px solid #fff;outline-offset:2px}#zawOkno #zZapisz.wyl{background:#5a5a66;color:#8a8a94;cursor:not-allowed;box-shadow:none;pointer-events:none}
+#zawOkno .regl{font-size:12px;color:#ccc;margin:12px 0 0}#zawOkno .regl a,#zasady .regl a{color:#ffd21f}#zasady .regl{font-size:13px;color:#ccc;margin:6px 0 14px}
+#zawInfo{font-size:12px;line-height:20px;color:#ccc;margin:6px 0 -4px;min-height:20px}
+#zawInfo a{color:#ffd21f}#zawInfo .blad{color:#ff5a4a}#zawInfo .link{color:#ffd21f;cursor:pointer;text-decoration:underline}
+#rTab tr.poza td{color:#7ff3ff}#rTab tr.dsq td{color:#ff5a4a;opacity:.85}#rTab tr.poza .nowy{background:#7ff3ff}
+#rTab small{display:block;font-size:11px;color:#999;margin-top:3px;white-space:nowrap}#rTab .nowy{white-space:nowrap}#rTab.zaw{width:1040px}
+#rKarty{display:flex;justify-content:center;gap:14px;margin:0 0 14px}
+#rKarty .karta{font-size:18px;padding:10px 22px;border:3px solid #3a3a5c;color:#aaa;cursor:pointer;user-select:none;min-width:250px}
+#rKarty .karta.wyb{color:#101018;background:#ffd21f;border-color:#ffd21f;box-shadow:4px 4px 0 #1a3a9c}
+#rKarty .karta.zamk{opacity:.4;cursor:not-allowed}#rKarty .karta small{display:block;font-size:10px;margin-top:4px}
+#rTab.zaw6{width:1160px;font-size:19px}#rTab.zaw6 td.m{width:60px}#rTab.zaw6 td.ps{width:150px;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums;font-size:16px;color:#ddd}
+#rTab.zaw6 td.c{width:230px;white-space:nowrap}#rTab.zaw6 tr.nag td{font-size:12px;color:#888;border-bottom:3px solid #3a3a5c;padding-top:2px;padding-bottom:6px}
+#rTab.zaw6 td.ps.dnf,#rTab.zaw6 tr.p1 td.ps.dnf{color:#ff3b30}#rTab.zaw6 .kr{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff3b30;margin-left:7px;vertical-align:middle}#rTab.zaw6 tr.leg td{border:none;text-align:left;color:#ff3b30;font-size:14px;padding-top:12px}#rTab.zaw6 tr.leg .kr{width:12px;height:12px;margin:0 8px 0 0}#rTab.zaw6 td.n{white-space:nowrap}#rTab.zaw6 td.ps small{margin-top:2px}#rTab.zaw6 tr.p1 td.ps{color:#ffe98a}#rTab.zaw6 tr.dsq td{color:#ff5a4a}
 </style>
 </head>
 <body>
@@ -163,12 +204,25 @@
 <div class="hud" id="swiatla" style="display:none"><b></b><b></b><b></b><b></b><b></b></div>
 <div class="hud" id="komunikat"></div>
 <div id="dotyk" class="start"><div id="tL">◀</div><div id="tP">▶</div><div id="tH">RĘCZNY</div><div id="tB">HAMULEC</div><div id="tG">GAZ</div></div>
-<div id="kontoOkno"><div class="ramka"><div class="ekran" data-e="wybor"><h3>WITAJ KIEROWCO!</h3><p>CZY GRAŁEŚ JUŻ W KROPEK RALLY TEAM TIME ATTACK?</p><div class="wybor"><div class="start" id="kNowy">NIE GRAŁEM JESZCZE</div><div class="start drugi" id="kMam">GRAŁEM JUŻ</div></div></div><div class="ekran" data-e="login"><h3>ZALOGUJ SIĘ</h3><p>PODAJ SWÓJ NICK I KLUCZ (6 ZNAKÓW), KTÓRY DOSTAŁEŚ PRZY ZAKŁADANIU KONTA.</p><div class="etyk">NICK</div><input id="lNick" maxlength="16" autocomplete="off" spellcheck="false"><div class="etyk">KLUCZ</div><input id="lKlucz" maxlength="7" autocomplete="off" spellcheck="false"><div class="blad" id="lBlad"></div><div class="start" id="lOk">ZALOGUJ (ENTER)</div><span class="link" id="lWroc">POWRÓT (ESC)</span></div><div class="ekran" data-e="klucz"><h3>TWÓJ KLUCZ</h3><p>ZAPISZ GO! RAZEM Z NICKIEM POZWOLI ZAGRAĆ NA INNYM KOMPUTERZE LUB TELEFONIE (TEN SAM WYNIK W RANKINGU).</p><div class="klucz" id="kKluczDuzy">------</div><div class="start" id="kKluczOk">ZAPISAŁEM (ENTER)</div></div><div class="ekran" data-e="konto"><h3>TWOJE KONTO</h3><div class="dane">NICK: <b id="kNick">—</b><br>KLUCZ: <b id="kKlucz">—</b></div><div class="przyc"><div class="start" id="kZmien">ZMIEŃ NICK</div><div class="start drugi" id="kWyloguj">WYLOGUJ</div></div><div style="margin-top:18px"><span class="link" id="kZamknij">ZAMKNIJ (ESC)</span></div></div><div class="ekran" data-e="przenies"><h3>KONTO Z POPRZEDNIEGO ADRESU</h3><p>W TEJ PRZEGLĄDARCE GRAŁEŚ NA STARYM ADRESIE GRY JAKO:</p><div class="klucz" id="pNick" style="font-size:30px;letter-spacing:4px">—</div><p id="pTeraz"></p><div class="przyc"><div class="start" id="pTak">PRZEŁĄCZ NA TO KONTO</div><div class="start drugi" id="pNie">ZOSTAW OBECNE</div></div></div><div class="ekran" data-e="wyloguj"><h3>WYLOGOWAĆ?</h3><p>ŻEBY WRÓCIĆ NA TO KONTO, BĘDZIESZ POTRZEBOWAĆ NICKU I KLUCZA:</p><div class="klucz" id="kKluczWyl">------</div><div class="przyc"><div class="start" id="kWylTak">WYLOGUJ</div><div class="start drugi" id="kWylNie">ANULUJ (ESC)</div></div></div></div></div>
-<div id="zasady"><h1>ZASADY <span class="emoji">📕</span></h1><div class="kol"><div class="blok"><h3>START</h3><ul><li>PRZYTRZYMAJ RĘCZNY (SPACJA) – ZAPALA SIĘ 5 CZERWONYCH ŚWIATEŁ, CO SEKUNDĘ JEDNO.</li><li>GDY WSZYSTKIE ZMIENIĄ SIĘ NA ZIELONE, PUŚĆ RĘCZNY I JEDŹ. GAZ MOŻESZ TRZYMAĆ WCZEŚNIEJ.</li><li>CZAS LICZY SIĘ OD ZAPALENIA ZIELONEGO – TAKŻE GDY JESZCZE TRZYMASZ RĘCZNY.</li></ul><h3>KARY</h3><ul><li><span class="kara">FALSTART +10 S</span> – PUSZCZENIE RĘCZNEGO Z GAZEM PRZED ZIELONYM. ZEGAR RUSZA OD RAZU.</li><li><span class="kara">SZYKANA +5 S</span> – ZA KAŻDĄ TRĄCONĄ BRAMKĘ Z OPON W SZYKANIE.</li></ul></div><div class="blok"><h3>TRASA</h3><ul><li>WYJAZD NA POBOCZE I TRAWĘ, UDERZENIE W OPONY, SEPARATORY I BANDY – BEZ KARY CZASOWEJ, ALE MOCNO SPOWALNIA.</li><li>NA MOSTKU JEST HOPA – PRZY DUŻEJ PRĘDKOŚCI AUTO SIĘ WYBIJA. JEZDNIA NA MOSTKU JEST WĘŻSZA.</li><li>ŻÓŁTA TABLICA 50 M PRZED METĄ ZAPOWIADA METĘ LOTNĄ. CZAS STAJE NA CZERWONEJ TABLICY METY.</li></ul><h3>RANKING</h3><ul><li>LICZY SIĘ TWÓJ NAJLEPSZY CZAS (Z KARAMI). WYNIK WYSYŁA SIĘ SAM PO MECIE.</li><li>KAŻDY PRZEJAZD JEST SPRAWDZANY NA SERWERZE. PODEJRZANE WYNIKI CZEKAJĄ NA WERYFIKACJĘ.</li><li class="klaw">STEROWANIE: STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU.</li><li class="dotyk">TELEFON: STRZAŁKI PO LEWEJ – SKRĘT · ZIELONY – GAZ · CZERWONY – HAMULEC · RĘCZNY PRZED STARTEM PO LEWEJ, W JEŹDZIE NAD GAZEM.</li></ul></div></div><div class="start" id="zPowrot">POWRÓT (ESC)</div></div>
-<div id="ranking"><h1>RANKING <span class="emoji">🏆</span></h1><h2>PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY</h2><table id="rTab"></table><div id="rInfo"></div><div id="rWyslij"></div><div class="start" id="rPowrot">POWRÓT (ESC)</div><div id="rAkt"></div></div>
+<div id="zawOkno"><div class="ramka"><h3>REJESTRACJA DO ZAWODÓW</h3>
+  <p>DANE WIDZI TYLKO ORGANIZATOR. Z OSOBĄ, KTÓRA OSIĄGNIE NAJLEPSZY WYNIK, SKONTAKTUJEMY SIĘ POPRZEZ WSKAZANE SOCIAL MEDIA – ŻEBY ODEBRAĆ NAGRODĘ, TRZEBA PODAĆ NICK I KLUCZ. W RANKINGU WIDAĆ TYLKO TWÓJ NICK.</p>
+  <div class="dwa"><div><div class="etyk">IMIĘ</div><input id="zImie" maxlength="40" autocomplete="given-name"></div><div><div class="etyk">NAZWISKO</div><input id="zNazw" maxlength="40" autocomplete="family-name"></div></div>
+  <div class="etyk">GDZIE OBSERWUJESZ KROPEK RALLY TEAM?</div>
+  <div class="portale"><div data-p="fb">FACEBOOK</div><div data-p="ig">INSTAGRAM</div><div data-p="tt">TIKTOK</div><div data-p="yt">YOUTUBE</div></div>
+  <div class="etyk" id="zKontoEt">NAZWA KONTA</div><input id="zKonto" maxlength="60" autocomplete="off" spellcheck="false">
+  <div class="kontakt"><b>GDZIE SIĘ Z TOBĄ SKONTAKTOWAĆ, JEŚLI WYGRASZ?</b><br>NAPISZEMY NA KONTO PODANE WYŻEJ (PRZY YOUTUBE – NA E-MAIL). MOŻESZ TEŻ ZOSTAWIĆ NUMER TELEFONU – <span class="nieob">NIE JEST OBOWIĄZKOWY</span>. TELEFON I INNE SOCIALE DODASZ TEŻ W KAŻDEJ CHWILI W PANELU GRACZA (TWOJE KONTO → KONTAKT).</div>
+  <div class="etyk">NUMER TELEFONU (NIEOBOWIĄZKOWO)</div><input id="zTel" type="tel" maxlength="20" autocomplete="tel" placeholder="np. 600 100 200">
+  <label class="zgoda"><input type="checkbox" id="zZgoda"><span class="ptak"></span><span>ZAPOZNAŁEM(-ŁAM) SIĘ Z <a href="regulamin.pdf" target="_blank" rel="noopener">REGULAMINEM ZAWODÓW (PDF)</a> I ZASADAMI RODO</span></label><div class="blad" id="zBlad"></div>
+  <div class="przyc"><div class="start" id="zZapisz">ZAPISZ</div><div class="start drugi" id="zAnuluj">ANULUJ</div></div></div></div>
+<div id="pauza"><div class="ramka"><h3>PAUZA</h3><p id="pauzaInfo"></p><div class="przyc"><div class="start" id="pKont">KONTYNUUJ</div><div class="start drugi" id="pWyjdz">WYJDŹ DO MENU</div></div></div></div>
+<div id="pauzaBtn" title="PAUZA (ESC / P)">II</div>
+<div id="kontoOkno"><div class="ramka"><div class="ekran" data-e="wybor"><h3>WITAJ KIEROWCO!</h3><p>CZY GRAŁEŚ JUŻ W KROPEK RALLY TEAM TIME ATTACK?</p><div class="wybor"><div class="start" id="kNowy">NIE GRAŁEM JESZCZE</div><div class="start drugi" id="kMam">GRAŁEM JUŻ</div></div></div><div class="ekran" data-e="login"><h3>ZALOGUJ SIĘ</h3><p>PODAJ SWÓJ NICK I KLUCZ (6 ZNAKÓW), KTÓRY DOSTAŁEŚ PRZY ZAKŁADANIU KONTA.</p><div class="etyk">NICK</div><input id="lNick" maxlength="16" autocomplete="off" spellcheck="false"><div class="etyk">KLUCZ</div><input id="lKlucz" maxlength="7" autocomplete="off" spellcheck="false"><div class="blad" id="lBlad"></div><div class="start" id="lOk">ZALOGUJ (ENTER)</div><span class="link" id="lWroc">POWRÓT (ESC)</span></div><div class="ekran" data-e="klucz"><h3>TWÓJ KLUCZ</h3><p>ZAPISZ GO! RAZEM Z NICKIEM POZWOLI ZAGRAĆ NA INNYM KOMPUTERZE LUB TELEFONIE (TEN SAM WYNIK W RANKINGU).</p><div class="klucz" id="kKluczDuzy">------</div><div class="start" id="kKluczOk">ZAPISAŁEM (ENTER)</div></div><div class="ekran" data-e="konto"><h3>TWOJE KONTO</h3><div class="dane">NICK: <b id="kNick">—</b><br>KLUCZ: <b id="kKlucz">—</b></div><div class="przyc"><div class="start" id="kZmien">ZMIEŃ NICK</div><div class="start drugi" id="kKontakt">KONTAKT</div><div class="start drugi" id="kWyloguj">WYLOGUJ</div></div><div style="margin-top:18px"><span class="link" id="kZamknij">ZAMKNIJ (ESC)</span></div></div><div class="ekran" data-e="kontakt"><h3>KONTAKT W RAZIE WYGRANEJ</h3><p>WSZYSTKIE POLA SĄ <span class="nieob">NIEOBOWIĄZKOWE</span>. DANE WIDZI TYLKO ORGANIZATOR – UŻYJEMY ICH WYŁĄCZNIE, ŻEBY SKONTAKTOWAĆ SIĘ Z TOBĄ, JEŚLI WYGRASZ. MOŻESZ JE ZMIENIĆ W KAŻDEJ CHWILI.</p><div class="kpola"><div><div class="etyk">TELEFON</div><input id="ktTel" type="tel" maxlength="20" autocomplete="tel" placeholder="np. 600 100 200"></div><div><div class="etyk">FACEBOOK</div><input id="ktFb" maxlength="60" autocomplete="off" spellcheck="false" placeholder="nazwa konta"></div><div><div class="etyk">INSTAGRAM</div><input id="ktIg" maxlength="60" autocomplete="off" spellcheck="false" placeholder="@nazwa"></div><div><div class="etyk">TIKTOK</div><input id="ktTt" maxlength="60" autocomplete="off" spellcheck="false" placeholder="@nazwa"></div><div class="caly"><div class="etyk">E-MAIL (NP. PRZY YOUTUBE)</div><input id="ktEmail" type="email" maxlength="60" autocomplete="email" spellcheck="false" placeholder="np. jan.kowalski@gmail.com"></div></div><div class="blad" id="ktBlad"></div><div class="przyc"><div class="start" id="ktZapisz">ZAPISZ</div><div class="start drugi" id="ktWroc">WRÓĆ (ESC)</div></div></div><div class="ekran" data-e="przenies"><h3>KONTO Z POPRZEDNIEGO ADRESU</h3><p>W TEJ PRZEGLĄDARCE GRAŁEŚ NA STARYM ADRESIE GRY JAKO:</p><div class="klucz" id="pNick" style="font-size:30px;letter-spacing:4px">—</div><p id="pTeraz"></p><div class="przyc"><div class="start" id="pTak">PRZEŁĄCZ NA TO KONTO</div><div class="start drugi" id="pNie">ZOSTAW OBECNE</div></div></div><div class="ekran" data-e="wyloguj"><h3>WYLOGOWAĆ?</h3><p>ŻEBY WRÓCIĆ NA TO KONTO, BĘDZIESZ POTRZEBOWAĆ NICKU I KLUCZA:</p><div class="klucz" id="kKluczWyl">------</div><div class="przyc"><div class="start" id="kWylTak">WYLOGUJ</div><div class="start drugi" id="kWylNie">ANULUJ (ESC)</div></div></div></div></div>
+<div id="zasady"><h1>ZASADY <span class="emoji">📕</span></h1><div class="kol"><div class="blok"><h3>START</h3><ul><li>PRZYTRZYMAJ RĘCZNY (SPACJA) – ZAPALA SIĘ 5 CZERWONYCH ŚWIATEŁ, CO SEKUNDĘ JEDNO.</li><li>GDY WSZYSTKIE ZMIENIĄ SIĘ NA ZIELONE, PUŚĆ RĘCZNY I JEDŹ. GAZ MOŻESZ TRZYMAĆ WCZEŚNIEJ.</li><li>CZAS LICZY SIĘ OD ZAPALENIA ZIELONEGO – TAKŻE GDY JESZCZE TRZYMASZ RĘCZNY.</li></ul><h3>KARY</h3><ul><li><span class="kara">FALSTART +10 S</span> – PUSZCZENIE RĘCZNEGO Z GAZEM PRZED ZIELONYM. ZEGAR RUSZA OD RAZU.</li><li><span class="kara">SZYKANA +5 S</span> – ZA KAŻDĄ TRĄCONĄ BRAMKĘ Z OPON W SZYKANIE.</li></ul></div><div class="blok"><h3>TRASA</h3><ul><li>WYJAZD NA POBOCZE I TRAWĘ, UDERZENIE W OPONY, SEPARATORY I BANDY – BEZ KARY CZASOWEJ, ALE MOCNO SPOWALNIA.</li><li>NA MOSTKU JEST HOPA – PRZY DUŻEJ PRĘDKOŚCI AUTO SIĘ WYBIJA. JEZDNIA NA MOSTKU JEST WĘŻSZA.</li><li>ŻÓŁTA TABLICA 50 M PRZED METĄ ZAPOWIADA METĘ LOTNĄ. CZAS STAJE NA CZERWONEJ TABLICY METY.</li></ul><h3>RANKING</h3><ul><li>LICZY SIĘ TWÓJ NAJLEPSZY CZAS (Z KARAMI). WYNIK WYSYŁA SIĘ SAM PO MECIE.</li><li>KAŻDY PRZEJAZD JEST SPRAWDZANY NA SERWERZE. PODEJRZANE WYNIKI CZEKAJĄ NA WERYFIKACJĘ.</li><li class="klaw">STEROWANIE: STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU.</li><li class="dotyk">TELEFON: STRZAŁKI PO LEWEJ – SKRĘT · ZIELONY – GAZ · CZERWONY – HAMULEC · RĘCZNY PRZED STARTEM PO LEWEJ, W JEŹDZIE NAD GAZEM.</li></ul></div></div><div class="regl" id="zasRegl">ZAWODY: <a href="regulamin.pdf" target="_blank" rel="noopener">REGULAMIN ZAWODÓW (PDF)</a> – OTWIERA SIĘ W NOWYM OKNIE</div><div class="start" id="zPowrot">POWRÓT (ESC)</div></div>
+<div id="ranking"><h1>RANKING <span class="emoji">🏆</span></h1><div id="rKarty" style="display:none"></div><h2>PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY</h2><table id="rTab"></table><div id="rInfo"></div><div id="rWyslij"></div><div class="start" id="rPowrot">POWRÓT (ESC)</div><div id="rAkt"></div></div>
 <div id="menu">
   <h1>Kropek Rally Team<br>Time Attack <span class="flaga">🏁</span></h1>
-  <h2>PS1 · 25 RAJD NIEPODLEGŁOŚCI · BRZYSKA</h2>
+  <h2><span id="odcTryb"></span><span id="odcOpis">PS1 · 25 RAJD NIEPODLEGŁOŚCI · BRZYSKA</span></h2>
+  <div class="odcStrz" id="odcL" title="POPRZEDNI ODCINEK">◀</div><div class="odcStrz" id="odcP" title="NASTĘPNY ODCINEK">▶</div>
   <div class="auta">
     <div class="auto wyb" data-auto="janusz"><b>KROPEK JANUSZA</b><span>Smoła / Prokop<br>KGR 11761 · IRBUD</span></div>
     <div class="auto" data-auto="andrzej"><b>KROPEK ANDRZEJA</b><span>Wieczorek / Duda<br>SH 5583F · BUDMAX METAL</span></div>
@@ -177,16 +231,38 @@
   <div class="tiki"><div class="tik wl" id="duchTik"><i><svg viewBox="0 0 9 9"><path d="M1.2 4.8 L3.6 7.2 L7.9 1.8" stroke="#3cff6a" stroke-width="1.9" fill="none" stroke-linecap="square"/></svg></i>DUCH NAJLEPSZEGO PRZEJAZDU</div></div>
   <p>STRZAŁKI / WSAD – JAZDA · SPACJA – RĘCZNY · R – RESTART · ESC – MENU</p>
   <div id="kontoBtn" title="KONTO"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="5" y="1" width="6" height="6" fill="#ffd21f"/><rect x="4" y="2" width="8" height="4" fill="#ffd21f"/><rect x="2" y="9" width="12" height="6" fill="#ffd21f"/><rect x="3" y="8" width="10" height="2" fill="#ffd21f"/></svg><span id="nickPokaz">—</span></div>
+  <div id="zawInfo"></div>
   <div class="przyciski"><div class="start" id="startBtn">START (ENTER)</div><div class="start drugi" id="rankingBtn">RANKING <span class="emoji">🏆</span></div><div class="start drugi" id="zasadyBtn">ZASADY <span class="emoji">📕</span></div></div>
   <div id="nickOkno"><div class="ramka"><h3>PODAJ NICK KIEROWCY</h3><p>NICK BĘDZIE WIDOCZNY W RANKINGU.<br>LITERY, CYFRY, SPACJA, _ - . (3–16)</p><input id="nickPole" maxlength="16" autocomplete="off" spellcheck="false"><div id="nickBlad"></div><div class="start" id="nickOk">ZAPISZ (ENTER)</div><span id="nickAnuluj">ANULUJ (ESC)</span></div></div>
 </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="makieta/trasa_ps1.js"></script>
-<script src="makieta/fizyka.js?v=3"></script>
+<script>
+/* ODCINKI – lista tras w grze (strzałki ◀ ▶ w menu). Gra wczytuje pliki tylko wybranej trasy; zmiana trasy = przeładowanie strony,
+   bo świat 3D budowany jest raz przy starcie. pref – przedrostek kluczy zapisu (najlepszy czas, duch); Brzyska bez przedrostka (stare zapisy graczy). */
+/* odcinek zawodów i jego późniejszy Time Attack: ta sama trasa, osobne rankingi */
+const PLIKI_ZAW=['makieta/trasa_ps3_brzyska.js?v=1','makieta/trasa_brzyska_zawody_fizyka.js?v=9','makieta/otoczenie_brzyska_zawody.js?v=1'];
+const STYL_ZAW={prostych:0.10,szer:[0.8,0.5],separatory:[[895,1],[1068,1],[1170,-1],[1718,1]],schodki:0,tol:4,wierny:true,most:501,hopka:170,podbicia:[250,310,1570],kibice:[[150,-1,1,3],[490,1,2,3,1],[580,1,10,14],[625,1,3,22],[715,-1,2,24],[880,-1,4,26],[905,-1,1,8],[1012,1,4,5],[1065,-1,1,3,1],[1092,-1,1,6],[1395,-1,3,4],[1418,-1,4,3],[1515,1,15,16],[1770,1,4,10]],dlugosc:1864,szykanaOdwr:true,szykana:1395,syf:[[353,428,0],[760,840,0],[1132,1197,0],[1300,1365,-1],[1471,1538,0],[1682,1747,0]]};
+const TRASY=[
+  {id:'brzyska_2026_v1',tryb:'ea',nazwa:'PS1 BRZYSKA',pora:'JESIEN',opis:'PS1 · 25 RAJD NIEPODLEGŁOŚCI · BRZYSKA',rankTytul:'PS1 · BRZYSKA · NAJLEPSZY CZAS KAŻDEGO KIEROWCY',
+   pliki:['makieta/trasa_ps1.js','makieta/trasa_brzyska_2026_fizyka.js?v=1'],tr:'PS1_BRZYSKA',fiz:'TRASA_BRZYSKA_2026',ranking:'wyniki/brzyska_2026.json',pref:''},
+  {id:'brzyska_2026_zawody',tryb:'zawody',nazwa:'BRZYSKA',pora:'JESIEN',opis:'BRZYSKA · DO WYGRANIA: LEGO SPEED CHAMPIONS',rankTytul:'ZAWODY · BRZYSKA · SUMA 3 PRZEJAZDÓW',
+   pliki:PLIKI_ZAW,tr:'PS3_BRZYSKA',otoczenie:'OTOCZENIE_BRZYSKA_ZAWODY',fiz:'TRASA_BRZYSKA_ZAWODY',ranking:'wyniki/brzyska_zawody.json',pref:'zaw_',
+   styl:STYL_ZAW,km:1.85,od:'2026-11-28T10:00:00+01:00',do:'2026-12-05T23:59:59+01:00'},
+  {id:'brzyska_2026_ta',tryb:'ta',nazwa:'BRZYSKA',pora:'JESIEN',opis:'BRZYSKA · TIME ATTACK PO ZAWODACH',rankTytul:'BRZYSKA · TIME ATTACK · NAJLEPSZY CZAS KAŻDEGO KIEROWCY',
+   pliki:PLIKI_ZAW,tr:'PS3_BRZYSKA',fiz:'TRASA_BRZYSKA_ZAWODY',otoczenie:'OTOCZENIE_BRZYSKA_ZAWODY',ranking:'wyniki/brzyska_2026_ta.json',pref:'ta_',styl:STYL_ZAW,km:1.85,od:'2026-12-06T00:00:00+01:00'}
+];
+const TRYBY={ea:'WCZESNY DOSTĘP',zawody:'ZAWODY',ta:'TIME ATTACK'};
+TRASY.forEach(t=>{if(t.od&&Date.now()<Date.parse(t.od))t.wkrotce=true;});   /* zawody grywalne dopiero od daty startu */
+let TRASA_NR=0;try{const U=new URLSearchParams(location.search);if(U.get('podglad')==='1'&&/^(localhost|127\.0\.0\.1)$/.test(location.hostname))TRASY.forEach(t=>t.wkrotce=false);   /* podgląd tylko lokalnie – na stronie nikt nie potrenuje przed startem */   /* ?podglad=1 – podgląd przed startem (tylko do testów) */
+  const q=U.get('trasa');   /* strona zawsze otwiera się na wczesnym dostępie; inną trasę wczytuje dopiero strzałka */const i=TRASY.findIndex(t=>t.id===q&&!t.wkrotce);if(i>=0)TRASA_NR=i;}catch(e){}
+const TRASA=TRASY[TRASA_NR];
+const daneTrasy=nazwa=>new Function('return '+nazwa)();   /* stała z pliku trasy (const nie trafia do window) */
+TRASA.pliki.forEach(p=>document.write('<script src="'+p+'"><\/script>'));
+</script>
+<script src="makieta/fizyka.js?v=12"></script>
 <script src="makieta/nick.js?v=3"></script>
-<script src="makieta/trasa_brzyska_2026_fizyka.js?v=1"></script>
 <script src="makieta/kropek_mesh.js"></script>
 <script src="makieta/kropek_model.js?v=1911a"></script>
 <script src="makieta/pojazdy_model.js?v=1711e"></script>
@@ -212,7 +288,7 @@ function rozdzPx(){return ROZDZ===1080?[1920,1080]:[1280,720];}
 const QS=new URLSearchParams(location.search), MAPA=false;
 const renderer=new THREE.WebGLRenderer({antialias:false});
 renderer.setSize(...rozdzPx(),false);renderer.setPixelRatio(1);
-renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.BasicShadowMap;renderer.shadowMap.autoUpdate=true;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.BasicShadowMap;renderer.shadowMap.autoUpdate=false;renderer.shadowMap.needsUpdate=true;   /* cienie przeliczane co drugą klatkę (pętla gry) – nieruchome obiekty, różnicy nie widać */
 document.getElementById('ekran').prepend(renderer.domElement);
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x8fa848);
 scene.add(new THREE.HemisphereLight(0xfff1d6,0x7a6848,0.85));
@@ -246,7 +322,7 @@ const TX_KRUSZ=(()=>{const cv=document.createElement('canvas');cv.width=64;cv.he
   const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.pelna=true;return t;})();
 
 // --- trasa z GPS (próbki co 0,75 m po długości łuku)
-const TR=PS1_BRZYSKA;
+const TR=daneTrasy(TRASA.tr);
 // Stylizacja jak w grach z automatów: długie proste + wyraźne zakręty (kolejność, kierunek i ostrość z GPS)
 // 1) Douglas-Peucker na surowym śladzie z większą tolerancją ?tol (m) → odcinki proste
 // 2) w każdym wierzchołku łuk: promień maleje z kątem skrętu (nawrót ciasno, łagodny łuk szeroko)
@@ -272,7 +348,25 @@ function manhattan(V,JOG){const out=[[V[0][0],V[0][1]]];let cx=V[0][0],cz=V[0][1
 function scalKrotkie(V,MIN){V=V.slice();let zm=true;while(zm){zm=false;for(let i=1;i<V.length-2;i++){const L=Math.hypot(V[i+1][0]-V[i][0],V[i+1][1]-V[i][1]);if(L>=MIN)continue;
     const [x1,z1]=V[i-1],[x2,z2]=V[i],[x3,z3]=V[i+1],[x4,z4]=V[i+2];const d=(x1-x2)*(z3-z4)-(z1-z2)*(x3-x4);if(Math.abs(d)<1e-6)continue;
     const t=((x1-x3)*(z3-z4)-(z1-z3)*(x3-x4))/d;const p=[x1+t*(x2-x1),z1+t*(z2-z1)];if(Math.hypot(p[0]-x2,p[1]-z2)>40)continue;V.splice(i,2,p);zm=true;break;}}return V;}   /* krótki odcinek między dwoma zakrętami → jeden zakręt w punkcie przecięcia (bez łuków o promieniu kilku metrów) */
-function stylizuj(P,tol){const V=scalKrotkie(QS.get("schodki")==="0"?dp(P,tol):manhattan(dp(P,tol),+(QS.get("jog")||20)),28);const out=[V[0]];
+// WYDŁUŻENIE PROSTYCH (zawody, styl.prostych = np. 0.10): odcinki prawie bez skrętu rozciągane tak, by cała trasa urosła o zadany ułamek; zakręty bez zmian.
+// ROZ.f(x,z) przenosi punkt mapy (las, dom, ślad GPS) razem z drogą (ta sama odległość od drogi), ROZ.m(m) – metry od startu po wydłużeniu.
+const ROZ={f:(x,z)=>[x,z],m:m=>m};
+function rozciagnij(S,ile){const n=S.length,L=[],hd=j=>Math.atan2(S[j+1][0]-S[j][0],S[j+1][1]-S[j][1]);for(let j=0;j<n-1;j++)L.push(Math.hypot(S[j+1][0]-S[j][0],S[j+1][1]-S[j][1]));
+  const w=[];for(let j=0;j<n-1;j++){let mx=0;for(let k=Math.max(0,j-2);k<Math.min(n-2,j+2);k++){let d=hd(k+1)-hd(k);d=Math.atan2(Math.sin(d),Math.cos(d));mx=Math.max(mx,Math.abs(d));}w.push(mx<0.05?1:0);}   /* prosta: kurs zmienia się < ~3° na 10 m w promieniu 20 m */
+  const suma=L.reduce((a,b)=>a+b,0),prost=L.reduce((a,l,j)=>a+l*w[j],0),alfa=prost>0?ile*suma/prost:0;
+  const S2=[S[0].slice()],c1=[0],c2=[0];for(let j=0;j<n-1;j++){const k=1+alfa*w[j];S2.push([S2[j][0]+(S[j+1][0]-S[j][0])*k,S2[j][1]+(S[j+1][1]-S[j][1])*k]);c1.push(c1[j]+L[j]);c2.push(c2[j]+L[j]*k);}
+  ROZ.m=m=>{if(m<=0)return m;if(m>=c1[n-1])return c2[n-1]+(m-c1[n-1]);let j=0;while(c1[j+1]<m)j++;return c2[j]+(m-c1[j])/(L[j]||1)*(c2[j+1]-c2[j]);};
+  ROZ.f=(x,z)=>{let b=0,bd=1e18,bt=0;for(let j=0;j<n-1;j++){const ax=S[j][0],az=S[j][1],dx=S[j+1][0]-ax,dz=S[j+1][1]-az;let t=((x-ax)*dx+(z-az)*dz)/((dx*dx+dz*dz)||1);t=Math.max(0,Math.min(1,t));const d=(ax+dx*t-x)**2+(az+dz*t-z)**2;if(d<bd){bd=d;b=j;bt=t;}}
+    const ax=S[b][0],az=S[b][1],dx=S[b+1][0]-ax,dz=S[b+1][1]-az,l=Math.hypot(dx,dz)||1,nx=-dz/l,nz=dx/l,lat=(x-(ax+dx*bt))*nx+(z-(az+dz*bt))*nz;
+    return [S2[b][0]+(S2[b+1][0]-S2[b][0])*bt+nx*lat,S2[b][1]+(S2[b+1][1]-S2[b][1])*bt+nz*lat];};
+  return S2;}
+const rozGPS=q=>ROZ.f(q[0],q[1]);   /* punkt śladu GPS po wydłużeniu prostych */
+const mNa=m=>START_I+Math.round(ROZ.m(m)/DS);   /* metry od startu (pomiar na trasie bez wydłużenia) → indeks próbki */
+function stylizuj(P,tol){
+  if(TRASA.styl&&TRASA.styl.wierny){   /* tryb wierny (zawody): droga prosto po śladzie GPS co 10 m, tylko lekko odszumiona (średnia z 3 punktów) – bez upraszczania i łuków */
+    const S0=P.map((p,i)=>{let sx=0,sz=0,c=0;for(let k=-1;k<=1;k++){const q=P[i+k];if(q){sx+=q[0];sz+=q[1];c++;}}return [sx/c,sz/c];});const S=TRASA.styl.prostych?rozciagnij(S0,TRASA.styl.prostych):S0;
+    const ext=(a,b,L)=>{const dx=a[0]-b[0],dz=a[1]-b[1],l=Math.hypot(dx,dz)||1;const o=[];for(let k=6;k>=1;k--)o.push([a[0]+dx/l*L*k/6,a[1]+dz/l*L*k/6]);return o;};
+    return {pts:[...ext(S[0],S[3],ZAPAS),...S,...ext(S[S.length-1],S[S.length-4],ZAPAS_META).reverse()],wierzcholki:dp(P,Math.max(tol,12))};}   /* wierzchołki tylko do strzałek zakrętów – grubsze uproszczenie, żeby zakręt liczył się w całości */const V=scalKrotkie((QS.get("schodki")==="0"||(TRASA.styl&&TRASA.styl.schodki===0))?dp(P,tol):manhattan(dp(P,tol),+(QS.get("jog")||20)),28);const out=[V[0]];
   for(let i=1;i<V.length-1;i++){const [px,pz]=V[i-1],[cx,cz]=V[i],[nx,nz]=V[i+1];
     let ax=px-cx,az=pz-cz,bx=nx-cx,bz=nz-cz;const la=Math.hypot(ax,az),lb=Math.hypot(bx,bz);ax/=la;az/=la;bx/=lb;bz/=lb;
     const skret=Math.PI-Math.acos(Math.max(-1,Math.min(1,ax*bx+az*bz)));          // kąt skrętu 0..π
@@ -289,30 +383,43 @@ function stylizuj(P,tol){const V=scalKrotkie(QS.get("schodki")==="0"?dp(P,tol):m
   const pre=ext(G[0],G[Math.min(3,G.length-1)],ZAPAS),post=ext(G[G.length-1],G[Math.max(0,G.length-4)],ZAPAS_META).reverse();
   return {pts:[...pre,...G,...post],wierzcholki:V};}
 const ZAPAS=40, ZAPAS_META=130;   // m prostej przed startem i za metą (dłuższy odjazd na wyhamowanie)
-const TOL=+(QS.get('tol')||12);
-const STYL=stylizuj(TR.surowe,TOL);
+const TOL=+(QS.get('tol')||(TRASA.styl&&TRASA.styl.tol)||12);   /* zawody: mniejsze upraszczanie – zakręty bliżej GPS */
+const STYL=stylizuj(TRASA.styl&&TRASA.styl.dlugosc?TR.surowe.slice(0,Math.round(TRASA.styl.dlugosc/10)+1):TR.surowe,TOL);   /* dlugosc: odcinek przycięty do zadanej długości od startu (m) */
 const curve=new THREE.CatmullRomCurve3(STYL.pts.map(([x,z])=>new THREE.Vector3(x,0,z)),false,'centripetal');
 const LEN=curve.getLength(), DS=0.75, N=Math.round(LEN/DS), m2t=m=>m/LEN;
 const samples=[];for(let i=0;i<=N;i++){const u=i/N;samples.push({p:curve.getPointAt(u),d:curve.getTangentAt(u)});}
 const nrm=s=>new THREE.Vector3(-s.d.z,0,s.d.x).normalize();
 const RD0=11;let RD=RD0;   // szerokość asfaltu na starcie; RD = szerokość w miejscu aktualnie budowanym (zmieniana w pętlach)
 const START_I=Math.round(ZAPAS/DS), META_I=N-Math.round(ZAPAS_META/DS);
-function wDrogi(i){const t=Math.max(0,Math.min(1,(i-START_I)/(META_I-START_I)));return RD0*(1-0.5*t);}   /* droga zwęża się liniowo przez cały odcinek: 100% na starcie, 50% na mecie */
+const SZER=(TRASA.styl&&TRASA.styl.szer)||[1,0.5];   /* szerokość względem RD0: [start, meta] – zawody: start węższy o 20%, meta bez zmian */
+function wDrogi(i){const t=Math.max(0,Math.min(1,(i-START_I)/(META_I-START_I)));return RD0*(SZER[0]+(SZER[1]-SZER[0])*t);}   /* droga zwęża się liniowo przez cały odcinek: 100% na starcie, 50% na mecie */
 const tc=(START_I-4)/N, CP=curve.getPointAt(tc), cd=curve.getTangentAt(tc);
 const ic=START_I, I0=0, I1=N;
 function krzywizna(i,k=6){const a=samples[Math.max(0,i-k)].d,b=samples[Math.min(N,i+k)].d;return {ang:Math.acos(Math.max(-1,Math.min(1,a.x*b.x+a.z*b.z))),lewy:(-a.x*b.z+a.z*b.x)>0};}
 // strefa otoczenia: las / pole / wieś (uproszczenie – docelowo z OpenStreetMap)
-function strefa(i,side){const v=(Math.sin(i*0.0021+0.5+side)+Math.sin(i*0.0057+side*2))*0.5;return v>0.25?'las':v<-0.35?'wies':'pole';}
+// otoczenie z OpenStreetMap (zawody): las tam, gdzie las na mapie; wieś tam, gdzie budynki; reszta pole
+const OTO=TRASA.otoczenie?(o=>({...o,lasy:o.lasy.map(P=>P.map(rozGPS)),cieki:o.cieki.map(P=>P.map(rozGPS)),budynki:o.budynki.map(b=>{const q=rozGPS(b);return [q[0],q[1],b[2],b[3],b[4]];})}))(daneTrasy(TRASA.otoczenie)):null;   /* las, domy i cieki przesunięte razem z drogą (wydłużone proste) */
+function wPoly(x,z,P){let w=false;for(let i=0,j=P.length-1;i<P.length;j=i++){const a=P[i],b=P[j];if((a[1]>z)!==(b[1]>z)&&x<(b[0]-a[0])*(z-a[1])/(b[1]-a[1])+a[0])w=!w;}return w;}
+const wLesie=(x,z)=>OTO.lasy.some(P=>wPoly(x,z,P));
+const STREFA_C=new Map();
+function strefaMapa(i,side){i=Math.max(0,Math.min(N,i));const k=i*2+(side>0?1:0);let v=STREFA_C.get(k);if(v)return v;const s=samples[i],n=nrm(s),o=side*(wDrogi(i)/2+22);const x=s.p.x+n.x*o,z=s.p.z+n.z*o;
+  v=wLesie(x,z)?'las':OTO.budynki.some(b=>Math.abs(b[0]-x)<45&&Math.abs(b[1]-z)<45)?'wies':'pole';STREFA_C.set(k,v);return v;}
+function strefa(i,side){if(OTO)return strefaMapa(i,side);const v=(Math.sin(i*0.0021+0.5+side)+Math.sin(i*0.0057+side*2))*0.5;return v>0.25?'las':v<-0.35?'wies':'pole';}
 
 // --- mostek na dnie doliny (~590 m wg profilu wysokości GPS) jako hopa
-const MOST_M=+(QS.get('most')||590);
-const IB_GPS=(()=>{const q=TR.surowe[Math.min(TR.surowe.length-1,Math.round(MOST_M/10))];let b=0,bd=1e9;samples.forEach((s,i)=>{const d=(s.p.x-q[0])**2+(s.p.z-q[1])**2;if(d<bd){bd=d;b=i;}});return b;})();
+const MOST_M=+(QS.get('most')||(TRASA.styl&&TRASA.styl.most)||590);   /* zawody: rzeka w dnie doliny wg wysokości GPS */
+const IB_GPS=(()=>{const q=rozGPS(TR.surowe[Math.min(TR.surowe.length-1,Math.round(MOST_M/10))]);let b=0,bd=1e9;samples.forEach((s,i)=>{const d=(s.p.x-q[0])**2+(s.p.z-q[1])**2;if(d<bd){bd=d;b=i;}});return b;})();
 // hopa na mostku: środek najbliższej (w promieniu ~300 m od mostka z GPS) prostej o długości min. 80 m
-const IB=(()=>{const prosto=i=>{if(i<30||i>N-30)return false;const c=samples[i].d;for(const k of [-12,12]){const a=samples[i+k].d;if(a.x*c.x+a.z*c.z<0.9995)return false;}return true;};
+const IB=(TRASA.styl&&TRASA.styl.wierny)?IB_GPS:(()=>{   /* tryb wierny: hopa dokładnie na mostku z GPS */
+const prosto=i=>{if(i<30||i>N-30)return false;const c=samples[i].d;for(const k of [-12,12]){const a=samples[i+k].d;if(a.x*c.x+a.z*c.z<0.9995)return false;}return true;};
   const odcinki=[];let st=-1;for(let i=START_I+20;i<META_I-20;i++){if(prosto(i)){if(st<0)st=i;}else if(st>=0){odcinki.push([st,i-1]);st=-1;}}if(st>=0)odcinki.push([st,META_I-21]);
   const dobre=odcinki.filter(([a,b])=>(b-a)*DS>=80);let best=null,bd=1e9;for(const [a,b] of dobre){const m=Math.round((a+b)/2);const d=Math.abs(m-IB_GPS);if(d<bd){bd=d;best=m;}}return best??IB_GPS;})();
 // profil: równa rampa w górę 10 m do 1 m i od razu zjazd 8 m – auto wybija się ze szczytu i leci kilkanaście metrów
-function hy(i){const d=(i-IB)*DS,H=1.0;if(d<=-10||d>=8)return 0;return d<0?H*(d+10)/10:H*(1-d/8);}
+// podbicia (zawody): krótkie garby 15 cm w miejscach powtarzalnych szarpnięć pionowych z akcelerometru GoPro (3 przejazdy z 11.11)
+const PODB=((TRASA.styl&&TRASA.styl.podbicia)||[]).map(m=>{const q=rozGPS(TR.surowe[Math.round(m/10)]);let b=0,bd=1e9;samples.forEach((s,i)=>{const d=(s.p.x-q[0])**2+(s.p.z-q[1])**2;if(d<bd){bd=d;b=i;}});return b;});
+// druga, delikatna hopka (zawody): na grzbiecie za startem wg wysokości GPS, 0,5 m; trasy bez styl.hopka – brak (IB2=-1)
+const IB2=(TRASA.styl&&TRASA.styl.hopka)?(()=>{const q=rozGPS(TR.surowe[Math.round(TRASA.styl.hopka/10)]);let b=0,bd=1e9;samples.forEach((s,i)=>{const d=(s.p.x-q[0])**2+(s.p.z-q[1])**2;if(d<bd){bd=d;b=i;}});return b;})():-1, H2=0.5;
+function hy(i){const d=(i-IB)*DS,H=1.0;let y=0;if(d>-10&&d<8)y=d<0?H*(d+10)/10:H*(1-d/8);if(IB2>=0){const e=(i-IB2)*DS;if(e>-12&&e<9)y+=e<0?H2*(e+12)/12:H2*(1-e/9);}for(const pb of PODB){const f=(i-pb)*DS;if(f>-3&&f<3)y+=.15*(1-Math.abs(f)/3);}return y;}
 const MOST_POL=6, MOST_ZWEZ=wDrogi(IB)/2*0.6;   // mostek: ±6 m od środka, jezdnia zwężona do ±3,3 m (bariery betonowe)
 // asfalt jak na wzorze: drobna faktura, ciemniejsze wyjeżdżone pasy kół, łaty i spękania (jedna tekstura na całą szerokość drogi)
 const TX_ASFALT=(()=>{const W2=256,H2=512,cv=document.createElement('canvas');cv.width=W2;cv.height=H2;const c=cv.getContext('2d');const im=c.createImageData(W2,H2);
@@ -375,8 +482,16 @@ function opony(x,z,ile=3,kolizja=true){if(kolizja)SEPARATORY.push({x,z,t:-9});  
   const OL=new THREE.Mesh(new THREE.CylinderGeometry(.37,.37,ile*.24+.04,9),new THREE.MeshBasicMaterial({color:0x0c0c0c,side:THREE.BackSide}));OL.position.y=ile*.12;g.add(OL);g.position.set(x,0,z);scene.add(g);}
 function beczka(x,z){const b=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.9,8),M(0x1d8a3a));b.position.set(x,.45,z);b.castShadow=true;scene.add(b);const p=new THREE.Mesh(new THREE.CylinderGeometry(.305,.305,.16,8),M(0xf0f0f0));p.position.set(x,.55,z);scene.add(p);}
 // szykana: na środku najdłuższej pionowej prostej (3 bramki co 16 m, naprzemiennie z lewej i prawej)
-const SZ_ODST=26, SZ_GLEB=0.4;   // szykana: odstęp bramek 26 próbek (19,5 m), bramka zajmuje 45% szerokości drogi
-const CH_I=(()=>{const V=STYL.wierzcholki;let best=-1,bl=0;for(let i=1;i<V.length;i++){const dx=V[i][0]-V[i-1][0],dz=V[i][1]-V[i-1][1];const L=Math.hypot(dx,dz);if(Math.abs(dz)>Math.abs(dx)&&L>bl){bl=L;best=i;}}
+const SZ_ODST=26, SZ_GLEB=0.4, SZ_ODWR=(TRASA.styl&&TRASA.styl.szykanaOdwr)?1:0;   /* SZ_ODWR: pierwszy rząd opon po prawej (wjazd lewą stroną) */
+// żwir („syf”) po wewnętrznej zakrętów (zawody): [od_i, do_i, strona: -1 lewa / 1 prawa]; przyczepność -10% liczy fizyka
+const SYF=((TRASA.styl&&TRASA.styl.syf)||[]).map(([a,b,st])=>{const i0=mNa(a),i1=mNa(b);
+  if(!st){const u=samples[i0].d,w=samples[i1].d;st=Math.sign(u.x*w.z-u.z*w.x)||1;}   /* strona 0 = automatycznie wewnętrzna zakrętu (apeks): skręt w prawo → prawa (+1), w lewo → lewa (-1) */
+  return [i0,i1,st];});   // szykana: odstęp bramek 26 próbek (19,5 m), bramka zajmuje 45% szerokości drogi
+const CH_I=(TRASA.styl&&TRASA.styl.szykana)?mNa(TRASA.styl.szykana):TRASA.styl?(()=>{   /* styl.szykana: środek szykany w metrach od startu (jak na onboardzie) */
+   /* trasa bez stylizacji: szykana na najdłuższej prostej w ostatnich 40% odcinka, min. 150 m od hopy */
+  const prosto=i=>{const a=samples[i-12].d,b=samples[i+12].d;return a.x*b.x+a.z*b.z>0.998;};const od=Math.round(START_I+0.6*(META_I-START_I)),doI=META_I-60;
+  let best=null,bl=0,st=-1;for(let i=od;i<=doI;i++){const ok=prosto(i)&&Math.abs(i-IB)>200;if(ok&&st<0)st=i;if((!ok||i===doI)&&st>=0){const L=i-st;if(L>bl){bl=L;best=Math.round((st+i)/2);}st=-1;}}
+  return best??Math.round(START_I+0.85*(META_I-START_I));})():(()=>{const V=STYL.wierzcholki;let best=-1,bl=0;for(let i=1;i<V.length;i++){const dx=V[i][0]-V[i-1][0],dz=V[i][1]-V[i-1][1];const L=Math.hypot(dx,dz);if(Math.abs(dz)>Math.abs(dx)&&L>bl){bl=L;best=i;}}
   const q=[(V[best][0]+V[best-1][0])/2,(V[best][1]+V[best-1][1])/2];let b=0,bd=1e9;samples.forEach((s,i)=>{const d=(s.p.x-q[0])**2+(s.p.z-q[1])**2;if(d<bd){bd=d;b=i;}});return b;})();
 const vszum=(a,b)=>{const ia=Math.floor(a),ib=Math.floor(b),fa=a-ia,fb=b-ib,h=(p,q)=>{const s=Math.sin(p*127.1+q*311.7)*43758.5453;return s-Math.floor(s);},sa=fa*fa*(3-2*fa),sb=fb*fb*(3-2*fb);return (h(ia,ib)*(1-sa)+h(ia+1,ib)*sa)*(1-sb)+(h(ia,ib+1)*(1-sa)+h(ia+1,ib+1)*sa)*sb;};
 function wysT(x,z){const SB=samples[IB];const d=distRoad(x,z);const dw=Math.abs((x-SB.p.x)*SB.d.x+(z-SB.p.z)*SB.d.z);const wz=Math.abs((x-SB.p.x)*SB.d.z-(z-SB.p.z)*SB.d.x);return (dw<MOST_POL+0.6&&wz<70)?-0.5:d<RD0/2+5?-0.06:Math.min(2.5,(d-RD0/2-4)*0.04)*(0.45+1.1*vszum(x/26,z/26));}   /* wysokość terenu – też do stawiania drzew i domów */
@@ -525,7 +640,7 @@ function budujBrzoze(v){const g=new THREE.Group();const pn=new THREE.Mesh(GEO_PI
 function tree(x,z,s){if(wWodzie(x,z,4.5*Math.max(1,s)))return;{const st0=samples[START_I].p;const dS=Math.hypot(x-st0.x,z-st0.z);if(dS<15||(dS<70&&rnd()<.45))return;}   /* mniej drzew przy starcie, wolne miejsce dla karetki i straży */const rb=rnd();if(rb<.2){const v=rb<.1?0:1;postaw("brzoza"+v,()=>budujBrzoze(v),x,z,rnd()*6.28,s*(0.85+rnd()*0.3));return;}const sw=rnd()<.22;const k=sw?Math.floor(rnd()*2):Math.floor(rnd()*LIS_DAB.length);
   postaw((sw?'swierk':'dab')+k,()=>budujDrzewo(sw,sw?0.9+k*0.15:1,k),x,z,rnd()*6.28,s*(0.9+rnd()*0.2));}
 const DOMY=[[0xf0ead8,0x8a3e26,0],[0xe8dcb8,0x6a3624,1],[0xf4f0e6,0x9a4a2c,2],[0xe4d6a8,0x5a3222,0]];   /* tynk: biały, kremowy, jasnożółty + dachówka */   /* kamień + dachówka: 4 wzory (3 kształty) */
-function house(x,z,rot){if(wWodzie(x,z,8)||distRoad(x,z)<RD/2+13)return;   /* murek i szopa nie mogą wchodzić na pobocze */{const st0=samples[START_I].p;if(Math.hypot(x-st0.x,z-st0.z)<30)return;}const k=Math.floor(rnd()*DOMY.length);postaw("dom"+k,()=>budujDom(DOMY[k][0],DOMY[k][1],DOMY[k][2]),x,z,rot+(rnd()<.5?0:Math.PI),0.9+rnd()*0.2);}
+function house(x,z,rot){if(OTO&&!house.zMapy)return;   /* zawody: domy tylko z mapy */if(wWodzie(x,z,8)||distRoad(x,z)<RD/2+13)return;   /* murek i szopa nie mogą wchodzić na pobocze */{const st0=samples[START_I].p;if(Math.hypot(x-st0.x,z-st0.z)<30)return;}const k=Math.floor(rnd()*DOMY.length);postaw("dom"+k,()=>budujDom(DOMY[k][0],DOMY[k][1],DOMY[k][2]),x,z,rot+(rnd()<.5?0:Math.PI),0.9+rnd()*0.2);}
 // krzaki: 3 wzory z kilku kęp liści (jesienne), kępy trawy: 2 wzory z cienkich źdźbeł – stawiane jako instancje
 const KRZ_PAL=[[0x9a3a1a,0xc05a24,0x6e2814],[0xb0761e,0xd49a34,0x7a5216],[0x6e7a2e,0x8e9a3c,0x4e5a22]];
 function budujKrzak(k){const g=new THREE.Group();const p=KRZ_PAL[k];for(let i=0;i<6;i++){const a=i/6*6.28+rnd(),o=i?.45+rnd()*.25:0;const r=.42+rnd()*.22;
@@ -553,7 +668,7 @@ if(!MAPA){
  const PLOT_OST={'-1':null,'1':null};
  for(let i=I0;i<=I1;i+=2){const s=samples[i];RD=wDrogi(i);const n=nrm(s);
    for(const side of [-1,1]){const st=strefa(i,side);
-     if(st==='las'){for(let r=0;r<3;r++){if(rnd()<.8){const o=side*(RD/2+6+r*16+rnd()*16);const x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(distRoad(x,z)>RD/2+5)tree(x,z,.85+rnd()*.55);}}}   // ściana lasu, kilka rzędów w głąb
+     if(st==='las'){for(let r=0;r<3;r++){if(rnd()<(TRASA.styl?[.7,.45,.2][r]:.8)){   /* zawody: najdalszy rząd rzadszy – las z mapy jest po obu stronach, mniej pracy dla karty */const o=side*(RD/2+6+r*16+rnd()*16);const x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(distRoad(x,z)>RD/2+5)tree(x,z,.85+rnd()*.55);}}}   // ściana lasu, kilka rzędów w głąb
      if(st==='pole'&&rnd()<.04){const o=side*(RD/2+7+rnd()*30);const x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(distRoad(x,z)>RD/2+5)tree(x,z,.9+rnd()*.5);}
      if(st==='wies'&&i%96===0){const o=side*(RD/2+16+rnd()*6);const x=s.p.x+n.x*o,z=s.p.z+n.z*o;if(distRoad(x,z)>RD/2+8)house(x,z,Math.atan2(s.d.x,s.d.z),[0xf1e6cf,0xe8dcc0,0xf4efe4][i%3],[0xc0452a,0x8a3a28,0xc8562f][i%3]);}
      if(st==='wies'&&i%3===0){const o=side*(RD/2+6.5);const px=s.p.x+n.x*o,pz=s.p.z+n.z*o;const p=new THREE.Mesh(new THREE.BoxGeometry(.14,.95,.14),M(0x6e4f32));p.position.set(px,.47,pz);p.castShadow=true;scene.add(p);
@@ -562,6 +677,11 @@ if(!MAPA){
          for(let k=1;k<6;k++){const u=k/6,sz=new THREE.Mesh(new THREE.BoxGeometry(.04,.85,.1),M(k%2?0x8a6a44:0x7c5c3a));sz.position.set(pp[0]+dx*u,.42,pp[1]+dz*u);sz.rotation.y=ry;scene.add(sz);}}
        PLOT_OST[side]=[px,pz];}else if(st!=='wies')PLOT_OST[side]=null;
    }}
+ // zawody: prawdziwe budynki z mapy (obrócone jak w rzeczywistości) i las w głąb według granic lasu z mapy
+ if(OTO){const dDaleko=(x,z)=>{let m=1e9,b=0;for(let i=0;i<=N;i+=8){const p=samples[i].p,d=(p.x-x)**2+(p.z-z)**2;if(d<m){m=d;b=i;}}return [Math.sqrt(m),b];};   /* odległość od drogi także dla dalekich punktów (distRoad kończy się na 60 m) */
+   house.zMapy=true;for(const b of OTO.budynki){const [d,bi]=dDaleko(b[0],b[1]);if(d<130){RD=wDrogi(bi);house(b[0],b[1],b[4]);}}house.zMapy=false;
+   /* las w głąb: rzędy drzew w strefie lasu (do ok. 54 m od drogi) wystarczają – dalej kamera z góry nie sięga, dodatkowe drzewa tylko obciążały kartę */
+ }
  // kilka drzew przy starcie (w kadrze odliczania, nie zasłaniają karetki ani straży)
  {for(const [wz,bok] of [[-8,-1],[6,-1],[-4,1],[10,1],[18,-1]]){const s=samples[Math.max(0,START_I+Math.round(wz/DS))],n=nrm(s);const o=bok*(RD/2+11+rnd()*3);const k=Math.floor(rnd()*4);postaw("dab"+k,()=>budujDrzewo(false,1,k),s.p.x+n.x*o,s.p.z+n.z*o,rnd()*6.28,.9+rnd()*.3);}}
  {const s=samples[START_I+Math.round(13/DS)],n=nrm(s);const o=-(RD/2+15);postaw("dom0",()=>budujDom(DOMY[0][0],DOMY[0][1],DOMY[0][2]),s.p.x+n.x*o,s.p.z+n.z*o,Math.atan2(s.d.x,s.d.z)+Math.PI/2,1);}   /* jeden dom po lewej przy starcie */
@@ -602,18 +722,41 @@ if(!MAPA){
  // kępy trawy: gęsto przy poboczu, rzadziej w polu (instancje – lekkie)
  for(let i=I0;i<=I1;i+=3){const s=samples[i];RD=wDrogi(i);const n=nrm(s);for(const side of [-1,1]){const ile=1+Math.floor(rnd()*3);for(let k=0;k<ile;k++){const o=side*(RD/2+1+rnd()*9);kepaW(s.p.x+n.x*o+(rnd()-.5)*2,s.p.z+n.z*o+(rnd()-.5)*2);}
    if(rnd()<.35){const o=side*(RD/2+12+rnd()*30);kepaW(s.p.x+n.x*o,s.p.z+n.z*o);}}}
+ // separatory z onboardu (zawody): [metr od startu, strona -1 lewa / 1 prawa] – po 3 przy krawędzi, co 3 m
+ if(TRASA.styl&&TRASA.styl.separatory)for(const [m,st] of TRASA.styl.separatory)for(let k=-1;k<=1;k++){const i=mNa(m)+Math.round(k*3/DS),q=samples[i],nn=nrm(q),w=wDrogi(i);separator(q.p.x+nn.x*st*(w/2+0.6),q.p.z+nn.z*st*(w/2+0.6),Math.atan2(q.d.x,q.d.z));}
  // bele słomy po zewnętrznej ciasnych łuków, stare ślady opon
  const SK=new THREE.MeshBasicMaterial({color:0x202024,transparent:true,opacity:.2});
  for(let i=I0+8;i<I1-8;i++){const k=krzywizna(i);if(k.ang<0.11)continue;const s=samples[i];RD=wDrogi(i);const n=nrm(s);const zew=k.lewy?1:-1;
    if(i%2===0&&k.ang>0.16)opony(s.p.x+n.x*zew*(RD/2+1.4),s.p.z+n.z*zew*(RD/2+1.4),2+(i%3===0));
-   if(i%9===0&&k.ang>0.2)separator(s.p.x-n.x*zew*(RD/2+0.6),s.p.z-n.z*zew*(RD/2+0.6),Math.atan2(s.d.x,s.d.z));
+   if(i%9===0&&k.ang>(TRASA.styl?0.12:0.2))separator(s.p.x-n.x*zew*(RD/2+0.6),s.p.z-n.z*zew*(RD/2+0.6),Math.atan2(s.d.x,s.d.z));
    if(i%2===0)for(let m=0;m<2;m++){const o=-zew*(1.2+m*1.5)+Math.sin(i*.04+m*1.7)*.5;const p=new THREE.Mesh(new THREE.PlaneGeometry(.24,1.56),SK);p.rotation.x=-Math.PI/2;const g=new THREE.Group();g.add(p);g.position.set(s.p.x+n.x*o,.055,s.p.z+n.z*o);g.rotation.y=Math.atan2(s.d.x,s.d.z);scene.add(g);}
  }
  // szykana z opon i separatorów + beczki
- if(true){[-1,0,1].forEach((gk,gi)=>{const i=CH_I+gk*SZ_ODST;const s=samples[i],n=nrm(s);RD=wDrogi(i);const side=gk===0?1:-1;
+ if(true){[-1,0,1].forEach((gk,gi)=>{const i=CH_I+gk*SZ_ODST;const s=samples[i],n=nrm(s);RD=wDrogi(i);const side=(gk===0?1:-1)*(SZ_ODWR?-1:1);
    for(let o=RD/2-0.3;o>RD/2-RD*SZ_GLEB;o-=0.75){opony(s.p.x+n.x*side*o,s.p.z+n.z*side*o,2,false);   /* bramki szykany mają własną kolizję z karą */}
    const tip=RD/2-RD*SZ_GLEB-0.2;separator(s.p.x+n.x*side*tip,s.p.z+n.z*side*tip,Math.atan2(s.d.x,s.d.z)+Math.PI/2);
    beczka(s.p.x+n.x*side*(RD/2+0.9)+s.d.x*1.2,s.p.z+n.z*side*(RD/2+0.9)+s.d.z*1.2);});}
+ // żwir wyciągnięty na asfalt po wewnętrznej zakrętów (tylko gdzie trasa ma SYF)
+ if(SYF.length){const cv=document.createElement('canvas');cv.width=64;cv.height=256;const c=cv.getContext('2d');let sd=91;const rr=()=>{sd=(sd*16807)%2147483647;return (sd-1)/2147483646;};
+   for(let k=0;k<1700;k++){const u=Math.pow(rr(),0.55);const x=u*64,y=rr()*256;const v=[[66,52,38],[82,64,44],[54,43,32],[96,76,52]][k%4];c.fillStyle=`rgba(${v[0]},${v[1]},${v[2]},${0.45+0.55*u})`;const r=0.8+rr()*2.2;   /* ciemny, błotnisty żwir */c.fillRect(x,y,r,r*(.7+rr()*.6));}   /* gęściej przy krawędzi wewnętrznej (u=1), rzadziej ku środkowi */
+   const tx=new THREE.CanvasTexture(cv);tx.wrapT=THREE.RepeatWrapping;const mat=new THREE.MeshLambertMaterial({map:tx,transparent:true,depthWrite:false,side:THREE.DoubleSide});
+   for(const [a,b,st] of SYF){const P=[],U=[],I=[];for(let i=a;i<=b;i++){const q=samples[i],nn=nrm(q),w=wDrogi(i),y=hy(i)+.05;const kon=Math.min(1,(i-a)/14,(b-i)/14);const o1=st*(w/2-0.05),o0=st*(w/2-0.05-(w/2)*0.6*(0.3+0.7*kon));   /* od pobocza w głąb jezdni: ok. 60% połowy drogi, zwęża się na końcach */
+       P.push(q.p.x+nn.x*o0,y,q.p.z+nn.z*o0,q.p.x+nn.x*o1,y,q.p.z+nn.z*o1);U.push(0,(i-a)*0.06,1,(i-a)*0.06);if(i>a){const k=(i-a)*2;I.push(k-2,k-1,k,k-1,k+1,k);}}
+     const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(U,2));g.setIndex(I);g.computeVertexNormals();
+     const m=new THREE.Mesh(g,mat);m.receiveShadow=true;m.renderOrder=2;scene.add(m);}}
+ // kibice za taśmą (zawody): grupy w miejscach widocznych na onboardzie PS3 z 11.11 – [metr od startu, strona -1 lewa / 1 prawa, ile osób, odległość od krawędzi drogi]
+ if(TRASA.styl&&TRASA.styl.kibice){let ks=4242;const kr=()=>{ks=(ks*16807)%2147483647;return (ks-1)/2147483646;};const KOL=[0xff4a3a,0x2f6bff,0xffd21f,0x2ecc40,0xffffff,0x1c1c1c,0xff8c1a,0x8a3cff,0x18b4c8,0x6b4a2a];
+   for(const [m,st,ile,odl,kam] of TRASA.styl.kibice){const c=mNa(m),dl=Math.max(6,ile*1.6+4),n0=Math.round(dl/2/DS),ot=Math.max(1.8,Math.min(odl,9)-1.6);   /* najwyżej 9 m od krawędzi – dalej kamera z góry ich nie pokazuje */let pp=null;
+     for(let i=c-n0;i<=c+n0;i++){const q=samples[i],nn=nrm(q),w=wDrogi(i),o=st*(w/2+ot),x=q.p.x+nn.x*o,z=q.p.z+nn.z*o;
+       if((i-(c-n0))%4===0){const sl=new THREE.Mesh(new THREE.BoxGeometry(.08,1,.08),M(0xeeeeee));sl.position.set(x,.5,z);scene.add(sl);if(pp){const dx=x-pp[0],dz=z-pp[1],L=Math.hypot(dx,dz);
+         const t=new THREE.Mesh(new THREE.BoxGeometry(.05,.1,L),M(((i>>2)%2)?0xffffff:0xe01818));t.position.set((x+pp[0])/2,.92,(z+pp[1])/2);t.rotation.y=Math.atan2(dx,dz);scene.add(t);}pp=[x,z];}}   /* taśma biało-czerwona na słupkach */
+     for(let k=0;k<ile;k++){const i=c+Math.round(((k+.5)/ile-.5)*(dl-3)/DS),q=samples[i],nn=nrm(q),w=wDrogi(i),o=st*(w/2+ot+1+kr()*Math.min(4,1+ile*.25));
+       const g=postac(kam?0xff8c1a:KOL[Math.floor(kr()*KOL.length)]);g.position.set(q.p.x+nn.x*o,0,q.p.z+nn.z*o);g.rotation.y=Math.atan2(-nn.x*st,-nn.z*st)+(kr()-.5)*.6;g.scale.setScalar(.78+kr()*.08);scene.add(g);}}}
+ // uskoki na asfalcie w miejscach podbić (zawody): ciemniejsza łata w poprzek drogi z jasną krawędzią uskoku – widać, gdzie podbije
+ if(PODB.length){const mL=new THREE.MeshLambertMaterial({color:0x34343a,transparent:true,opacity:.6,depthWrite:false}),mK=new THREE.MeshLambertMaterial({color:0xd6d4cc,transparent:true,opacity:.7,depthWrite:false});
+   for(const pb of PODB){for(const [dl,mat,dz] of [[1.6,mL,0],[0.14,mK,-0.8],[0.1,mK,0.8]]){const i=Math.max(0,Math.min(N,pb+Math.round(dz/DS))),q=samples[i],w=wDrogi(i);
+     const m=new THREE.Mesh(new THREE.PlaneGeometry(w-0.3,dl),mat);m.rotation.order='YXZ';m.rotation.y=Math.atan2(q.d.x,q.d.z);m.rotation.x=-Math.PI/2;   /* jak linia mety: szerokość w poprzek drogi */
+     m.position.set(q.p.x,hy(i)+.052,q.p.z);m.renderOrder=3;scene.add(m);}}}
  // start: biała linia, tablica świetlna z zielonym światłem, kibice i samochód organizatora
  if(true){RD=RD0;const s=samples[Math.round(ZAPAS/DS)],n=nrm(s);
    const lin=new THREE.Mesh(new THREE.PlaneGeometry(RD,.5),new THREE.MeshLambertMaterial({map:wytartaFarba((()=>{const cv=document.createElement('canvas');cv.width=512;cv.height=32;const c=cv.getContext('2d');c.fillStyle='#ecebe6';c.fillRect(0,0,512,32);return cv;})()),transparent:true,depthWrite:false}));lin.rotation.order='YXZ';lin.rotation.y=Math.atan2(s.d.x,s.d.z);lin.rotation.x=-Math.PI/2;lin.position.set(s.p.x,.05,s.p.z);scene.add(lin);
@@ -664,6 +807,33 @@ if(!MAPA){
    b2.fillStyle='#fff';b2.font='bold 24px Arial Black,Arial';b2.textAlign='center';b2.textBaseline='middle';b2.fillText('META',128,17);
    const tbn=new THREE.CanvasTexture(cb);tbn.anisotropy=4;const mb=new THREE.MeshLambertMaterial({map:tbn});
    const ban=new THREE.Mesh(new THREE.BoxGeometry(RD+2,.62,.06),[M(0xb01818),M(0xb01818),M(0xb01818),M(0xb01818),mb,mb]);ban.position.set(s.p.x,2.85,s.p.z);ban.rotation.y=Math.atan2(s.d.x,s.d.z);ban.castShadow=true;void ban;}
+ // META STOP: 100 m za metą lotną (po prawej) – tablica STOP, samochód sędziów i sędzia z kartą czasu; po mecie auto samo tu dojeżdża i staje
+ window.STOP_I=Math.min(N-12,META_I+Math.round(100/DS));   /* globalnie – używa go dojazd po mecie w _gra */
+ {const s=samples[STOP_I],n=nrm(s),w=wDrogi(META_I),ry=Math.atan2(-s.d.x,-s.d.z);
+  /* znaki końca OS-u wg regulaminu: okrągłe tarcze z białą obwódką, postawione na ziemi po prawej (żółta 100 m przed metą, czerwona na linii mety lotnej, czerwona STOP, beżowa 25 m za STOP) */
+  const flaga=(c)=>{c.save();c.translate(64,64);c.rotate(-.35);c.fillStyle='#222';c.fillRect(-26,-30,4,62);for(let a=0;a<6;a++)for(let b=0;b<4;b++){c.fillStyle=(a+b)%2?'#111':'#fff';c.fillRect(-22+a*8,-30+b*8,8,8);}c.restore();};
+  const tarcza=(kol,rys)=>{const cv=document.createElement('canvas');cv.width=cv.height=128;const c=cv.getContext('2d');c.clearRect(0,0,128,128);c.beginPath();c.arc(64,64,62,0,7);c.fillStyle='#fff';c.fill();
+    c.beginPath();c.arc(64,64,55,0,7);c.fillStyle=kol;c.fill();c.save();c.beginPath();c.arc(64,64,55,0,7);c.clip();rys(c);c.restore();return new THREE.CanvasTexture(cv);};
+  const postawZnak=(i,tx)=>{const q=samples[Math.max(0,Math.min(N,i))],nq=nrm(q),wq=wDrogi(Math.min(i,META_I));const g=new THREE.Group();
+    const d=new THREE.Mesh(new THREE.CircleGeometry(.7,28),new THREE.MeshLambertMaterial({map:tx,transparent:true,side:THREE.DoubleSide}));d.position.set(0,.78,0);d.rotation.x=-.75;g.add(d);
+    for(const k of [-.35,.35]){const nz=new THREE.Mesh(new THREE.BoxGeometry(.05,.75,.05),M(0x555555));nz.position.set(k,.3,-.3);nz.rotation.x=.55;g.add(nz);}
+    g.position.set(q.p.x+nq.x*(wq/2+1.3),0,q.p.z+nq.z*(wq/2+1.3));g.rotation.y=Math.atan2(-q.d.x,-q.d.z);scene.add(g);};
+  postawZnak(META_I-Math.round(100/DS),tarcza('#f4d21a',flaga));
+  postawZnak(META_I+2,tarcza('#d42020',flaga));
+  {/* META STOP: kwadratowa biała tablica postawiona na ziemi, w środku czerwony znak STOP */
+   const cv=document.createElement('canvas');cv.width=cv.height=128;const c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,128,128);c.strokeStyle='#2a2a2a';c.lineWidth=4;c.strokeRect(2,2,124,124);
+   c.beginPath();c.arc(64,64,48,0,7);c.fillStyle='#d42020';c.fill();c.fillStyle='#1a1a1a';c.font='bold 30px Arial Black,Arial';c.textAlign='center';c.textBaseline='middle';c.fillText('STOP',64,66);
+   const q=samples[STOP_I],nq=nrm(q),wq=wDrogi(META_I),g=new THREE.Group();
+   const pl=new THREE.Mesh(new THREE.BoxGeometry(1.4,1.4,.05),[M(0xdddddd),M(0xdddddd),M(0xdddddd),M(0xdddddd),new THREE.MeshLambertMaterial({map:new THREE.CanvasTexture(cv)}),M(0xcccccc)]);pl.position.set(0,.75,0);pl.rotation.x=-.75;pl.castShadow=true;g.add(pl);
+   for(const k of [-.45,.45]){const nz=new THREE.Mesh(new THREE.BoxGeometry(.06,.75,.06),M(0x555555));nz.position.set(k,.3,-.32);nz.rotation.x=.55;g.add(nz);}
+   g.position.set(q.p.x+nq.x*(wq/2+1.3),0,q.p.z+nq.z*(wq/2+1.3));g.rotation.y=Math.atan2(-q.d.x,-q.d.z);scene.add(g);}
+  postawZnak(STOP_I+Math.round(25/DS),tarcza('#e8c49a',c=>{c.strokeStyle='#1a1a1a';c.lineWidth=9;for(const o of [-26,0,26]){c.beginPath();c.moveTo(20+o,108);c.lineTo(108+o,20);c.stroke();}}));
+  const q=samples[Math.min(N-2,STOP_I+Math.round(9/DS))],nq=nrm(q);   /* samochód sędziów 9 m za tablicą, na poboczu */
+  const sam=new THREE.Group();const b=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.4,4.2),M(0xf2f2f2));b.position.y=.9;b.castShadow=true;sam.add(b);const pas=new THREE.Mesh(new THREE.BoxGeometry(1.82,.25,4.22),M(0xd42020));pas.position.y=1.1;sam.add(pas);
+  const dach=new THREE.Mesh(new THREE.BoxGeometry(1.5,.08,1.8),M(0xffd21f));dach.position.set(0,1.65,-.2);sam.add(dach);   /* żółta tablica „STOP / KONTROLA CZASU” na dachu */
+  sam.position.set(q.p.x+nq.x*(w/2+2.6),0,q.p.z+nq.z*(w/2+2.6));sam.rotation.y=Math.atan2(q.d.x,q.d.z);scene.add(sam);
+  const sedzia=postac(0xff8c1a);sedzia.position.set(s.p.x+n.x*(w/2+.9)+s.d.x*2.5,0,s.p.z+n.z*(w/2+.9)+s.d.z*2.5);sedzia.rotation.y=Math.atan2(-n.x,-n.z);sedzia.scale.setScalar(.8);scene.add(sedzia);   /* sędzia w kamizelce przy krawędzi drogi */
+  const karta=new THREE.Mesh(new THREE.BoxGeometry(.35,.02,.25),M(0xffffff));karta.position.set(sedzia.position.x-n.x*.35,1.05,sedzia.position.z-n.z*.35);scene.add(karta);}
  // kibice za taśmą po wewnętrznej najbliższego ciasnego łuku przed autem
  const kc=[0xff4a3a,0x2f6bff,0xffd21f,0x2ecc40,0xffffff,0x1c1c1c,0xff8c1a,0x8a3cff,0x18b4c8];
  function kibic(x,z,ry){const g=postac(kc[Math.floor(rnd()*kc.length)]);g.position.set(x,0,z);g.rotation.y=ry;g.scale.setScalar(.8);scene.add(g);}
@@ -896,11 +1066,14 @@ const P=KRT_P;try{localStorage.removeItem('krt_fizyka');}catch(e){}
 
 // ===================== STEROWANIE =====================
 const K={};addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT')return;   /* wpisywanie nicku: bez sterowania autem */
-  if(nickOtwarte())return;if(kontoOtwarte()){if(e.code==='Escape')kontoEsc();else if(e.code==='Enter')kontoEnter();return;}K[e.code]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
-  if(e.code==='KeyR'&&stan!=='menu')nowyPrzejazd();
-  if(rankingOtwarty()){if(e.code==='Escape'||e.code==='Enter')zamknijRanking();return;}
+  if(nickOtwarte())return;if(zawOtwarte()){if(e.code==='Escape')zamknijZawOkno();else if(e.code==='Enter')zapiszRejestracje();return;}
+  if(GRA_PAUZA){if(e.code==='Escape'||e.code==='Enter'||e.code==='KeyP')wznow();return;}
+  if(kontoOtwarte()){if(e.code==='Escape')kontoEsc();else if(e.code==='Enter')kontoEnter();return;}K[e.code]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
+  if(e.code==='KeyR'&&stan!=='menu'){if(czyZawody()){if(stan==='meta')pokazMenu();}else nowyPrzejazd();}   /* zawody: R nie działa – przejazd można tylko zatrzymać pauzą */
+  if(e.code==='KeyP'&&(stan==='odliczanie'||stan==='jazda'))pauza();
+  if(rankingOtwarty()){if(e.code==='Escape'||e.code==='Enter')zamknijRanking();else if(e.code==='ArrowLeft')zmienKarte('zaw');else if(e.code==='ArrowRight')zmienKarte('ta');return;}
   if(zasadyOtwarte()){if(e.code==='Escape'||e.code==='Enter')zamknijZasady();return;}
-  if(e.code==='Escape')pokazMenu();if(e.code==='Enter'&&stan==='menu')startGry();});
+  if(e.code==='Escape'){if(stan==='odliczanie'||stan==='jazda')pauza();else pokazMenu();}if(stan==='menu'&&document.getElementById('menu').style.display!=='none'){if(e.code==='ArrowLeft')zmienOdcinek(-1);if(e.code==='ArrowRight')zmienOdcinek(1);}if(e.code==='Enter'&&stan==='menu')startGry();});
 addEventListener('keyup',e=>{K[e.code]=false;});
 const DOT={};['tL','tP','tH','tG','tB'].forEach(id=>{const el=document.getElementById(id);const on=e=>{e.preventDefault();DOT[id]=true;},off=e=>{e.preventDefault();DOT[id]=false;};
   el.addEventListener('touchstart',on,{passive:false});el.addEventListener('touchend',off,{passive:false});el.addEventListener('touchcancel',off,{passive:false});});
@@ -911,6 +1084,7 @@ let wejscie=function(){const gp=(navigator.getGamepads&&navigator.getGamepads()[
   let gaz=K.ArrowUp||K.KeyW||DOT.tG,ham=K.ArrowDown||K.KeyS||DOT.tB,lewo=K.ArrowLeft||K.KeyA||DOT.tL,prawo=K.ArrowRight||K.KeyD||DOT.tP,reczny=K.Space||DOT.tH;
   let skret=(lewo?1:0)-(prawo?1:0);
   if(gp){const ax=gp.axes[0]||0;if(Math.abs(ax)>.15)skret=-ax;gaz=gaz||gp.buttons[7]?.value>.2||gp.buttons[0]?.pressed;ham=ham||gp.buttons[6]?.value>.2||gp.buttons[1]?.pressed;reczny=reczny||gp.buttons[2]?.pressed;}
+  if(typeof ZAW!=='undefined'&&ZAW.zapoz){const v=Math.hypot(A.vx,A.vz)*3.6;if(v>=50)gaz=false;if(v>53)ham=true;}   /* zapoznanie: najwyżej 50 km/h – odcięcie gazu, na zjeździe lekkie hamowanie */
   return {gaz:!!gaz,ham:!!ham,skret:Math.round(Math.max(-1,Math.min(1,skret))*32)/32,reczny:!!reczny};}
 // powtórka: wejście czytane RAZ na krok fizyki (WE) i zapisywane jako zmiany [nr kroku, bity gaz/ham/ręczny, skręt]
 let WE={gaz:false,ham:false,skret:0,reczny:false};const POWT={k:0,z:[],ost:''};
@@ -924,43 +1098,73 @@ let stan='menu',czas=0,meta=false,kara=0;   // kara: +5 s za bramkę szykany, +1
 // start: trzymasz ręczny (spacja), 5 lamp zapala się na czerwono co sekundę, potem wszystkie zielone; puszczenie ręcznego = ruszenie.
 // Puszczenie ręcznego z wciśniętym gazem przed zielonym = falstart (+10 s, zegar rusza od razu).
 // fizyka i procedura startu liczone we wspólnym module (makieta/fizyka.js) – tym samym, którym pośrednik sprawdza powtórki
-const SIM=KRT_SYMULACJA(TRASA_BRZYSKA_2026,{uderzenie:s=>dzwiekUderzenie(s),szykana:()=>pokazKomunikat('<span style="color:#ff5a4a">SZYKANA +5 S</span>'),
+const SIM=KRT_SYMULACJA(daneTrasy(TRASA.fiz),{uderzenie:s=>dzwiekUderzenie(s),szykana:()=>pokazKomunikat('<span style="color:#ff5a4a">SZYKANA +5 S</span>'),
   falstart:()=>{czasyIdx=[];dzwiekStartu('falstart');pokazKomunikat('<span style="color:#ff5a4a">FALSTART +10 S</span>');},zielone:()=>{czasyIdx=[];dzwiekStartu('zielone');},meta:()=>{zSIM();koniec();}});
 const START=SIM.START;
 function doSIM(){SIM.stan=stan;SIM.czas=czas;SIM.kara=kara;SIM.meta=meta;}   // stan gry → moduł
 function zSIM(){stan=SIM.stan;czas=SIM.czas;kara=SIM.kara;meta=SIM.meta;}    // moduł → stan gry
 const A=SIM.A;
 let zapis=[],duchZapis=null,duchCzasy=null;
-function wczytajDucha(){try{const d=JSON.parse(localStorage.getItem('krt_duch_'+AUTO)||'null');duchZapis=d?d.p:null;duchCzasy=d?d.c:null;}catch(e){duchZapis=null;duchCzasy=null;}}
-function najlepszy(){const v=+localStorage.getItem('krt_best_'+AUTO);return v>0?v:null;}
+function wczytajDucha(){try{const d=JSON.parse(localStorage.getItem('krt_duch_'+TRASA.pref+AUTO)||'null');duchZapis=d?d.p:null;duchCzasy=d?d.c:null;}catch(e){duchZapis=null;duchCzasy=null;}}
+function najlepszy(){const v=+localStorage.getItem('krt_best_'+TRASA.pref+AUTO);return v>0?v:null;}
 function fmt(t){if(t==null)return '---';const m=Math.floor(t/60),s=t-m*60;return m+"'"+(s<10?'0':'')+s.toFixed(2).replace('.','"');}
 function nowyPrzejazd(){
   SIM.nowyPrzejazd();zSIM();POWT.k=0;POWT.z=[];POWT.ost='';A.sladD=0;zapis=[];SLADY.count=0;sladIdx=0;wczytajDucha();
   document.getElementById('best').textContent=fmt(najlepszy());document.getElementById('komunikat').style.display='none';}
 function pokazKomunikat(t){const k=document.getElementById('komunikat');if(stan==='meta')return;k.style.display='block';k.innerHTML='<span style="font-size:26px">'+t+'</span>';clearTimeout(pokazKomunikat.t);pokazKomunikat.t=setTimeout(()=>{if(stan!=='meta')k.style.display='none';},1500);}
-function pokazMenu(){stan='menu';document.getElementById('menu').style.display='block';}
+function pokazMenu(){if(typeof ZAW!=='undefined'&&ZAW.zapoz&&stan!=='menu')ZAW.zapoz=false;stan='menu';document.getElementById('menu').style.display='block';if(typeof zawodyOdswiez==='function')zawodyOdswiez();}
 // ===================== RANKING =====================
 // dane: wyniki/brzyska_2026.json publikowany przez pośrednika: {trasa, aktualizacja, wyniki:[{nick,czas}, ...]} posortowane od najszybszego
-const RANK={el:document.getElementById('ranking'),plik:'wyniki/brzyska_2026.json',ile:10};
+const RANK={el:document.getElementById('ranking'),plik:TRASA.ranking,ile:10};
 function rankingOtwarty(){return RANK.el.style.display==='block';}
 function htmlTekst(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-async function pokazRanking(mojCzas){RANK.poMecie=mojCzas!=null;RANK.konf=false;RANK.zaladowany=false;RANK.W=null;RANK.akt=null;odswiezWysylke();document.getElementById('menu').style.display='none';document.getElementById('komunikat').style.display='none';RANK.el.style.display='block';
-  document.getElementById('rTab').innerHTML='<tr><td colspan="3" style="color:#888;border:none">WCZYTUJĘ...</td></tr>';document.getElementById('rAkt').textContent='';
-  RANK.mojCzas=mojCzas;RANK.najlPlik=null;odswiezInfo();
+/* zakładki rankingu na odcinku zawodów / jego Time Attacku: WYNIKI ZAWODÓW (PS1–PS3 + SUMA) i TIME ATTACK (najlepszy czas) – TA zamknięty do końca zawodów */
+function rankKarty(){if(TRASA.tryb!=='zawody'&&TRASA.tryb!=='ta')return null;const z=TRASY.find(t=>t.tryb==='zawody'),ta=TRASY.find(t=>t.tryb==='ta');return z&&ta?{zaw:z,ta:ta,taOtw:!ta.wkrotce}:null;}
+function ustawKarty(){const k=rankKarty(),el=document.getElementById('rKarty'),h2=document.querySelector('#ranking h2');
+  if(!k){el.style.display='none';RANK.karta=null;RANK.plik=TRASA.ranking;h2.textContent=TRASA.rankTytul||TRASA.opis;return;}
+  if(!RANK.karta||(RANK.karta==='ta'&&!k.taOtw))RANK.karta=TRASA.tryb==='ta'&&k.taOtw?'ta':'zaw';
+  el.style.display='';el.innerHTML=`<span class="karta${RANK.karta==='zaw'?' wyb':''}" data-k="zaw">WYNIKI RAJDU</span><span class="karta${RANK.karta==='ta'?' wyb':''}${k.taOtw?'':' zamk'}" data-k="ta"${k.taOtw?'':' title="TIME ATTACK RUSZA PO ZAKOŃCZENIU ZAWODÓW"'}>TIME ATTACK${k.taOtw?'':'<small>PO ZAKOŃCZENIU ZAWODÓW</small>'}</span>`;
+  const t=RANK.karta==='ta'?k.ta:k.zaw;RANK.plik=t.ranking;h2.textContent=t.rankTytul;}
+function zmienKarte(k){const K=rankKarty();if(!K||k===RANK.karta||(k==='ta'&&!K.taOtw))return;RANK.karta=k;wczytajRanking();}
+document.getElementById('rKarty').addEventListener('click',e=>{const s=e.target.closest('.karta');if(s)zmienKarte(s.dataset.k);});
+async function pokazRanking(mojCzas){RANK.poMecie=mojCzas!=null;RANK.konf=false;RANK.mojCzas=mojCzas;RANK.karta=null;odswiezWysylke();document.getElementById('menu').style.display='none';document.getElementById('komunikat').style.display='none';RANK.el.style.display='block';wczytajRanking();}
+async function wczytajRanking(){ustawKarty();RANK.zaladowany=false;RANK.W=null;RANK.akt=null;const nr=RANK.nr=(RANK.nr||0)+1;
+  document.getElementById('rTab').innerHTML='<tr><td colspan="6" style="color:#888;border:none">WCZYTUJĘ...</td></tr>';document.getElementById('rAkt').textContent='';
+  RANK.najlPlik=null;odswiezInfo();
   let d=null;try{const o=await fetch(RANK.plik+'?t='+Date.now(),{cache:'no-store'});if(o.ok)d=await o.json();}catch(e){}
-  if(!rankingOtwarty())return;
-  RANK.W=d&&Array.isArray(d.wyniki)?d.wyniki:null;RANK.akt=d&&d.aktualizacja;RANK.zaladowany=true;rysujTabele();}
-// tabela: opublikowany ranking + (tuż po mecie) Twój nowy rekord potwierdzony przez pośrednika – widoczny od razu, zanim ranking na stronie się odświeży
+  if(!rankingOtwarty()||nr!==RANK.nr)return;
+  RANK.poza=d&&Array.isArray(d.poza)?d.poza:[];RANK.dsq=d&&Array.isArray(d.dsq)?d.dsq:[];RANK.W=d&&Array.isArray(d.wyniki)?d.wyniki:null;RANK.akt=d&&d.aktualizacja;RANK.zaladowany=true;rysujTabele();}
+function komPS(x){return x==null?'<td class="ps">—</td>':typeof x==='object'?`<td class="ps dnf">${x.dnf!=null?fmt(+x.dnf):'DNF'}<i class="kr"></i></td>`:`<td class="ps">${fmt(+x)}</td>`;}   /* DNF z czasem 150% najszybszego (u DSQ bez czasu) */
+function rysujZawody(){const tab=document.getElementById('rTab'),akt=document.getElementById('rAkt'),W=RANK.W,poza=RANK.poza||[],dsq=RANK.dsq||[];
+  tab.classList.remove('zaw');tab.classList.add('zaw6');
+  if(!W||(!W.length&&!poza.length&&!dsq.length)){tab.innerHTML=`<tr><td colspan="6" style="color:#aaa;border:none;padding:40px">${W?'RANKING JEST JESZCZE PUSTY':'RANKING JESZCZE NIE DZIAŁA'}</td></tr>`;return;}
+  const medal=['🏆','🥈','🥉'],moje=W.findIndex(w=>w.nick===GRACZ.nick),ps=w=>[0,1,2].map(i=>komPS((w.czasy||[])[i])).join('');
+  if(RANK.plik===TRASA.ranking){RANK.najlPlik=moje>=0?+W[moje].czas:null;odswiezInfo();}
+  const wiersz=(w,i)=>`<tr class="${i===0?'p1':''}${i===moje?' ja':''}"><td class="m">${i+1}.</td><td class="n">${htmlTekst(w.nick)}</td>${ps(w)}<td class="c">${fmt(+w.czas)}<span class="medal">${medal[i]||''}</span></td></tr>`;
+  let h='<tr class="nag"><td class="m"></td><td class="n">KIEROWCA</td><td class="ps">PS1</td><td class="ps">PS2</td><td class="ps">PS3</td><td class="c">SUMA</td></tr>';
+  h+=poza.map(w=>`<tr class="poza"><td class="m">–</td><td class="n">${htmlTekst(w.nick)}<span class="nowy">POZA KONKURSEM</span></td>${ps(w)}<td class="c">${fmt(+w.czas)}</td></tr>`).join('');
+  h+=W.slice(0,RANK.ile).map(wiersz).join('');
+  if(moje>=RANK.ile)h+='<tr class="kropki"><td colspan="6">...</td></tr>'+wiersz(W[moje],moje);
+  h+=dsq.map(w=>`<tr class="dsq${w.nick===GRACZ.nick?' ja':''}"><td class="m">DSQ</td><td class="n">${htmlTekst(w.nick)}</td>${ps(w)}<td class="c">DSQ</td></tr>`).join('');   /* 2 nieukończone odcinki: na dole tabeli */
+  if([...W,...poza,...dsq].some(w=>(w.czasy||[]).some(c=>c&&typeof c==='object')))h+='<tr class="leg"><td colspan="6"><i class="kr"></i> DNF</td></tr>';   /* legenda: czerwony czas = 150% najszybszego przejazdu */
+  tab.innerHTML=h;
+  if(moje>=0&&moje<3&&!RANK.konf){RANK.konf=true;konfetti();}
+  if(RANK.akt){const t=new Date(RANK.akt);if(!isNaN(t))akt.textContent='RANKING AKTUALIZOWANY AUTOMATYCZNIE · OSTATNIO: '+t.toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}}
 function rysujTabele(){const tab=document.getElementById('rTab'),akt=document.getElementById('rAkt');
+  if(RANK.karta==='zaw')return rysujZawody();tab.classList.remove('zaw6');
   let W=RANK.W?RANK.W.slice():null;const o=WYSYLKA.odp;let nowy=false;
-  if(RANK.poMecie&&o&&o.ok&&o.status==='ok'&&o.rekordOsobisty&&GRACZ.nick){W=(W||[]).filter(w=>w.nick!==GRACZ.nick);W.push({nick:GRACZ.nick,czas:o.czas});W.sort((a,b)=>a.czas-b.czas);nowy=true;}
-  if(!W||!W.length){tab.innerHTML=`<tr><td colspan="3" style="color:#aaa;border:none;padding:40px">${W?'RANKING JEST JESZCZE PUSTY':'RANKING JESZCZE NIE DZIAŁA'}</td></tr>`;return;}
+  if(RANK.poMecie&&RANK.plik===TRASA.ranking&&o&&o.ok&&o.status==='ok'&&o.rekordOsobisty&&GRACZ.nick){W=(W||[]).filter(w=>w.nick!==GRACZ.nick);W.push({nick:GRACZ.nick,czas:o.czas});W.sort((a,b)=>a.czas-b.czas);nowy=true;}
+  if(W&&!W.length&&((RANK.poza||[]).length||(RANK.dsq||[]).length))W=[];else if(!W||!W.length){tab.innerHTML=`<tr><td colspan="6" style="color:#aaa;border:none;padding:40px">${W?'RANKING JEST JESZCZE PUSTY':'RANKING JESZCZE NIE DZIAŁA'}</td></tr>`;return;}
   const medal=['🏆','🥈','🥉'];const moje=W.findIndex(w=>w.nick===GRACZ.nick);
-  RANK.najlPlik=moje>=0?+W[moje].czas:null;odswiezInfo();   // najlepszy czas – z rankingu (i z odpowiedzi pośrednika po nowym rekordzie)
+  if(RANK.plik===TRASA.ranking){RANK.najlPlik=moje>=0?+W[moje].czas:null;odswiezInfo();}   // najlepszy czas – z rankingu (i z odpowiedzi pośrednika po nowym rekordzie)
   const wiersz=(w,i)=>`<tr class="${i===0?'p1':''}${i===moje?' ja':''}"><td class="m">${i+1}.</td><td class="n">${htmlTekst(w.nick)}${i===moje&&nowy?' <span class="nowy">NOWY</span>':''}</td><td class="c">${fmt(+w.czas)}<span class="medal">${medal[i]||''}</span></td></tr>`;
   let h=W.slice(0,RANK.ile).map(wiersz).join('');
   if(moje>=RANK.ile)h+='<tr class="kropki"><td colspan="3">...</td></tr>'+wiersz(W[moje],moje);
-  tab.innerHTML=h;
+  const sklad=w=>Array.isArray(w.czasy)&&w.czasy.length?`<small>${w.czasy.map(c=>c&&typeof c==='object'?'DNF '+fmt(+c.dnf):fmt(+c)).join(' + ')}</small>`:'';   /* nieukończony odcinek: DNF z czasem 150% najszybszego */
+  const pozaH=(RANK.poza||[]).map(w=>`<tr class="poza"><td class="m">–</td><td class="n">${htmlTekst(w.nick)} <span class="nowy">POZA KONKURSEM</span>${sklad(w)}</td><td class="c">${fmt(+w.czas)}</td></tr>`).join('');
+  if((RANK.poza||[]).length||W.some(w=>w.czasy))h=pozaH+W.slice(0,RANK.ile).map((w,i)=>wiersz(w,i).replace('</td><td class="c">',sklad(w)+'</td><td class="c">')).join('')+(moje>=RANK.ile?'<tr class="kropki"><td colspan="3">...</td></tr>'+wiersz(W[moje],moje):'');
+  h+=(RANK.dsq||[]).map(w=>`<tr class="dsq"><td class="m">DSQ</td><td class="n">${htmlTekst(w.nick)}</td><td class="c">—</td></tr>`).join('');   /* 2+ nieukończone odcinki: na dole tabeli */
+  tab.classList.toggle('zaw',W.some(w=>w.czasy));tab.innerHTML=h;
   if(moje>=0&&moje<3&&!RANK.konf){RANK.konf=true;konfetti();}   /* jesteś w TOP 3 – konfetti i stroboskopy przy każdym otwarciu rankingu */
   if(RANK.akt){const t=new Date(RANK.akt);if(!isNaN(t))akt.textContent='RANKING AKTUALIZOWANY AUTOMATYCZNIE · OSTATNIO: '+t.toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}}
 function zamknijRanking(){RANK.el.style.display='none';pokazMenu();}
@@ -969,7 +1173,7 @@ function odswiezInfo(){let najl=RANK.najlPlik;const o=WYSYLKA.odp;if(RANK.poMeci
   document.getElementById('rInfo').innerHTML=[RANK.mojCzas!=null?`TWÓJ CZAS: <b>${fmt(RANK.mojCzas)}</b>`:'',najl!=null?`TWÓJ NAJLEPSZY CZAS TO: <b>${fmt(najl)}</b>`:''].filter(Boolean).join(' · ');}
 // ===================== WYSYŁKA PRZEJAZDU DO POŚREDNIKA =====================
 // na mecie gra wysyła powtórkę (klawisze); pośrednik sam przelicza czas i odpowiada: zapisany (miejsce) / do weryfikacji / odrzucony
-const TRASA_ID='brzyska_2026_v1';
+const TRASA_ID=TRASA.id;
 const WYSYLKA={stan:'',odp:null};
 function kodujPowtorke(z){let p=0;return z.map(e=>{const d=[e[0]-p,e[1],Math.round(e[2]*32)];p=e[0];return d;});}   // [kroki od poprzedniej zmiany, bity, skręt×32]
 function odswiezWysylke(){if(RANK.poMecie&&rankingOtwarty()){if(RANK.zaladowany)rysujTabele();else odswiezInfo();}const el=document.getElementById('rWyslij');el.className='';
@@ -981,18 +1185,93 @@ function odswiezWysylke(){if(RANK.poMecie&&rankingOtwarty()){if(RANK.zaladowany)
   else if(o&&o.ok&&o.status==='moderacja')el.textContent='WYNIK CZEKA NA WERYFIKACJĘ';
   else{el.className='blad';el.textContent=(o&&o.blad)||'WYNIK NIE ZOSTAŁ ZAPISANY';}}
 async function wyslijDane(dane){WYSYLKA.stan='wysylam';WYSYLKA.odp=null;odswiezWysylke();
-  try{WYSYLKA.odp=await posrednik(dane);WYSYLKA.stan='gotowe';try{if(JSON.parse(localStorage.getItem('krt_niewyslany')||'null')?.czas===dane.czas)localStorage.removeItem('krt_niewyslany');}catch(e){}
+  try{WYSYLKA.odp=await posrednik(dane);WYSYLKA.stan='gotowe';if(WYSYLKA.odp&&WYSYLKA.odp.zawody){ZAW.stan=WYSYLKA.odp.zawody;pokazOdcinek();}try{if(JSON.parse(localStorage.getItem('krt_niewyslany')||'null')?.czas===dane.czas)localStorage.removeItem('krt_niewyslany');}catch(e){}
     if(WYSYLKA.odp&&!WYSYLKA.odp.ok&&/NICK/.test(WYSYLKA.odp.blad||'')){GRACZ.potw=false;try{localStorage.removeItem('krt_nick_potw');}catch(e){}}}
   catch(e){WYSYLKA.stan='blad';   // bez internetu: zapamiętaj najlepszy niewysłany przejazd i wyślij go później
     try{const st=JSON.parse(localStorage.getItem('krt_niewyslany')||'null');if(!st||dane.czas<st.czas)localStorage.setItem('krt_niewyslany',JSON.stringify(dane));}catch(e2){}}
   odswiezWysylke();}
-function wyslijPrzejazd(t){WYSYLKA.stan='';WYSYLKA.odp=null;if(!POSREDNIK_URL||!GRACZ.nick)return;
-  const dane={akcja:'przejazd',kod:GRACZ.kod,nick:GRACZ.nick,trasa:TRASA_ID,wersja:KRT_FIZYKA_WERSJA,czas:t,auto:AUTO,powt:kodujPowtorke(POWT.z)};   // zbierane od razu – zanim gracz wciśnie R
+function wyslijPrzejazd(t){WYSYLKA.stan='';WYSYLKA.odp=null;if(!POSREDNIK_URL||!GRACZ.nick||(PODGLAD&&TRASA.tryb!=='ea')||ZAW.zapoz)return;   /* zapoznanie: wynik nie jest wysyłany */
+  const dane={akcja:'przejazd',kod:GRACZ.kod,nick:GRACZ.nick,trasa:TRASA_ID,wersja:KRT_FIZYKA_WERSJA,czas:t,auto:AUTO,powt:kodujPowtorke(POWT.z)};if(czyZawody()&&ZAW.token){dane.token=ZAW.token;ZAW.token=null;}   // zbierane od razu – zanim gracz wciśnie R
   wyslijDane(dane);}
 async function wyslijZalegly(){if(!POSREDNIK_URL)return;let d=null;try{d=JSON.parse(localStorage.getItem('krt_niewyslany')||'null');}catch(e){}
   if(!d||d.kod!==GRACZ.kod||d.wersja!==KRT_FIZYKA_WERSJA){try{localStorage.removeItem('krt_niewyslany');}catch(e){}return;}
   d.nick=GRACZ.nick||d.nick;try{const o=await posrednik(d);if(o)localStorage.removeItem('krt_niewyslany');}catch(e){}}
-document.getElementById('rankingBtn').onclick=()=>pokazRanking(null);
+document.getElementById('rankingBtn').onclick=()=>{if(!TRASY[ODC].wkrotce)pokazRanking(null);};
+// ===================== ZAWODY: rejestracja, 3 przejazdy (suma), DNF, pauza =====================
+// Podejście zużywa się w chwili startu (serwer wydaje token). Restart / wyjście w trakcie = DNF. Start = akceptacja regulaminu i RODO.
+const ZAW={stan:null,token:null,nr:0,laduje:false,blad:'',zapoz:false};let GRA_PAUZA=false;
+const PODGLAD=new URLSearchParams(location.search).get('podglad')==='1'&&/^(localhost|127\.0\.0\.1)$/.test(location.hostname);   /* ?podglad=1 – jazda testowa przed startem: bez serwera, bez limitu 3 przejazdów, wyniki nie są wysyłane */
+const czyZawody=()=>!PODGLAD&&TRASA.tryb==='zawody'&&TRASY[ODC]===TRASA;
+const kartaZawodow=()=>TRASY[ODC].tryb==='zawody';
+const zawKoniec=t=>t.do&&Date.now()>Date.parse(t.do);
+async function zawodyOdswiez(){if(!kartaZawodow()||!POSREDNIK_URL||!GRACZ.kod)return;ZAW.laduje=true;
+  try{const o=await posrednik({akcja:'zawody_stan',kod:GRACZ.kod});if(o&&o.ok)ZAW.stan=o;}catch(e){}ZAW.laduje=false;pokazOdcinek();}
+function zawodyKarta(t){const inf=document.getElementById('zawInfo'),sb=document.getElementById('startBtn'),rb=document.getElementById('rankingBtn');inf.innerHTML='';
+  if(PODGLAD&&t.tryb!=='ea'){inf.innerHTML='<span class="blad">PODGLĄD TESTOWY – JAZDA BEZ LIMITU, WYNIKI NIE SĄ WYSYŁANE</span>';return;}
+  if(t.tryb!=='zawody')return;const st=ZAW.stan,op=document.getElementById('odcOpis');
+  const regLink=st&&st.poza?' · ORGANIZATOR – POZA KONKURSEM':' · <span class="link" id="zRejLink">'+(st&&st.zarejestrowany?'EDYTUJ ZGŁOSZENIE':'ZAREJESTRUJ SIĘ')+'</span>';
+  const info='START W ZAWODACH OZNACZA AKCEPTACJĘ <a href="regulamin.pdf" target="_blank" rel="noopener">REGULAMINU</a> I ZASAD RODO'+(GRACZ.nick?regLink:'');
+  if(zawKoniec(t)){sb.textContent='ZAWODY ZAKOŃCZONE';sb.classList.add('nieaktywny');rb.classList.remove('nieaktywny');op.textContent=t.opis+' · WYNIKI';return;}
+  inf.innerHTML=(ZAW.blad?'<span class="blad">'+ZAW.blad+'</span><br>':'')+info;
+  const zl=document.getElementById('zRejLink');if(zl)zl.onclick=otworzZawOkno;
+  /* zapoznanie jest teraz głównym przyciskiem (przed PS1) */
+  if(t.wkrotce||!GRACZ.nick||t!==TRASA)return;
+  if(!st){sb.textContent=ZAW.laduje?'SPRAWDZAM…':'START (ENTER)';return;}
+  if(!st.zarejestrowany){sb.textContent='ZAREJESTRUJ SIĘ';return;}
+  if(st.dnf){sb.textContent='DSQ';sb.classList.add('nieaktywny');op.textContent=t.opis+' · DSQ – DWA NIEUKOŃCZONE ODCINKI';return;}
+  if(st.dnfIle===1)op.textContent=t.opis+' · 1 DNF (+50% NAJSZYBSZEGO PRZEJAZDU)';
+  if(st.zostalo<=0){sb.textContent='UKOŃCZONO 3/3';sb.classList.add('nieaktywny');op.textContent=t.opis+(st.suma!=null?' · SUMA '+fmt(st.suma):st.moderacja?' · WYNIK W WERYFIKACJI':'');return;}
+  if(!st.zapoznanie&&st.zostalo===3){sb.textContent='ZAPOZNANIE (MAX 50 KM/H)';return;}   /* obowiązkowe zapoznanie przed PS1 */
+  sb.textContent='START DO PS'+(4-st.zostalo);}
+async function zawodyStart(){const st=ZAW.stan;ZAW.blad='';if(!st){zawodyOdswiez();return;}if(!st.zarejestrowany){otworzZawOkno();return;}if(st.dnf||st.zostalo<=0)return;if(!st.zapoznanie){zawodyZapoznanie();return;}
+  const sb=document.getElementById('startBtn');sb.textContent='START…';
+  try{const o=await posrednik({akcja:'zawody_start',kod:GRACZ.kod});if(!o||!o.ok){if(o&&o.stan)ZAW.stan=o.stan;ZAW.blad=(o&&o.blad)||'NIE UDAŁO SIĘ WYSTARTOWAĆ';pokazOdcinek();return;}
+    ZAW.token=o.token;ZAW.nr=o.nr;ZAW.stan.zostalo=o.zostalo;}
+  catch(e){ZAW.blad='BRAK POŁĄCZENIA – START W ZAWODACH WYMAGA INTERNETU';pokazOdcinek();return;}
+  startJazdy();}
+async function zawodyZapoznanie(){ZAW.blad='';try{const o=await posrednik({akcja:'zawody_zapoznanie',kod:GRACZ.kod});if(!o||!o.ok){ZAW.blad=(o&&o.blad)||'NIE UDAŁO SIĘ';pokazOdcinek();return;}}
+  catch(e){ZAW.blad='BRAK POŁĄCZENIA – SPRÓBUJ PONOWNIE';pokazOdcinek();return;}
+  if(ZAW.stan)ZAW.stan.zapoznanie=true;ZAW.zapoz=true;ZAW.token=null;startJazdy();}   /* zapoznanie: jeden przejazd z limitem 50 km/h, bez wyniku */
+async function zawodyDnf(){const tok=ZAW.token;ZAW.token=null;if(!tok)return;try{const o=await posrednik({akcja:'zawody_dnf',kod:GRACZ.kod,token:tok});if(o&&o.ok)ZAW.stan=o;}catch(e){}pokazOdcinek();}
+// napis u góry: w zawodach numer podejścia jak odcinek rajdu (PS1–PS3), w podglądzie PS1, poza zawodami sama nazwa
+function ustawNapisPS(){if(ZAW.zapoz){document.querySelector('#ps').firstChild.textContent='ZAPOZNANIE '+TRASA.nazwa;return;}const nr=czyZawody()?ZAW.nr:(PODGLAD&&TRASA.tryb==='zawody'?1:0);document.querySelector('#ps').firstChild.textContent=(nr?'PS'+nr+' ':'')+TRASA.nazwa;}
+// pauza: ESC / P / przycisk II – czas i fizyka stoją; w zawodach drugi przycisk = przerwanie przejazdu (DNF)
+function pauza(zRestartu){if(GRA_PAUZA||!(stan==='odliczanie'||stan==='jazda'))return;GRA_PAUZA=true;const z=czyZawody()&&!ZAW.zapoz,w=document.getElementById('pWyjdz');
+  document.getElementById('pauzaInfo').textContent=z?'ZAWODY: PRZERWANIE PRZEJAZDU = DNF. JEDEN NIEUKOŃCZONY ODCINEK – CZAS 150% TWOJEGO NAJSZYBSZEGO PRZEJAZDU. DWA – DSQ, KONIEC UDZIAŁU.':'GRA ZATRZYMANA';
+  w.textContent=z?'PRZERWIJ (DNF)':(zRestartu?'RESTART':'WYJDŹ DO MENU');w.classList.toggle('dnf',z);w.dataset.restart=zRestartu&&!z?'1':'';document.getElementById('pauza').style.display='block';}
+function wznow(){GRA_PAUZA=false;document.getElementById('pauza').style.display='none';}
+document.getElementById('pKont').onclick=wznow;
+document.getElementById('pWyjdz').onclick=()=>{const restart=document.getElementById('pWyjdz').dataset.restart==='1';wznow();if(ZAW.zapoz){ZAW.zapoz=false;pokazMenu();}else if(czyZawody()){zawodyDnf();pokazMenu();}else if(restart)nowyPrzejazd();else pokazMenu();};
+document.getElementById('pauzaBtn').onclick=()=>pauza();
+setInterval(()=>{document.getElementById('pauzaBtn').style.display=(stan==='odliczanie'||stan==='jazda')&&!GRA_PAUZA?'block':'none';},250);
+// okno rejestracji
+const ZREJ={pl:''};const zawOtwarte=()=>document.getElementById('zawOkno').style.display==='block';
+function ustawPortal(p){ZREJ.pl=p;document.querySelectorAll('#zawOkno .portale div').forEach(d=>d.classList.toggle('wyb',d.dataset.p===p));const k=document.getElementById('zKonto');
+  document.getElementById('zKontoEt').textContent=p==='yt'?'ADRES E-MAIL (KONTAKT W SPRAWIE NAGRODY)':'NAZWA KONTA NA '+({fb:'FACEBOOKU',ig:'INSTAGRAMIE',tt:'TIKTOKU'}[p]||'PORTALU');k.type=p==='yt'?'email':'text';k.placeholder=p==='yt'?'np. jan.kowalski@gmail.com':'np. @jan_kowalski';}
+document.querySelectorAll('#zawOkno .portale div').forEach(d=>d.onclick=()=>ustawPortal(d.dataset.p));
+function zgodaUstaw(){document.getElementById('zZapisz').classList.toggle('wyl',!document.getElementById('zZgoda').checked);}
+document.getElementById('zZgoda').addEventListener('change',()=>{document.getElementById('zBlad').textContent='';zgodaUstaw();});
+function otworzZawOkno(){if(!GRACZ.nick){otworzKonto('wybor',false);return;}document.getElementById('zBlad').textContent='';document.getElementById('zZgoda').checked=false;zgodaUstaw();ustawPortal(ZREJ.pl||'fb');document.getElementById('zawOkno').style.display='block';setTimeout(()=>document.getElementById('zImie').focus(),50);}
+function zamknijZawOkno(){document.getElementById('zawOkno').style.display='none';}
+async function zapiszRejestracje(){const b=document.getElementById('zBlad'),v=id=>document.getElementById(id).value.trim();
+  if(!document.getElementById('zZgoda').checked){b.textContent='ZAZNACZ, ŻE ZAPOZNAŁEŚ(-AŚ) SIĘ Z REGULAMINEM';return;}b.textContent='ZAPISUJĘ…';
+  const d={akcja:'zawody_rejestracja',kod:GRACZ.kod,nick:GRACZ.nick,imie:v('zImie'),nazwisko:v('zNazw'),platforma:ZREJ.pl,akceptacja:true};if(ZREJ.pl==='yt')d.email=v('zKonto');else d.konto=v('zKonto');d.telefon=v('zTel');
+  try{const o=await posrednik(d);if(!o||!o.ok){b.textContent=(o&&o.blad)||'BŁĄD';return;}zamknijZawOkno();ZAW.blad='';await zawodyOdswiez();}catch(e){b.textContent='BRAK POŁĄCZENIA – SPRÓBUJ PONOWNIE';}}
+document.getElementById('zZapisz').onclick=zapiszRejestracje;document.getElementById('zAnuluj').onclick=zamknijZawOkno;
+['zImie','zNazw','zKonto','zTel'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();zapiszRejestracje();}else if(e.key==='Escape'){e.preventDefault();zamknijZawOkno();}}));
+// ===================== ODCINKI: strzałki ◀ ▶ w menu =====================
+// ODC = karta oglądana w menu; TRASA_NR = trasa wczytana. Przejście na inną grywalną trasę przeładowuje stronę (bez ekranu tytułowego).
+let ODC=TRASA_NR;
+const odcData=t=>new Date(t).toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'});
+function pokazOdcinek(){const t=TRASY[ODC],b=document.getElementById('odcTryb');b.textContent=TRYBY[t.tryb];b.className=t.tryb;
+  document.getElementById('odcOpis').textContent=t.wkrotce?`${t.opis} · START ${odcData(t.od)}`:t.opis;
+  const s=document.getElementById('startBtn'),rb=document.getElementById('rankingBtn');s.classList.toggle('nieaktywny',!!t.wkrotce);rb.classList.toggle('nieaktywny',!!t.wkrotce);
+  s.textContent=t.wkrotce?'START '+odcData(t.od):'START (ENTER)';zawodyKarta(t);}
+function zmienOdcinek(k){ODC=(ODC+k+TRASY.length)%TRASY.length;const t=TRASY[ODC];
+  if(!t.wkrotce&&ODC!==TRASA_NR){try{sessionStorage.setItem('krt_bez_okladki','1');}catch(e){}const U=new URLSearchParams(location.search);if(ODC===0)U.delete('trasa');else U.set('trasa',t.id);location.search=U.toString();return;}   /* wczytanie wybranej trasy */
+  pokazOdcinek();zawodyOdswiez();}
+document.getElementById('odcL').onclick=()=>zmienOdcinek(-1);document.getElementById('odcP').onclick=()=>zmienOdcinek(1);
+setTimeout(()=>{pokazOdcinek();zawodyOdswiez();},0);   /* po wczytaniu całego skryptu (GRACZ jest niżej) */ustawKarty();
 // przełącznik ducha (przejazd najlepszego czasu) – zapamiętany w przeglądarce, domyślnie włączony
 let DUCH_WL=true;try{DUCH_WL=localStorage.getItem('krt_duch_wl')!=='0';}catch(e){}
 function pokazTikDucha(){document.getElementById('duchTik').classList.toggle('wl',DUCH_WL);}
@@ -1049,7 +1328,7 @@ function otworzKonto(ekran,poStart){if(poStart!==undefined)KONTO.poStart=poStart
   if(ekran==='wyloguj')document.getElementById('kKluczWyl').textContent=GRACZ.klucz||'------';
   if(ekran==='konto'){document.getElementById('kNick').textContent=GRACZ.nick||'—';document.getElementById('kKlucz').textContent=GRACZ.klucz||'POJAWI SIĘ PO POŁĄCZENIU Z INTERNETEM';}}
 function zamknijKonto(){KONTO.el.style.display='none';}
-function kontoEsc(){const e=KONTO.ekran;if(e==='przenies'){PRZEN.o=null;zamknijKonto();return;}if(e==='login')otworzKonto('wybor');else if(e==='wyloguj')otworzKonto('konto');else if(e==='klucz')kluczZapisany();else if(e==='konto')zamknijKonto();}   // na ekranie wyboru bez nicku – zostajemy
+function kontoEsc(){const e=KONTO.ekran;if(e==='przenies'){PRZEN.o=null;zamknijKonto();return;}if(e==='login')otworzKonto('wybor');else if(e==='wyloguj'||e==='kontakt')otworzKonto('konto');else if(e==='klucz')kluczZapisany();else if(e==='konto')zamknijKonto();}   // na ekranie wyboru bez nicku – zostajemy
 function kontoEnter(){const e=KONTO.ekran;if(e==='klucz')kluczZapisany();else if(e==='login')zaloguj();}
 function kluczZapisany(){zamknijKonto();if(KONTO.poStart){KONTO.poStart=false;startGry();}}
 async function zaloguj(){if(KONTO.czeka)return;const bl=document.getElementById('lBlad');
@@ -1075,6 +1354,23 @@ document.getElementById('kKluczOk').onclick=kluczZapisany;
 document.getElementById('kZmien').onclick=()=>{zamknijKonto();otworzNick(false,false);};
 document.getElementById('kWyloguj').onclick=()=>otworzKonto('wyloguj');document.getElementById('kWylTak').onclick=wyloguj;document.getElementById('kWylNie').onclick=()=>otworzKonto('konto');
 document.getElementById('kZamknij').onclick=zamknijKonto;
+// ===================== KONTAKT W RAZIE WYGRANEJ (panel gracza, nieobowiązkowy) =====================
+const KT_POLA={telefon:'ktTel',fb:'ktFb',ig:'ktIg',tt:'ktTt',email:'ktEmail'};
+async function otworzKontakt(){otworzKonto('kontakt');const b=document.getElementById('ktBlad');Object.values(KT_POLA).forEach(id=>document.getElementById(id).value='');
+  setTimeout(()=>document.getElementById('ktTel').focus(),0);
+  if(!POSREDNIK_URL){b.textContent='KONTAKT NIE JEST DOSTĘPNY';return;}
+  b.style.color='#ccc';b.textContent='WCZYTUJĘ...';
+  try{const o=await posrednik({akcja:'kontakt_pobierz',kod:GRACZ.kod});b.style.color='';
+    if(!o||!o.ok){b.textContent=(o&&o.blad)||'BŁĄD';return;}b.textContent='';
+    for(const p in KT_POLA){const el=document.getElementById(KT_POLA[p]);if(!el.value)el.value=(o.kontakt||{})[p]||'';}}
+  catch(e){b.style.color='';b.textContent='BRAK POŁĄCZENIA Z INTERNETEM';}}
+async function zapiszKontakt(){if(KONTO.czeka)return;const b=document.getElementById('ktBlad'),k={};for(const p in KT_POLA)k[p]=document.getElementById(KT_POLA[p]).value.trim();
+  KONTO.czeka=true;b.style.color='#ccc';b.textContent='ZAPISUJĘ...';
+  try{const o=await posrednik({akcja:'kontakt_zapisz',kod:GRACZ.kod,kontakt:k});KONTO.czeka=false;
+    if(!o||!o.ok){b.style.color='';b.textContent=(o&&o.blad)||'BŁĄD';return;}b.style.color='#3cff6a';b.textContent='ZAPISANO ✓';setTimeout(()=>{if(KONTO.ekran==='kontakt')otworzKonto('konto');},900);}
+  catch(e){KONTO.czeka=false;b.style.color='';b.textContent='BRAK POŁĄCZENIA – SPRÓBUJ PONOWNIE';}}
+document.getElementById('kKontakt').onclick=otworzKontakt;document.getElementById('ktZapisz').onclick=zapiszKontakt;document.getElementById('ktWroc').onclick=()=>otworzKonto('konto');
+Object.values(KT_POLA).forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();zapiszKontakt();}else if(e.key==='Escape'){e.preventDefault();otworzKonto('konto');}}));
 document.getElementById('kontoBtn').onclick=()=>otworzKonto(GRACZ.nick?'konto':'wybor',false);
 ['lNick','lKlucz'].forEach(id=>{const el=document.getElementById(id);el.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();if(id==='lNick')document.getElementById('lKlucz').focus();else zaloguj();}else if(e.key==='Escape'){e.preventDefault();otworzKonto('wybor');}});
   el.addEventListener('input',()=>{document.getElementById('lBlad').textContent='';});});
@@ -1095,7 +1391,8 @@ pokazNick();
 if(PRZENIES.token||PRZENIES.nick)odbierzKonto().then(ok=>{if(!ok&&!GRACZ.nick&&!kontoOtwarte()&&!nickOtwarte())otworzKonto('wybor',false);else if(GRACZ.nick)sprawdzNickPozniej().then(pobierzKlucz).then(wyslijZalegly);});
 else if(!GRACZ.nick)otworzKonto('wybor',false);
 else sprawdzNickPozniej().then(pobierzKlucz).then(wyslijZalegly);
-function startGry(){if(!GRACZ.nick){otworzKonto('wybor',true);return;}dzwiekStart();document.getElementById('menu').style.display='none';try{localStorage.setItem('krt_auto',AUTO);}catch(e){}zbudujAuto();nowyPrzejazd();}
+function startGry(){if(TRASY[ODC].wkrotce)return;if(!GRACZ.nick&&!PODGLAD){otworzKonto('wybor',true);return;}if(czyZawody()){zawodyStart();return;}startJazdy();}
+function startJazdy(){dzwiekStart();ustawNapisPS();document.getElementById('menu').style.display='none';try{localStorage.setItem('krt_auto',AUTO);}catch(e){}zbudujAuto();nowyPrzejazd();}
 document.querySelectorAll('.auto').forEach(el=>el.onclick=()=>{AUTO=el.dataset.auto;document.querySelectorAll('.auto').forEach(e=>e.classList.toggle('wyb',e===el));});
 document.querySelector(`.auto[data-auto="${AUTO}"]`)?.click();
 document.getElementById('startBtn').onclick=startGry;
@@ -1117,11 +1414,12 @@ function efektyKroku(){const o=SIM.ost,v=o.v,fx=o.fx,fz=o.fz,rx=o.rx,rz=o.rz,we=
       _m.compose(_p.set(tx-A.vx/v*dl/2,A.y+0.06,tz-A.vz/v*dl/2),_q.setFromEuler(_e.set(0,Math.atan2(A.vx,A.vz),0)),_s.set(1,1,(dl+0.12)/0.8));SLADY.setMatrixAt(sladIdx,_m);sladIdx=(sladIdx+1)%900;SLADY.count=Math.min(900,SLADY.count+1);}
     SLADY.instanceMatrix.needsUpdate=true;
     if(Math.random()<.6){const k=kurz[kurzIdx];kurzIdx=(kurzIdx+1)%80;k.x=A.x-fx*2;k.z=A.z-fz*2;k.y=A.y+.3;k.vx=-fx*2+(Math.random()-.5)*2;k.vz=-fz*2+(Math.random()-.5)*2;k.vy=1+Math.random();k.t=1;}}}
-function koniec(){stan='meta';const t=czas+kara;const b=najlepszy();const rekord=!b||t<b;if(!window.PAUZA)wyslijPrzejazd(t);if(rekord&&!window.PAUZA){dzwiekStartu('fanfary');konfetti();}   /* nowy rekord: fanfary + konfetti */setTimeout(()=>{if(stan==='meta'&&!window.PAUZA)pokazRanking(t);},3000);   /* ranking po przejechaniu odcinka */
+function koniec(){stan='meta';const t=czas+kara;const b=najlepszy();const rekord=!b||t<b;if(!window.PAUZA)wyslijPrzejazd(t);if(rekord&&!window.PAUZA){dzwiekStartu('fanfary');konfetti();}   /* nowy rekord: fanfary + konfetti */{const t0=Date.now();(function rk(){if(stan!=='meta'||window.PAUZA)return;const v=Math.hypot(A.vx,A.vz),dt0=Date.now()-t0;if(v<0.3&&dt0>2000)setTimeout(()=>{if(stan==='meta'&&!window.PAUZA)pokazRanking(t);},900);else if(dt0>10000)pokazRanking(t);else setTimeout(rk,200);})();}   /* ranking, gdy auto stanie przy mecie STOP (najpóźniej po 10 s) */
   const km=document.getElementById('komunikat');km.style.display='block';
-  km.innerHTML=`META!<br><span style="font-size:56px;color:#fff">${fmt(t)}</span><br><span style="font-size:22px;color:${rekord?'#3cff6a':'#fff'}">${rekord?'NOWY REKORD!':'NAJLEPSZY: '+fmt(b)}</span>${kara?`<br><span style="font-size:18px;color:#ff5a4a">W TYM KARA ZA SZYKANĘ: +${kara} S</span>`:""}<br><span style="font-size:18px;color:#ccc">KROPEK Z RAJDU: ${fmt(CZAS_RAJDU)} · R – JESZCZE RAZ</span>`;
+  const zawLinia=ZAW.zapoz?'<br><span style="font-size:20px;color:#7ff3ff">ZAPOZNANIE ZAKOŃCZONE – CZAS NIE LICZY SIĘ DO WYNIKÓW</span>':czyZawody()?`<br><span style="font-size:20px;color:#ffd21f">ZAWODY · PS${ZAW.nr} (${ZAW.nr}/3)</span>`:'';
+  km.innerHTML=`META!${zawLinia}<br><span style="font-size:56px;color:#fff">${fmt(t)}</span><br><span style="font-size:22px;color:${rekord?'#3cff6a':'#fff'}">${rekord?'NOWY REKORD!':'NAJLEPSZY: '+fmt(b)}</span>${kara?`<br><span style="font-size:18px;color:#ff5a4a">W TYM KARA ZA SZYKANĘ: +${kara} S</span>`:""}<br><span style="font-size:18px;color:#ccc">KROPEK Z RAJDU: ${fmt(CZAS_RAJDU)} · R – JESZCZE RAZ</span>`;
   if(rekord){const c=[];let k=0;for(let i=START_I;i<=META_I;i+=20){while(k<czasyIdx.length&&czasyIdx[k][0]<i)k++;c.push(k<czasyIdx.length?czasyIdx[k][1]:t);}
-    try{localStorage.setItem('krt_best_'+AUTO,t.toFixed(3));localStorage.setItem('krt_duch_'+AUTO,JSON.stringify({p:zapis,c}));}catch(e){}}}
+    try{localStorage.setItem('krt_best_'+TRASA.pref+AUTO,t.toFixed(3));localStorage.setItem('krt_duch_'+TRASA.pref+AUTO,JSON.stringify({p:zapis,c}));}catch(e){}}}
 let czasyIdx=[];
 
 // ===================== KAMERA I RYSOWANIE =====================
@@ -1144,9 +1442,11 @@ function kamera(dt){cienAuta();const v=Math.hypot(A.vx,A.vz);const lead=4+Math.m
 
 // HUD
 const el={czas:document.getElementById('czas'),delta:document.getElementById('delta'),kmh:document.getElementById('kmh'),kmhW:document.getElementById('kmhW'),notka:document.getElementById('notka'),pasek:document.querySelectorAll('#pasek i'),sw:document.getElementById('swiatla'),km:document.getElementById('komunikat')};
-document.querySelector('#ps small').textContent='JESIEN - '+(DLUGOSC/1000).toFixed(2).replace('.',',')+' KM';
+document.querySelector('#ps').firstChild.textContent=TRASA.nazwa;document.querySelector('#ps small').textContent=TRASA.pora+' - '+(TRASA.km||Math.min(DLUGOSC/1000,TRASA.kmMax||99)).toFixed(2).replace('.',',')+' KM';
 function zakret(t0,t1){const a=curve.getTangentAt(Math.min(t0,1)),b=curve.getTangentAt(Math.min(t1,1));return {lewy:(-a.x*b.z+a.z*b.x)>0,ang:Math.acos(Math.max(-1,Math.min(1,a.x*b.x+a.z*b.z)))};}
-function piktogram(z,size){const kol=z.ang<0.5?'#3cd65a':z.ang<1.1?'#ffd21f':'#e8302a';const sciezka=z.ang<0.35?'M12.5 31.5 V12 H4 L16.5 2 L29 12 H20.5 V31.5 Z':z.ang<2.0?'M29 31.5 V11 H14 V4 L3 13.5 L14 23 V18 H21.5 V31.5 Z':'M29.5 31.5 V8.5 Q29.5 2 23 2 H10.5 Q4 2 4 8.5 V15 H2.5 L10 25 L17.5 15 H11.5 V9.5 H22 V31.5 Z';   /* strzałki na cały kwadracik */const odb=(!z.lewy&&z.ang>=0.35)?' transform="translate(33,0) scale(-1,1)"':'';return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 33 33" shape-rendering="crispEdges"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><path d="'+sciezka+'"'+odb+' fill="'+kol+'" stroke="#101018" stroke-width="1.4" stroke-linejoin="round"/></svg>';}
+function piktogram(z,size){const PR=TRASA.styl?[0.3,0.6]:[0.5,1.1];   /* progi kolorów: trasa wierna GPS ma łagodniejsze kąty – zielona < ~17°, żółta < ~34°, czerwona dalej */
+  const kol=z.prosto?'#3cd65a':z.ang<PR[0]?'#3cd65a':z.ang<PR[1]?'#ffd21f':'#e8302a';let sciezka=z.prosto?'M12.5 31.5 V12 H4 L16.5 2 L29 12 H20.5 V31.5 Z':z.ang<2.0?'M29 31.5 V11 H14 V4 L3 13.5 L14 23 V18 H21.5 V31.5 Z':'M29.5 31.5 V8.5 Q29.5 2 23 2 H10.5 Q4 2 4 8.5 V15 H2.5 L10 25 L17.5 15 H11.5 V9.5 H22 V31.5 Z';   /* strzałki na cały kwadracik */let odb=(!z.lewy&&!z.prosto)?' transform="translate(33,0) scale(-1,1)"':'';
+  if(!z.prosto&&z.ang<0.9){sciezka='M12.5 31.5 V12 H4 L16.5 2 L29 12 H20.5 V31.5 Z';odb=' transform="translate(16.5 17) rotate('+(z.lewy?-1:1)*(z.ang<PR[0]?22:45)+') scale(.86) translate(-16.5 -16.5)"';}   /* zakręt do ok. 50°: strzałka po skosie (najłagodniejsze zielone); strzałka prosto tylko na długiej prostej */return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 33 33" shape-rendering="crispEdges"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><path d="'+sciezka+'"'+odb+' fill="'+kol+'" stroke="#101018" stroke-width="1.4" stroke-linejoin="round"/></svg>';}
 // lista zakrętów z wierzchołków stylizowanej trasy: kąt skrętu w każdym wierzchołku, wierzchołki bliżej niż 40 m
 // i skręcające w tę samą stronę łączone w jeden zakręt (np. dwa skosy 45° = zakręt 90°); przeciwne kierunki = osobne (esy)
 const ZAKRETY=(()=>{const V=STYL.wierzcholki,lista=[];
@@ -1161,6 +1461,17 @@ function zakretyPrzed(i){const a=ZAKRETY.find(z=>z.koniec+8>i&&(z.idx-i)*DS<135)
 function nastepny(od,zasieg){for(let m=0;m<zasieg;m+=4){const t=od+m2t(m);if(t>1)break;const z=zakret(t,t+m2t(25));if(z.ang>0.2){return {z:zakret(t,t+m2t(55)),t:t+m2t(55)};}}return null;}
 const HOPA='<svg width="132" height="132" viewBox="0 0 33 33" shape-rendering="crispEdges"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><path d="M2 29 L13 29 L19 22 L31 22 L31 29" fill="none" stroke="#ffd21f" stroke-width="3.5"/><path d="M4 21 Q13 3 27 12" fill="none" stroke="#fff" stroke-width="2.4" stroke-dasharray="2.5 2"/><path d="M27 8 L30 14 L23.5 14.5 Z" fill="#fff"/></svg>';
 const SZYK='<svg width="132" height="132" viewBox="0 0 33 33" shape-rendering="crispEdges"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><path d="M16.5 31 V25 L8 19.5 L25 11.5 L16.5 7 V2" fill="none" stroke="#101018" stroke-width="7"/><path d="M16.5 31 V25 L8 19.5 L25 11.5 L16.5 7 V2" fill="none" stroke="#ffd21f" stroke-width="3.6"/><rect x="2" y="17" width="5" height="5" fill="#d42020"/><rect x="26" y="9" width="5" height="5" fill="#d42020"/></svg>';
+// elementy trasy po kolei (zakręty, hopy, szykana) – w HUD duży znak bieżącego, obok mały znak następnego; na długiej prostej zielona strzałka prosto + mały znak tego, co dalej
+const mini=html=>html.replace('width="132" height="132"','width="72" height="72"');
+const HAMULEC='<svg width="72" height="72" viewBox="0 0 33 33"><rect x="0.5" y="0.5" width="32" height="32" fill="rgba(16,16,24,.55)" stroke="#fff" stroke-width="1"/><circle cx="16.5" cy="16.5" r="8.5" fill="#e8302a" stroke="#101018" stroke-width="1.2"/><path d="M7 9.5 Q3.2 16.5 7 23.5 M26 9.5 Q29.8 16.5 26 23.5" fill="none" stroke="#ffd21f" stroke-width="2.4" stroke-linecap="round"/><rect x="15.2" y="10.8" width="2.6" height="7.6" fill="#fff"/><rect x="15.2" y="20" width="2.6" height="2.6" fill="#fff"/></svg>';   /* kontrolka hamulca – HAMUJ przed szykaną i mostkiem */
+const ELEMENTY=(()=>{const L=ZAKRETY.filter(z=>z.z.ang>=0.26).map(z=>({i:z.idx,k:z.koniec,zas:135,z:z.z}));   /* łuki poniżej ok. 15° pomijane – tam strzałka prosto */L.push({i:IB,k:IB,zas:110,hop:1,ham:1});if(typeof IB2!=='undefined'&&IB2>=0)L.push({i:IB2,k:IB2,zas:110,hop:1});
+  L.push({i:CH_I-SZ_ODST,k:CH_I-SZ_ODST,zas:110,szyk:1,ham:1});return L.sort((a,b)=>a.i-b.i);})();
+const minal=(e,i)=>e.hop?(e.i-i)*DS<=3:e.szyk?(e.i-i)*DS<=-5:e.k+8<=i;
+const znakEl=(e,duzy)=>{const h=e.hop?HOPA:e.szyk?SZYK:piktogram(e.z,132);return duzy?h:mini(h);};
+function strzalkiHUD(i){const ham=ELEMENTY.some(e=>e.ham&&(e.i-i)*DS>0&&(e.i-i)*DS<120)?HAMULEC:'';return strzalkiZnaki(i)+ham;}   /* 120 m przed mostkiem i szykaną: symbol hamulca po prawej, obok małych znaków */
+function strzalkiZnaki(i){let n=0;while(n<ELEMENTY.length&&minal(ELEMENTY[n],i))n++;const f=ELEMENTY[n];if(!f)return PROSTO;
+  if((f.i-i)*DS<f.zas){const g=ELEMENTY[n+1];return znakEl(f,true)+(g&&(g.i-i)*DS<450?znakEl(g,false):'');}   /* przed mostkiem i szykaną: symbol hamulca */
+  return PROSTO+((f.i-i)*DS<450?znakEl(f,false):'');}
 let ostNotka='';const HUDP={kmh:-1,rozgrzewka:0,p:new THREE.Vector3(),q:new THREE.Vector3(),t:new THREE.Vector3(),kolorDelta:''};   /* obiekty HUD używane ponownie – mniej sprzątania pamięci */
 const FPS={k:0,t:performance.now(),v:0,pokaz:false};addEventListener('keydown',e=>{if(e.code==='KeyF'){FPS.pokaz=!FPS.pokaz;document.getElementById('fps').textContent='';}});
 function hud(klatka){
@@ -1178,7 +1489,7 @@ function hud(klatka){
   el.pasek[1].style.left=(Math.max(0,Math.min(1,(A.idx-START_I)/(META_I-START_I)))*506)+'px';
   if(klatka%4===0){
     const NOTKA_POZ='translate(800px,100px) translate(-50%,-50%)';const doMostu=(IB-A.idx)*DS,doSzyk=(CH_I-A.idx)*DS-SZ_ODST*DS;let h='';
-    if(doMostu>3&&doMostu<110)h=HOPA;else if(doSzyk>-5&&doSzyk<110)h=SZYK;else{const zz=zakretyPrzed(A.idx);if(zz[0])h=piktogram(zz[0].z,132);if(zz[1])h+=piktogram(zz[1].z,72);}
+    void doMostu;void doSzyk;h=strzalkiHUD(A.idx);   /* duży znak bieżącego elementu + mały znak następnego */
     if(stan==='odliczanie')h='';   // w czasie odliczania tylko lampy
     if(HUDP.rozgrzewka>0)HUDP.rozgrzewka--;else if(h!==ostNotka){if(ostNotka===null){el.notka.style.flexWrap='';el.notka.style.width='';el.notka.style.opacity='';}el.notka.innerHTML=h;ostNotka=h;}
     if(el.notka.style.transform!==NOTKA_POZ)el.notka.style.transform=NOTKA_POZ;}   /* strzałki zakrętów, hopa i szykana zawsze w jednym miejscu: środek u góry ekranu */
@@ -1302,7 +1613,7 @@ addEventListener('keydown',e=>{if(e.code==='KeyM'){DZW.wycisz=!DZW.wycisz;pokazK
 ['keydown','touchstart','touchend','mousedown','click'].forEach(ev=>addEventListener(ev,()=>{dzwiekStart();},{passive:true,capture:true}));   /* przeglądarki pozwalają grać dopiero po pierwszym kliknięciu / dotknięciu / klawiszu; capture – działa też przy pisaniu nicku i klucza w oknie logowania */
 /* EKRAN TYTUŁOWY z okładką: „NACIŚNIJ DOWOLNY PRZYCISK” (na dotyku „DOTKNIJ EKRANU”). Pierwsze naciśnięcie tylko go zamyka (nie startuje gry, nie klika w menu)
    i przy okazji odblokowuje dźwięk – muzyka gra od wejścia do menu. Zarejestrowane po nasłuchu dźwięku, więc dźwięk rusza, a reszta gry tego naciśnięcia nie widzi. */
-const OKLADKA=document.getElementById('okladka');
+const OKLADKA=document.getElementById('okladka');try{if(sessionStorage.getItem('krt_bez_okladki')){sessionStorage.removeItem('krt_bez_okladki');OKLADKA.classList.add('znika');OKLADKA.style.display='none';}}catch(e){}   /* po zmianie odcinka bez ekranu tytułowego */
 function zamknijOkladke(e){if(!OKLADKA||OKLADKA.classList.contains('znika'))return;e.stopImmediatePropagation();if(e.cancelable&&e.type!=='touchstart')e.preventDefault();
   OKLADKA.classList.add('znika');setTimeout(()=>{OKLADKA.style.display='none';},400);}
 ['keydown','mousedown','touchstart','click'].forEach(ev=>addEventListener(ev,zamknijOkladke,{capture:true}));
@@ -1389,7 +1700,7 @@ function startKrok(dt){const n0=START.faza==='swiatla'?Math.floor(START.t):0;doS
 function petla(t){requestAnimationFrame(petla);if(window.PAUZA)return;   // PAUZA – zatrzymanie do zrzutów testowych
   if(t-ostRys<1000/78)return;   /* obraz w rytmie odświeżania ekranu (60 Hz = każda klatka, 120/144 Hz = co druga) – równe odstępy klatek, bez szarpania; fizyka 60 Hz w stałym kroku z interpolacją */const dt=Math.min(0.1,(t-ostRys)/1000);ostRys=t;
   silnikKrok(dt);muzykaKrok();rysujObrotomierz();plomienRysuj();
-  if(stan!=='menu'){akum+=dt;while(akum>=DT){POP.x=A.x;POP.z=A.z;POP.y=A.y;POP.h=A.h;if(stan==='odliczanie'||stan==='jazda'){WE=wejscie();zapiszWE();}startKrok(DT);krok();akum-=DT;if(stan==='jazda'&&(czasyIdx.length===0||czasyIdx[czasyIdx.length-1][0]<A.idx))czasyIdx.push([A.idx,czas+kara]);}}
+  if(stan!=='menu'&&!GRA_PAUZA){akum+=dt;while(akum>=DT){POP.x=A.x;POP.z=A.z;POP.y=A.y;POP.h=A.h;if(stan==='odliczanie'||stan==='jazda'){WE=wejscie();zapiszWE();}else if(stan==='meta')WE=doStopu();startKrok(DT);krok();akum-=DT;if(stan==='jazda'&&(czasyIdx.length===0||czasyIdx[czasyIdx.length-1][0]<A.idx))czasyIdx.push([A.idx,czas+kara]);}}
   // auto
   {const u=Math.min(1,akum/DT);let dh=A.h-POP.h;if(dh>Math.PI)dh-=2*Math.PI;if(dh<-Math.PI)dh+=2*Math.PI;   /* płynny ruch auta między krokami fizyki (60 Hz) przy 40 kl./s */
    car.position.set(POP.x+(A.x-POP.x)*u,POP.y+(A.y-POP.y)*u,POP.z+(A.z-POP.z)*u);car.rotation.set(A.wPowietrzu?-0.08:0,POP.h+dh*u,0);}
@@ -1403,17 +1714,20 @@ function petla(t){requestAnimationFrame(petla);if(window.PAUZA)return;   // PAUZ
   for(let i=0;i<80;i++){const k=kurz[i];if(k.t>0){k.t-=dt*1.4;k.x+=k.vx*dt;k.y+=k.vy*dt;k.z+=k.vz*dt;k.vy-=dt;}const sc=Math.max(0.001,k.t)*1.2+0.2*(k.t>0);
     _m.compose(_p.set(k.x,k.t>0?k.y:-9,k.z),_q.identity(),_s.set(sc,sc,sc));KURZ.setMatrixAt(i,_m);}KURZ.instanceMatrix.needsUpdate=true;
   TX_WODA.offset.y-=dt*0.08;   /* nurt strumienia */
-  kamera(dt);hud(klatka++);renderer.render(scene,camera);}
+  kamera(dt);hud(klatka++);if(klatka%2===0)renderer.shadowMap.needsUpdate=true;renderer.render(scene,camera);}
 // ===================== POWTÓRKA: przeliczenie przejazdu z zapisanych klawiszy (to samo zrobi pośrednik) =====================
 window.odtworzPowtorke=function(z,maxKrokow=60*600){const zachowaj=stan;nowyPrzejazd();let i=0;
   for(let k=0;k<maxKrokow;k++){while(i+1<z.length&&z[i+1][0]<=k)i++;WE=z.length&&z[0][0]<=k?wePowt(z,i):{gaz:false,ham:false,skret:0,reczny:false};startKrok(DT);krok();if(meta)break;}
   const w={meta,czas:+czas.toFixed(4),kara,razem:+(czas+kara).toFixed(4),x:A.x,z:A.z,h:A.h};stan='menu';return w;};
 // ===================== TEST: autopilot w symulacji (bez rysowania) =====================
 // window.testPrzejazd() – przejeżdża odcinek automatem: celuje w punkt 14 m przed autem, hamuje przed ostrymi łukami.
-window.testKadr=function(sek){window.PAUZA=true;const w=window.testPrzejazd(sek,true);kamera(1);for(let i=0;i<400;i++)kamera(1/60);hud(0);hud(4);renderer.render(scene,camera);return w;};
+window.testKadr=function(sek){window.PAUZA=true;const w=window.testPrzejazd(sek,true);kamera(1);for(let i=0;i<400;i++)kamera(1/60);hud(0);hud(4);renderer.shadowMap.needsUpdate=true;renderer.render(scene,camera);return w;};
+// po mecie lotnej gra sama prowadzi auto do mety STOP: kierownica z autopilota, prędkość malejąca do zera przy tablicy (hamowanie ok. 5 m/s²)
+function doStopu(){const we=window.AUTOPILOT();const d=(STOP_I-A.idx)*DS-3,v=Math.hypot(A.vx,A.vz),vCel=d<=0?0:Math.min(70/3.6,Math.sqrt(2*5*d));
+  return {gaz:d>4&&v<vCel-1,ham:v>vCel+.3||d<=0,skret:v<0.5?0:we.skret,reczny:false};}
 window.AUTOPILOT=function(){const s=samples[A.idx];const look=Math.min(N,A.idx+Math.round((14+Math.hypot(A.vx,A.vz)*0.35)/DS));const c=samples[look].p.clone();
     // slalom w szykanie: punkt docelowy przesunięty na wolną stronę najbliższej bramki przed autem
-    let wSzyk=false;for(const gk of [-1,0,1]){const gi=CH_I+gk*SZ_ODST;if(gi>=A.idx-(window.AP_ZA||2)&&gi-A.idx<(window.AP_ZASIEG||24)){const sg=gk===0?1:-1;const nb=nrm(samples[gi]);const sl=samples[Math.min(N,Math.max(look,gi))].p;c.copy(sl).addScaledVector(nb,-sg*(window.AP_OFF||wDrogi(gi)*0.31));wSzyk=true;break;}}
+    let wSzyk=false;for(const gk of [-1,0,1]){const gi=CH_I+gk*SZ_ODST;if(gi>=A.idx-(window.AP_ZA||2)&&gi-A.idx<(window.AP_ZASIEG||24)){const sg=(gk===0?1:-1)*(SZ_ODWR?-1:1);const nb=nrm(samples[gi]);const sl=samples[Math.min(N,Math.max(look,gi))].p;c.copy(sl).addScaledVector(nb,-sg*(window.AP_OFF||wDrogi(gi)*0.31));wSzyk=true;break;}}
     const dx=c.x-A.x,dz=c.z-A.z;const fx=-Math.sin(A.h),fz=-Math.cos(A.h);const kat=Math.atan2(fx*dz-fz*dx,fx*dx+fz*dz);
     const v=Math.hypot(A.vx,A.vz);let vCel=P.vmax/3.6;
     {const doSz=(CH_I-SZ_ODST-A.idx)*DS;if(doSz<60&&doSz>-SZ_ODST*3*DS)vCel=Math.min(vCel,(window.AP_V||8)+Math.max(0,doSz)*0.25);}   // przed szykaną i w niej ok. 55 km/hfor(let m=10;m<80;m+=5){const i=Math.min(N-8,A.idx+Math.round(m/DS));const k=krzywizna(i,14);if(k.ang>0.15){const vk=Math.max(9,Math.sqrt(14/(k.ang/(28*DS)))*1.0);vCel=Math.min(vCel,vk+m*0.35);}}
@@ -1428,12 +1742,13 @@ window.testPrzejazd=function(maxS=400,zostaw=false){const stary=wejscie;let band
     if(Math.hypot(A.vx-vx,A.vz-vz)>1.5)banda++;const s=samples[A.idx],n=nrm(s);if(Math.abs((A.x-s.p.x)*n.x+(A.z-s.p.z)*n.z)>wDrogi(A.idx)/2+0.8)wyjazdy++;
     if(A.wPowietrzu&&!ostPowietrze)hop++;ostPowietrze=A.wPowietrzu;}
   wejscie=stary;const wynik={czas:+czas.toFixed(2),kara:kara,meta:meta,kmhMax:Math.round(maxV*3.6),uderzenia:banda,klatkiPozaAsfaltem:wyjazdy,wybicia:hop,dl:Math.round(DLUGOSC),czasRajdu:+CZAS_RAJDU.toFixed(2)};
-  if(!zostaw){try{localStorage.removeItem("krt_best_"+AUTO);localStorage.removeItem("krt_duch_"+AUTO);}catch(e){}stan="menu";}else{car.position.set(A.x,A.y,A.z);car.rotation.set(0,A.h,0);document.getElementById("menu").style.display="none";}return wynik;};
-function rozgrzejZnaki(){const wz=[HOPA,SZYK];for(const a of [0.2,0.8,1.5])for(const l of [true,false]){wz.push(piktogram({ang:a,lewy:l},132));wz.push(piktogram({ang:a,lewy:l},72));}
+  if(!zostaw){try{localStorage.removeItem("krt_best_"+TRASA.pref+AUTO);localStorage.removeItem("krt_duch_"+TRASA.pref+AUTO);}catch(e){}stan="menu";}else{car.position.set(A.x,A.y,A.z);car.rotation.set(0,A.h,0);document.getElementById("menu").style.display="none";}return wynik;};
+const PROSTO=piktogram({ang:0,prosto:true,lewy:false},132);
+function rozgrzejZnaki(){const wz=[HOPA,SZYK,PROSTO,HAMULEC];for(const a of [0.2,0.6,1.5,2.5])for(const l of [true,false]){wz.push(piktogram({ang:a,lewy:l},132));wz.push(piktogram({ang:a,lewy:l},72));}
   el.notka.style.transform='translate(800px,450px) translate(-50%,-50%)';el.notka.style.flexWrap='wrap';el.notka.style.width='1500px';el.notka.style.opacity='0.02';el.notka.innerHTML=wz.join('');ostNotka=null;HUDP.rozgrzewka=3;}
 function rozgrzej(){rozgrzejZnaki();   /* jednorazowo przy starcie: kompilacja wszystkich shaderów i wysłanie wszystkich tekstur do karty – bez przycięć, gdy nowe obiekty wjeżdżają w kadr */
   const fc=[];scene.traverse(o=>{if(o.isMesh||o.isSprite||o.isLineSegments){fc.push([o,o.frustumCulled,o.visible]);o.frustumCulled=false;if(o.userData.kafel)o.visible=true;}});
-  try{renderer.compile(scene,camera);renderer.render(scene,camera);}catch(e){}
+  try{renderer.compile(scene,camera);renderer.shadowMap.needsUpdate=true;renderer.render(scene,camera);}catch(e){}
   for(const [o,f,v] of fc){o.frustumCulled=f;o.visible=v;}}
 // optymalizacja bez zmiany wyglądu: nieruchome obiekty sceny nie przeliczają macierzy w każdej klatce (ruszają się tylko auto, duch, cień auta, płomień, słońce i kamera)
 function zamrozStatyczne(){const ruch=new Set([car,ghost,CIEN_AUTA,PLOMIEN,sun,sun.target,camera]);for(const c of scene.children){if(ruch.has(c))continue;c.updateMatrixWorld(true);c.traverse(o=>{o.matrixAutoUpdate=false;});}}
