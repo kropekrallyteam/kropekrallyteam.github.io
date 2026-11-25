@@ -1179,7 +1179,8 @@ async function wczytajRanking(){ustawKarty();RANK.zaladowany=false;RANK.W=null;R
 function komPS(x){return x==null?'<td class="ps">—</td>':typeof x==='object'?`<td class="ps dnf">${x.dnf!=null?fmt(+x.dnf):'DNF'}<i class="kr"></i></td>`:`<td class="ps">${fmt(+x)}</td>`;}   /* DNF z czasem 150% najszybszego (u DSQ bez czasu) */
 function rysujZawody(){const tab=document.getElementById('rTab'),akt=document.getElementById('rAkt'),W=RANK.W,poza=RANK.poza||[],dsq=RANK.dsq||[];
   tab.classList.remove('zaw');tab.classList.add('zaw6');
-  if(!W||(!W.length&&!poza.length&&!dsq.length)){tab.innerHTML=`<tr><td colspan="6" style="color:#aaa;border:none;padding:40px">${W?'RANKING JEST JESZCZE PUSTY':'RANKING JESZCZE NIE DZIAŁA'}</td></tr>`;return;}
+  if(!W||(!W.length&&!poza.length&&!dsq.length)){const zt=(rankKarty()||{}).zaw,przed=zt&&zt.od&&Date.now()<Date.parse(zt.od);   /* przed startem: kiedy ruszają zawody */
+    tab.innerHTML=`<tr><td colspan="6" style="color:#aaa;border:none;padding:40px;line-height:1.8">${przed?'ZAWODY RUSZAJĄ '+odcGodz(zt.od)+'<br><span style="font-size:15px">TU POJAWIĄ SIĘ WYNIKI: PS1, PS2, PS3 I SUMA</span>':W?'RANKING JEST JESZCZE PUSTY':'RANKING JESZCZE NIE DZIAŁA'}</td></tr>`;return;}
   const medal=['🏆','🥈','🥉'],moje=W.findIndex(w=>w.nick===GRACZ.nick),ps=w=>[0,1,2].map(i=>komPS((w.czasy||[])[i])).join('');
   if(RANK.plik===TRASA.ranking){RANK.najlPlik=moje>=0?+W[moje].czas:null;odswiezInfo();}
   const wiersz=(w,i)=>`<tr class="${i===0?'p1':''}${i===moje?' ja':''}"><td class="m">${i+1}.</td><td class="n">${htmlTekst(w.nick)}</td>${ps(w)}<td class="c">${fmt(+w.czas)}<span class="medal">${medal[i]||''}</span></td></tr>`;
@@ -1360,7 +1361,7 @@ async function zapiszNick(){if(NICK.czeka)return;const w=KRT_NICK_SPRAWDZ(NICK.p
       if(!o.ok){NICK.blad.textContent=o.blad||'TEN NICK JEST ZAJĘTY – WPISZ INNY';NICK.pole.focus();return;}potw=true;if(o.klucz)GRACZ.klucz=o.klucz;}
     catch(e){NICK.czeka=false;NICK.blad.style.color='';}}   // brak połączenia: nick zostaje w grze, sprawdzimy go przy następnym połączeniu
   GRACZ.nick=w.nick;GRACZ.potw=potw;zapiszGracza();
-  pokazNick();NICK.el.style.display='none';
+  pokazNick();NICK.el.style.display='none';poZmianieKonta();
   if(NICK.nowe&&GRACZ.klucz){otworzKonto('klucz',NICK.poZapisieStart);return;}   // nowe konto: pokaż klucz do zapisania
   if(NICK.poZapisieStart)startGry();}
 // nick wpisany bez połączenia (albo przed uruchomieniem rankingu) – ciche sprawdzenie przy starcie gry; zajęty → prośba o inny
@@ -1394,12 +1395,14 @@ async function zaloguj(){if(KONTO.czeka)return;const bl=document.getElementById(
   try{const o=await posrednik({akcja:'logowanie',nick,klucz});KONTO.czeka=false;bl.style.color='';
     if(!o.ok){bl.textContent=o.blad||'BŁĘDNY NICK LUB KLUCZ';return;}
     GRACZ.kod=o.kod;GRACZ.nick=o.nick;GRACZ.klucz=o.klucz;GRACZ.potw=true;zapiszGracza();try{localStorage.removeItem('krt_niewyslany');}catch(e){}
-    pokazNick();zamknijKonto();if(KONTO.poStart){KONTO.poStart=false;startGry();}}
+    pokazNick();zamknijKonto();poZmianieKonta();if(KONTO.poStart){KONTO.poStart=false;startGry();}}
   catch(e){KONTO.czeka=false;bl.style.color='';bl.textContent='BRAK POŁĄCZENIA Z INTERNETEM – SPRÓBUJ PONOWNIE';}}
 // wylogowanie: ta przeglądarka dostaje nowy, pusty kod gracza (stare konto zostaje – wraca się na nie nickiem i kluczem)
 function wyloguj(){const b=new Uint8Array(16);crypto.getRandomValues(b);GRACZ.kod=Array.from(b,x=>x.toString(16).padStart(2,'0')).join('');
   GRACZ.nick='';GRACZ.klucz='';GRACZ.potw=false;zapiszGracza();try{localStorage.removeItem('krt_niewyslany');}catch(e){}
-  document.getElementById('lNick').value='';document.getElementById('lKlucz').value='';pokazNick();otworzKonto('wybor',false);}
+  document.getElementById('lNick').value='';document.getElementById('lKlucz').value='';pokazNick();poZmianieKonta();otworzKonto('wybor',false);}
+// po założeniu konta, zalogowaniu i wylogowaniu: stan zawodów od nowa (przycisk ZAREJESTRUJ SIĘ / EDYTUJ ZGŁOSZENIE bez odświeżania strony)
+function poZmianieKonta(){if(typeof ZAW==='undefined')return;ZAW.stan=null;ZAW.sprawdzone=false;ZAW.blad='';if(typeof pokazOdcinek==='function')pokazOdcinek();if(typeof zawodyOdswiez==='function')zawodyOdswiez();}
 // klucz dla graczy, którzy grali, zanim pojawiły się klucze
 async function pobierzKlucz(){if(!POSREDNIK_URL||!GRACZ.nick||!GRACZ.potw||GRACZ.klucz)return;try{const o=await posrednik({akcja:'klucz',kod:GRACZ.kod});if(o.ok&&o.klucz){GRACZ.klucz=o.klucz;zapiszGracza();}}catch(e){}}
 document.getElementById('kNowy').onclick=()=>{zamknijKonto();otworzNick(KONTO.poStart,true);};
@@ -1561,7 +1564,7 @@ function hud(klatka){
   const sw=el.sw.children;
   if(stan==='odliczanie'){el.sw.style.display='flex';const n=START.faza==='czeka'?0:Math.min(5,Math.floor(START.t));
     for(let i=0;i<5;i++)sw[i].style.background=i<n?'#ff2a1a':'#3a0c0c';
-    el.km.style.display='block';el.km.innerHTML=START.faza==='czeka'?'<span style="font-size:22px;line-height:40px">TRZYMAJ RĘCZNY (SPACJA)<br>GAZ MOŻESZ TRZYMAĆ<br>PUŚĆ RĘCZNY NA ZIELONYM</span>':'';}
+    el.km.style.display='block';el.km.innerHTML=START.faza==='czeka'?'<span style="font-size:22px;line-height:40px">TRZYMAJ RĘCZNY'+(document.getElementById('ekran').classList.contains('dotykowy')?'':' (SPACJA)')+'<br>GAZ MOŻESZ TRZYMAĆ<br>PUŚĆ RĘCZNY NA ZIELONYM</span>':'';}
   else if(stan==='jazda'&&czas<1.2&&!START.falstart){el.sw.style.display='flex';for(let i=0;i<5;i++)sw[i].style.background='#29e04a';if(el.km.innerHTML.indexOf('TRZYMAJ')>=0)el.km.style.display='none';}
   else{el.sw.style.display='none';if(el.km.innerHTML.indexOf('TRZYMAJ')>=0)el.km.style.display='none';}
 }
