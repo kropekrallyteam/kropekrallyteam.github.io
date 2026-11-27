@@ -1129,10 +1129,13 @@ const DOT={};['tL','tP','tH','tG','tB'].forEach(id=>{const el=document.getElemen
 // układ przycisków: przed startem RĘCZNY po lewej (zamiast strzałek), po ruszeniu strzałki po lewej i RĘCZNY nad GAZEM
 let DOTYK_TRYB='start';function dotykTryb(){const t=(stan==='odliczanie'||(stan==='jazda'&&START.trzymaj))?'start':'jazda';if(t!==DOTYK_TRYB){DOTYK_TRYB=t;document.getElementById('dotyk').className=t;if(t==='start'){DOT.tL=false;DOT.tP=false;}}}
 if('ontouchstart' in window||QS.get('dotyk')){document.getElementById('dotyk').style.display='block';document.getElementById('ekran').classList.add('dotykowy');}
-let wejscie=function(){const gp=(navigator.getGamepads&&navigator.getGamepads()[0])||null;
+/* kontroler: oś skrętu liczy się dopiero, gdy gracz ją ruszy względem położenia spoczynkowego (kierownica/pedał/joystick stojący na -1 nie skręca autem), klawiatura zawsze ma pierwszeństwo */
+const PAD={baza:{},ruszony:{}};
+function padAktywny(){const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[];for(const g of L){const ax=g.axes[0]||0,k=g.index+':'+g.id;if(!(k in PAD.baza))PAD.baza[k]=ax;if(Math.abs(ax-PAD.baza[k])>.3)PAD.ruszony[k]=true;if(PAD.ruszony[k]||g.buttons.some(b=>b&&b.pressed))return {g,os:!!PAD.ruszony[k]};}return null;}
+let wejscie=function(){const pa=padAktywny(),gp=pa&&pa.g;
   let gaz=K.ArrowUp||K.KeyW||DOT.tG,ham=K.ArrowDown||K.KeyS||DOT.tB,lewo=K.ArrowLeft||K.KeyA||DOT.tL,prawo=K.ArrowRight||K.KeyD||DOT.tP,reczny=K.Space||DOT.tH;
   let skret=(lewo?1:0)-(prawo?1:0);
-  if(gp){const ax=gp.axes[0]||0;if(Math.abs(ax)>.15)skret=-ax;gaz=gaz||gp.buttons[7]?.value>.2||gp.buttons[0]?.pressed;ham=ham||gp.buttons[6]?.value>.2||gp.buttons[1]?.pressed;reczny=reczny||gp.buttons[2]?.pressed;}
+  if(gp){const ax=gp.axes[0]||0;if(pa.os&&!lewo&&!prawo&&Math.abs(ax)>.15)skret=-ax;gaz=gaz||gp.buttons[7]?.value>.2||gp.buttons[0]?.pressed;ham=ham||gp.buttons[6]?.value>.2||gp.buttons[1]?.pressed;reczny=reczny||gp.buttons[2]?.pressed;}
   if(typeof ZAW!=='undefined'&&ZAW.zapoz){const v=Math.hypot(A.vx,A.vz)*3.6;if(v>=50)gaz=false;if(v>53)ham=true;}   /* zapoznanie: najwyżej 50 km/h – odcięcie gazu, na zjeździe lekkie hamowanie */
   return {gaz:!!gaz,ham:!!ham,skret:Math.round(Math.max(-1,Math.min(1,skret))*32)/32,reczny:!!reczny};}
 // powtórka: wejście czytane RAZ na krok fizyki (WE) i zapisywane jako zmiany [nr kroku, bity gaz/ham/ręczny, skręt]
