@@ -1188,12 +1188,13 @@ function ustawKarty(){const k=rankKarty(),el=document.getElementById('rKarty'),h
 function zmienKarte(k){const K=rankKarty();if(!K||k===RANK.karta||(k==='ta'&&!K.taOtw))return;RANK.karta=k;wczytajRanking();}
 document.getElementById('rKarty').addEventListener('click',e=>{const s=e.target.closest('.karta');if(s)zmienKarte(s.dataset.k);});
 async function pokazRanking(mojCzas){RANK.poMecie=mojCzas!=null;RANK.konf=false;RANK.mojCzas=mojCzas;RANK.karta=null;odswiezWysylke();document.getElementById('menu').style.display='none';document.getElementById('komunikat').style.display='none';RANK.el.style.display='block';wczytajRanking();}
+const UKRYCI=['JANUSZ SMOŁA'];const jawny=w=>!UKRYCI.includes(String(w&&w.nick||'').trim().toUpperCase());   /* organizator: jego czas nie jest pokazywany w wynikach zawodów (trasa testowa i Time Attack – widoczny) */
 async function wczytajRanking(){ustawKarty();RANK.zaladowany=false;RANK.W=null;RANK.akt=null;const nr=RANK.nr=(RANK.nr||0)+1;
   document.getElementById('rTab').innerHTML='<tr><td colspan="6" style="color:#888;border:none">WCZYTUJĘ...</td></tr>';document.getElementById('rAkt').textContent='';
   RANK.najlPlik=null;odswiezInfo();
   let d=null;try{const o=await fetch(RANK.plik+'?t='+Date.now(),{cache:'no-store'});if(o.ok)d=await o.json();}catch(e){}
   if(!rankingOtwarty()||nr!==RANK.nr)return;
-  RANK.poza=d&&Array.isArray(d.poza)?d.poza:[];RANK.dsq=d&&Array.isArray(d.dsq)?d.dsq:[];RANK.W=d&&Array.isArray(d.wyniki)?d.wyniki:null;RANK.akt=d&&d.aktualizacja;RANK.zaladowany=true;rysujTabele();}
+  RANK.poza=d&&Array.isArray(d.poza)?d.poza:[];RANK.dsq=d&&Array.isArray(d.dsq)?d.dsq:[];RANK.W=d&&Array.isArray(d.wyniki)?d.wyniki:null;if(d&&d.zawody){RANK.dsq=RANK.dsq.filter(jawny);RANK.W=RANK.W&&RANK.W.filter(jawny);RANK.poza=RANK.poza.filter(jawny);}RANK.akt=d&&d.aktualizacja;RANK.zaladowany=true;rysujTabele();}
 function komPS(x){return x==null?'<td class="ps">—</td>':typeof x==='object'?`<td class="ps dnf">${x.dnf!=null?fmt(+x.dnf):'DNF'}<i class="kr"></i></td>`:`<td class="ps">${fmt(+x)}</td>`;}   /* DNF z czasem 150% najszybszego (u DSQ bez czasu) */
 function rysujZawody(){const tab=document.getElementById('rTab'),akt=document.getElementById('rAkt'),W=RANK.W,poza=RANK.poza||[],dsq=RANK.dsq||[];
   tab.classList.remove('zaw');tab.classList.add('zaw6');
@@ -1299,15 +1300,17 @@ function znacznikUrz(){let u='';try{u=localStorage.getItem('krt_urz')||'';if(!/^
   let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return {urz:u,odcisk:(h>>>0).toString(36)};}
 /* jedno zapytanie startu naraz: drugie kliknięcie / Enter w czasie oczekiwania na serwer zakładało drugi start (PS2 → DNF i od razu PS3, zapoznanie zużyte bez jazdy) */
 let ZAW_CZEKA=false;
+function ladowanieStartu(t){const n=OKLADKA.querySelector('.ladNapis');if(!n.dataset.org)n.dataset.org=n.innerHTML;n.innerHTML=t;OKLADKA.classList.remove('znika');OKLADKA.classList.add('laduje');OKLADKA.style.display='block';}   /* ekran ładowania od kliknięcia START do odpowiedzi serwera */
+function koniecLadowaniaStartu(blad){const n=OKLADKA.querySelector('.ladNapis');const przywroc=()=>{if(n.dataset.org)n.innerHTML=n.dataset.org;};if(blad){OKLADKA.style.display='none';OKLADKA.classList.remove('laduje');przywroc();return;}schowajLadowanie();setTimeout(przywroc,1600);}
 async function zawodyStart(){if(ZAW_CZEKA||stan!=='menu')return;const st=ZAW.stan;ZAW.blad='';if(!st){zawodyOdswiez();return;}if(!st.zarejestrowany){otworzZawOkno();return;}if(przedStartem(TRASA)){pokazOdcinek();return;}if(st.dnf||st.zostalo<=0)return;if(!st.zapoznanie){zawodyZapoznanie();return;}
-  const sb=document.getElementById('startBtn');sb.textContent='START…';ZAW_CZEKA=true;
-  try{const o=await posrednik({akcja:'zawody_start',kod:GRACZ.kod,...znacznikUrz()});ZAW_CZEKA=false;if(!o||!o.ok){if(o&&o.stan)ZAW.stan=o.stan;ZAW.blad=(o&&o.blad)||'NIE UDAŁO SIĘ WYSTARTOWAĆ';pokazOdcinek();return;}
+  const sb=document.getElementById('startBtn');sb.textContent='START…';ZAW_CZEKA=true;ladowanieStartu('ŁADOWANIE<br>PS'+Math.min(3,(st.przejazdy||[]).length+1)+'…');
+  try{const o=await posrednik({akcja:'zawody_start',kod:GRACZ.kod,...znacznikUrz()});ZAW_CZEKA=false;if(!o||!o.ok){koniecLadowaniaStartu(true);if(o&&o.stan)ZAW.stan=o.stan;ZAW.blad=(o&&o.blad)||'NIE UDAŁO SIĘ WYSTARTOWAĆ';pokazOdcinek();return;}
     ZAW.token=o.token;ZAW.nr=o.nr;ZAW.stan.zostalo=o.zostalo;}
-  catch(e){ZAW_CZEKA=false;ZAW.blad='BRAK POŁĄCZENIA – START W ZAWODACH WYMAGA INTERNETU';pokazOdcinek();return;}
-  startJazdy();}
-async function zawodyZapoznanie(){if(ZAW_CZEKA)return;ZAW.blad='';ZAW_CZEKA=true;try{const o=await posrednik({akcja:'zawody_zapoznanie',kod:GRACZ.kod,...znacznikUrz()});ZAW_CZEKA=false;if(!o||!o.ok){ZAW.blad=(o&&o.blad)||'NIE UDAŁO SIĘ';pokazOdcinek();return;}}
-  catch(e){ZAW_CZEKA=false;ZAW.blad='BRAK POŁĄCZENIA – SPRÓBUJ PONOWNIE';pokazOdcinek();return;}
-  if(ZAW.stan)ZAW.stan.zapoznanie=true;ZAW.zapoz=true;ZAW.token=null;startJazdy();}   /* zapoznanie: jeden przejazd z limitem 50 km/h, bez wyniku */
+  catch(e){ZAW_CZEKA=false;koniecLadowaniaStartu(true);ZAW.blad='BRAK POŁĄCZENIA – START W ZAWODACH WYMAGA INTERNETU';pokazOdcinek();return;}
+  startJazdy();koniecLadowaniaStartu();}
+async function zawodyZapoznanie(){if(ZAW_CZEKA)return;ZAW.blad='';ZAW_CZEKA=true;ladowanieStartu('ŁADOWANIE<br>ZAPOZNANIA…');try{const o=await posrednik({akcja:'zawody_zapoznanie',kod:GRACZ.kod,...znacznikUrz()});ZAW_CZEKA=false;if(!o||!o.ok){koniecLadowaniaStartu(true);ZAW.blad=(o&&o.blad)||'NIE UDAŁO SIĘ';pokazOdcinek();return;}}
+  catch(e){ZAW_CZEKA=false;koniecLadowaniaStartu(true);ZAW.blad='BRAK POŁĄCZENIA – SPRÓBUJ PONOWNIE';pokazOdcinek();return;}
+  if(ZAW.stan)ZAW.stan.zapoznanie=true;ZAW.zapoz=true;ZAW.token=null;startJazdy();koniecLadowaniaStartu();}   /* zapoznanie: jeden przejazd z limitem 50 km/h, bez wyniku */
 async function zawodyDnf(){const tok=ZAW.token;ZAW.token=null;if(!tok)return;try{const o=await posrednik({akcja:'zawody_dnf',kod:GRACZ.kod,token:tok});if(o&&o.ok)ZAW.stan=o;}catch(e){}pokazOdcinek();}
 // napis u góry: w zawodach numer podejścia jak odcinek rajdu (PS1–PS3), w podglądzie PS1, poza zawodami sama nazwa
 function ustawNapisPS(){if(ZAW.zapoz){document.querySelector('#ps').firstChild.textContent='ZAPOZNANIE '+TRASA.nazwa;return;}const nr=czyZawody()?ZAW.nr:(PODGLAD&&TRASA.tryb==='zawody'?1:0);document.querySelector('#ps').firstChild.textContent=(nr?'PS'+nr+' ':'')+TRASA.nazwa;}
