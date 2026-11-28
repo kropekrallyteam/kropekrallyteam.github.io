@@ -1122,7 +1122,7 @@ const K={};addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT
   if(e.code==='KeyP'&&(stan==='odliczanie'||stan==='jazda'))pauza();
   if(rankingOtwarty()){if(e.code==='Escape'||e.code==='Enter')zamknijRanking();else if(e.code==='ArrowLeft')zmienKarte('zaw');else if(e.code==='ArrowRight')zmienKarte('ta');return;}
   if(zasadyOtwarte()){if(e.code==='Escape'||e.code==='Enter')zamknijZasady();return;}
-  if(e.code==='Escape'){if(stan==='odliczanie'||stan==='jazda')pauza();else pokazMenu();}if(stan==='menu'&&document.getElementById('menu').style.display!=='none'){if(e.code==='ArrowLeft')zmienOdcinek(-1);if(e.code==='ArrowRight')zmienOdcinek(1);}if(e.code==='Enter'&&stan==='menu')startGry();});
+  if(e.code==='Escape'){if(stan==='odliczanie'||stan==='jazda')pauza();else pokazMenu();}if(stan==='menu'&&document.getElementById('menu').style.display!=='none'){if(e.code==='ArrowLeft')zmienOdcinek(-1);if(e.code==='ArrowRight')zmienOdcinek(1);}if(e.code==='Enter'&&!e.repeat&&stan==='menu')startGry();});
 addEventListener('keyup',e=>{K[e.code]=false;});
 const DOT={};['tL','tP','tH','tG','tB'].forEach(id=>{const el=document.getElementById(id);const on=e=>{e.preventDefault();DOT[id]=true;},off=e=>{e.preventDefault();DOT[id]=false;};
   el.addEventListener('touchstart',on,{passive:false});el.addEventListener('touchend',off,{passive:false});el.addEventListener('touchcancel',off,{passive:false});});
@@ -1297,14 +1297,16 @@ function znacznikUrz(){let u='';try{u=localStorage.getItem('krt_urz')||'';if(!/^
   let tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone;}catch(e){}
   const s=[screen.width+'x'+screen.height,window.devicePixelRatio,tz,navigator.language,navigator.hardwareConcurrency,navigator.deviceMemory,navigator.maxTouchPoints,navigator.platform,gl].join('|');
   let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return {urz:u,odcisk:(h>>>0).toString(36)};}
-async function zawodyStart(){const st=ZAW.stan;ZAW.blad='';if(!st){zawodyOdswiez();return;}if(!st.zarejestrowany){otworzZawOkno();return;}if(przedStartem(TRASA)){pokazOdcinek();return;}if(st.dnf||st.zostalo<=0)return;if(!st.zapoznanie){zawodyZapoznanie();return;}
-  const sb=document.getElementById('startBtn');sb.textContent='START…';
-  try{const o=await posrednik({akcja:'zawody_start',kod:GRACZ.kod,...znacznikUrz()});if(!o||!o.ok){if(o&&o.stan)ZAW.stan=o.stan;ZAW.blad=(o&&o.blad)||'NIE UDAŁO SIĘ WYSTARTOWAĆ';pokazOdcinek();return;}
+/* jedno zapytanie startu naraz: drugie kliknięcie / Enter w czasie oczekiwania na serwer zakładało drugi start (PS2 → DNF i od razu PS3, zapoznanie zużyte bez jazdy) */
+let ZAW_CZEKA=false;
+async function zawodyStart(){if(ZAW_CZEKA||stan!=='menu')return;const st=ZAW.stan;ZAW.blad='';if(!st){zawodyOdswiez();return;}if(!st.zarejestrowany){otworzZawOkno();return;}if(przedStartem(TRASA)){pokazOdcinek();return;}if(st.dnf||st.zostalo<=0)return;if(!st.zapoznanie){zawodyZapoznanie();return;}
+  const sb=document.getElementById('startBtn');sb.textContent='START…';ZAW_CZEKA=true;
+  try{const o=await posrednik({akcja:'zawody_start',kod:GRACZ.kod,...znacznikUrz()});ZAW_CZEKA=false;if(!o||!o.ok){if(o&&o.stan)ZAW.stan=o.stan;ZAW.blad=(o&&o.blad)||'NIE UDAŁO SIĘ WYSTARTOWAĆ';pokazOdcinek();return;}
     ZAW.token=o.token;ZAW.nr=o.nr;ZAW.stan.zostalo=o.zostalo;}
-  catch(e){ZAW.blad='BRAK POŁĄCZENIA – START W ZAWODACH WYMAGA INTERNETU';pokazOdcinek();return;}
+  catch(e){ZAW_CZEKA=false;ZAW.blad='BRAK POŁĄCZENIA – START W ZAWODACH WYMAGA INTERNETU';pokazOdcinek();return;}
   startJazdy();}
-async function zawodyZapoznanie(){ZAW.blad='';try{const o=await posrednik({akcja:'zawody_zapoznanie',kod:GRACZ.kod,...znacznikUrz()});if(!o||!o.ok){ZAW.blad=(o&&o.blad)||'NIE UDAŁO SIĘ';pokazOdcinek();return;}}
-  catch(e){ZAW.blad='BRAK POŁĄCZENIA – SPRÓBUJ PONOWNIE';pokazOdcinek();return;}
+async function zawodyZapoznanie(){if(ZAW_CZEKA)return;ZAW.blad='';ZAW_CZEKA=true;try{const o=await posrednik({akcja:'zawody_zapoznanie',kod:GRACZ.kod,...znacznikUrz()});ZAW_CZEKA=false;if(!o||!o.ok){ZAW.blad=(o&&o.blad)||'NIE UDAŁO SIĘ';pokazOdcinek();return;}}
+  catch(e){ZAW_CZEKA=false;ZAW.blad='BRAK POŁĄCZENIA – SPRÓBUJ PONOWNIE';pokazOdcinek();return;}
   if(ZAW.stan)ZAW.stan.zapoznanie=true;ZAW.zapoz=true;ZAW.token=null;startJazdy();}   /* zapoznanie: jeden przejazd z limitem 50 km/h, bez wyniku */
 async function zawodyDnf(){const tok=ZAW.token;ZAW.token=null;if(!tok)return;try{const o=await posrednik({akcja:'zawody_dnf',kod:GRACZ.kod,token:tok});if(o&&o.ok)ZAW.stan=o;}catch(e){}pokazOdcinek();}
 // napis u góry: w zawodach numer podejścia jak odcinek rajdu (PS1–PS3), w podglądzie PS1, poza zawodami sama nazwa
